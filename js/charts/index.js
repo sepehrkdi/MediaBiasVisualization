@@ -10,6 +10,7 @@ export { BaseChart } from './BaseChart.js';
 export { BarChart, DivergingBarChart, StackedBarChart } from './BarChart.js';
 export { LineChart, AreaChart, MultiLineChart } from './LineChart.js';
 export { ChoroplethMap } from './ChoroplethMap.js';
+export { AnimatedChoroplethMap } from './AnimatedChoroplethMap.js';
 export { NetworkGraph } from './NetworkGraph.js';
 export { ConflictTimelineChart } from './ConflictTimelineChart.js';
 

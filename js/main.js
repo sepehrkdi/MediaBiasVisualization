@@ -21,6 +21,7 @@ import {
     MultiLineChart 
 } from './charts/LineChart.js';
 import { ChoroplethMap } from './charts/ChoroplethMap.js';
+import { AnimatedChoroplethMap } from './charts/AnimatedChoroplethMap.js';
 import { NetworkGraph } from './charts/NetworkGraph.js';
 import { 
     ScatterPlot, 
@@ -43,6 +44,7 @@ const Charts = {
     AreaChart,
     MultiLineChart,
     ChoroplethMap,
+    AnimatedChoroplethMap,
     NetworkGraph,
     ScatterPlot,
     TreeMap,
@@ -151,6 +153,7 @@ async function init() {
 async function loadAllData() {
     const dataFiles = [
         { key: 'coverage', path: 'data/country_coverage.json' },
+        { key: 'choroplethYearly', path: 'data/choropleth_yearly.json' },
         { key: 'sentiment', path: 'data/sentiment_by_source.json' },
         { key: 'bias', path: 'data/bias_comparison.json' },
         { key: 'events', path: 'data/event_types.json' },
@@ -356,6 +359,7 @@ async function initializeCharts() {
     // Store chart types for switching during scroll
     state.chartTypes = {
         'global-coverage': () => Charts.ChoroplethMap,
+        'animated-choropleth': () => Charts.AnimatedChoroplethMap,
         'coverage-disparity': () => Charts.BarChart,
         'sentiment-comparison': () => Charts.DivergingBarChart,
         'source-clusters': () => Charts.ScatterPlot,
@@ -460,6 +464,18 @@ function getChartConfig(chartType, stepNumber) {
             options: {
                 title: 'Global News Coverage Volume',
                 colorScale: 'sequential'
+            }
+        },
+        'animated-choropleth': {
+            ChartClass: Charts.AnimatedChoroplethMap,
+            data: state.data.choroplethYearly,
+            options: {
+                title: 'Global Conflict Events Over Time',
+                metric: 'fatalities',
+                animationSpeed: 1000,
+                autoPlay: false,
+                loop: true,
+                colorScheme: 'interpolateYlOrRd'
             }
         },
         'coverage-disparity': {
