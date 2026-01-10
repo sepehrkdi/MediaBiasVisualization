@@ -2,8 +2,9 @@
 
 A data-driven storytelling website that explores global media bias using GDELT data, D3.js visualizations, and a scroll-driven narrative.
 
-**Course**: Data Visualization 2025-2026, University of Geneva  
-**Author**: Sepehr Khodadadeh  
+**Team**: EsfViz  
+**Course**: Data Visualization 2025-2026, University of Genova  
+**Members**: Sepehr Khodadadi, Hesam Mohebi, Bahar Khalilian  
 **Repository**: https://github.com/sepehrkdi/MediaBiasVisualization.git
 
 ---
@@ -266,7 +267,7 @@ npx browser-sync start --server --files "**/*.html, **/*.css, **/*.js"
 
 ## 📄 License
 
-This project is for educational purposes as part of the University of Geneva Data Visualization course.
+This project is for educational purposes as part of the University of Genova Data Visualization course.
 
 ---
 
@@ -274,15 +275,19 @@ This project is for educational purposes as part of the University of Geneva Dat
 
 - [GDELT Project](https://www.gdeltproject.org/) for the data
 - [D3.js](https://d3js.org/) for visualization library
-- [University of Geneva](https://www.unige.ch/) for the course framework
+- [University of Genova](https://www.unige.it/) for the course framework
 - [Natural Earth](https://www.naturalearthdata.com/) for geographic data
 
 ---
 
 ## 📞 Contact
 
-**Sepehr Khodadadeh**  
+**EsfViz Team**  
+- Sepehr Khodadadi
+- Hesam Mohebi
+- Bahar Khalilian
+
 Data Visualization 2025-2026  
-University of Geneva
+University of Genova
 
 GitHub: [@sepehrkdi](https://github.com/sepehrkdi)

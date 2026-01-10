@@ -4,11 +4,11 @@
 
 /* CSS Custom Properties (Variables) */
 :root {
-    /* University of Geneva Colors - based on id.unige.it guidelines */
-    --color-primary: #CF0063;           /* UNIGE Magenta */
+    /* University of Genova Colors */
+    --color-primary: #CF0063;           /* Accent Magenta */
     --color-primary-dark: #A30050;
     --color-primary-light: #E6337F;
-    --color-secondary: #003366;         /* UNIGE Dark Blue */
+    --color-secondary: #003366;         /* Dark Blue */
     --color-secondary-light: #004C99;
     --color-accent: #FF6B35;            /* Accent Orange */
     
@@ -168,9 +168,9 @@ body {
     left: 0;
     right: 0;
     height: var(--header-height);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
     z-index: var(--z-sticky);
     transition: transform var(--transition-base), background var(--transition-base);
 }
@@ -180,7 +180,8 @@ body {
 }
 
 .site-header.is-scrolled {
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(0, 20, 40, 0.95);
+    backdrop-filter: blur(10px);
     box-shadow: var(--shadow-md);
 }
 
@@ -217,13 +218,19 @@ body {
 }
 
 .nav-list a {
-    color: var(--text-primary);
+    color: var(--color-white);
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9375rem;
     padding: var(--space-xs) 0;
     position: relative;
     transition: color var(--transition-fast);
+}
+
+.nav-list a:visited,
+.nav-list a:active,
+.nav-list a:focus {
+    color: var(--color-white);
 }
 
 .nav-list a::after {
@@ -233,12 +240,12 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: var(--color-primary);
+    background-color: var(--color-white);
     transition: width var(--transition-base);
 }
 
 .nav-list a:hover {
-    color: var(--color-primary);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .nav-list a:hover::after {
@@ -294,8 +301,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-gray-900) 100%);
+    background: url('../assets/heading-background.png') center center / cover no-repeat;
     overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 20, 40, 0.4);
+    z-index: 0;
 }
 
 .hero-background {
@@ -318,6 +333,24 @@ body {
     max-width: 900px;
 }
 
+.hero-tagline {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-sm);
+}
+
+.hero-subtitle {
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--space-xl);
+}
+
 .hero-badge {
     display: inline-block;
     margin-bottom: var(--space-lg);
@@ -334,6 +367,43 @@ body {
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+}
+
+.group-name {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.team-members {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xxl);
+}
+
+.team-member-badge {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-lg);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-xl);
+    color: var(--color-white);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.team-member-badge:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 .hero-title {
@@ -726,8 +796,68 @@ body {
     margin-bottom: var(--space-lg);
 }
 
+.pipeline-description {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    font-size: 0.95rem;
+}
+
+.data-flow-description {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    font-size: 0.95rem;
+}
+
 .flow-diagram {
     min-height: 200px;
+}
+
+/* Interactive Pipeline Styles */
+.pipeline-details {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    border-left: 4px solid var(--color-primary);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pipeline-details.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pipeline-detail-content h4 {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.pipeline-detail-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Pipeline node hover states */
+.pipeline-node {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.pipeline-node:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.pipeline-node.active {
+    filter: drop-shadow(0 0 8px var(--color-primary));
 }
 
 /* ==========================================================================
@@ -881,6 +1011,14 @@ body {
     margin-bottom: var(--space-md);
 }
 
+.footer-title {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: var(--space-md);
+}
+
 .footer-brand p {
     color: var(--color-gray-400);
     font-size: 0.9375rem;
@@ -914,6 +1052,12 @@ body {
     text-decoration: none;
     font-size: 0.9375rem;
     transition: color var(--transition-fast);
+}
+
+.footer-column a:visited,
+.footer-column a:active,
+.footer-column a:focus {
+    color: var(--color-gray-400);
 }
 
 .footer-column a:hover {

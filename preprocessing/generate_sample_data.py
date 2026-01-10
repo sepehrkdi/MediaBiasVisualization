@@ -3,7 +3,7 @@ Sample Data Generator
 Generates realistic sample data for development and demo purposes.
 Use this when GDELT database is not available.
 
-Author: Sepehr Khodadadeh
+Team: EsfViz (Sepehr Khodadadi, Hesam Mohebi, Bahar Khalilian)
 """
 
 import json

@@ -699,14 +699,140 @@ function setupDataFlowDiagram() {
             ]
         };
         
+        // Pipeline stage descriptions for interactivity
+        const pipelineDescriptions = {
+            gdelt: {
+                title: 'GDELT Database',
+                description: 'The Global Database of Events, Language, and Tone (GDELT) monitors news media from nearly every country in the world, identifying people, locations, organizations, themes, sources, emotions, and events. We query over 1 billion events from this comprehensive dataset.'
+            },
+            postgres: {
+                title: 'PostgreSQL Storage',
+                description: 'Raw GDELT data is stored in a PostgreSQL database for efficient querying and analysis. We use optimized indexes and partitioning to handle the massive scale of global news data spanning multiple years.'
+            },
+            python: {
+                title: 'Python Processing',
+                description: 'Python scripts using pandas, numpy, and scipy perform data cleaning, aggregation, sentiment analysis, and statistical computations. This includes calculating coverage ratios, tone distributions, and temporal patterns.'
+            },
+            csv: {
+                title: 'JSON Data Files',
+                description: 'Processed data is exported as optimized JSON files, pre-aggregated for visualization performance. Each file corresponds to a specific chart or analysis, minimizing client-side computation.'
+            },
+            d3: {
+                title: 'D3.js Visualizations',
+                description: 'Interactive visualizations built with D3.js bring the data to life. Each chart is designed to reveal specific patterns in media bias, from geographic distributions to temporal trends and sentiment analysis.'
+            }
+        };
+        
         state.charts.dataFlow = new Charts.FlowDiagram(
             container,
             flowData,
             { tooltip: state.tooltip }
         );
+        
+        // Setup interactive pipeline details
+        setupPipelineInteractivity(pipelineDescriptions);
     } catch (e) {
         console.warn('Failed to initialize data flow diagram:', e);
     }
+}
+
+/**
+ * Setup interactive pipeline stage details
+ */
+function setupPipelineInteractivity(descriptions) {
+    const detailsPanel = document.getElementById('pipeline-details');
+    const titleEl = document.getElementById('pipeline-detail-title');
+    const descEl = document.getElementById('pipeline-detail-description');
+    
+    if (!detailsPanel || !titleEl || !descEl) return;
+    
+    // Add click handlers to pipeline nodes
+    const diagram = document.getElementById('data-flow-diagram');
+    if (!diagram) return;
+    
+    // Use MutationObserver to wait for SVG to be created
+    const observer = new MutationObserver((mutations, obs) => {
+        const svg = diagram.querySelector('svg');
+        if (svg) {
+            obs.disconnect();
+            addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl);
+        }
+    });
+    
+    observer.observe(diagram, { childList: true, subtree: true });
+    
+    // Also check if SVG already exists
+    const existingSvg = diagram.querySelector('svg');
+    if (existingSvg) {
+        observer.disconnect();
+        addPipelineNodeHandlers(existingSvg, descriptions, detailsPanel, titleEl, descEl);
+    }
+}
+
+/**
+ * Add click handlers to pipeline SVG nodes
+ */
+function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl) {
+    const nodeGroups = svg.querySelectorAll('.node');
+    let activeNode = null;
+    
+    nodeGroups.forEach(nodeGroup => {
+        nodeGroup.classList.add('pipeline-node');
+        
+        nodeGroup.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Get node id from the group or text
+            const textEl = nodeGroup.querySelector('text');
+            const label = textEl ? textEl.textContent : '';
+            
+            // Map label to id
+            const labelToId = {
+                'GDELT Database': 'gdelt',
+                'PostgreSQL': 'postgres',
+                'Python Processing': 'python',
+                'CSV/JSON Files': 'csv',
+                'D3.js Visualizations': 'd3'
+            };
+            
+            const nodeId = labelToId[label];
+            if (!nodeId || !descriptions[nodeId]) return;
+            
+            // Update active state
+            if (activeNode) {
+                activeNode.classList.remove('active');
+            }
+            nodeGroup.classList.add('active');
+            activeNode = nodeGroup;
+            
+            // Update details panel
+            const info = descriptions[nodeId];
+            titleEl.textContent = info.title;
+            descEl.textContent = info.description;
+            detailsPanel.classList.add('visible');
+        });
+        
+        // Keyboard accessibility
+        nodeGroup.setAttribute('tabindex', '0');
+        nodeGroup.setAttribute('role', 'button');
+        nodeGroup.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                nodeGroup.click();
+            }
+        });
+    });
+    
+    // Click outside to hide details
+    document.addEventListener('click', (e) => {
+        if (!detailsPanel.contains(e.target) && !svg.contains(e.target)) {
+            detailsPanel.classList.remove('visible');
+            if (activeNode) {
+                activeNode.classList.remove('active');
+                activeNode = null;
+            }
+        }
+    });
 }
 
 /**

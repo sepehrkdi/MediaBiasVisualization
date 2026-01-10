@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Exploring Global Media Bias Through Data - An interactive visualization project analyzing news coverage patterns across the world using GDELT data.">
-    <meta name="author" content="MediaBias Research Team">
+    <meta name="author" content="EsfViz Team">
     
     <title>Decoding Media Bias | A Data-Driven Exploration</title>
     
@@ -27,11 +27,6 @@
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="assets/images/unige-logo.svg" alt="University of Geneva" class="unige-logo">
-                </a>
-            </div>
             <nav class="main-nav">
                 <ul class="nav-list">
                     <li><a href="#story">The Story</a></li>
@@ -52,23 +47,19 @@
             <div class="hero-particles" id="hero-particles"></div>
         </div>
         <div class="hero-content">
-            <div class="hero-badge">
-                <span>Data Visualization Project 2025-2026</span>
-            </div>
+            <p class="hero-tagline">in focus of attention</p>
             <h1 class="hero-title">
-                <span class="title-line">Decoding</span>
-                <span class="title-line accent">Media Bias</span>
+                <span class="title-line">Shifting Spotlights</span>
             </h1>
-            <p class="hero-subtitle">
-                How do news outlets around the world shape our understanding of events?
-                <br>An interactive exploration of global media coverage patterns.
-            </p>
-            <div class="hero-cta">
-                <a href="#story" class="btn btn-primary">Begin the Journey</a>
-                <a href="#methodology" class="btn btn-secondary">View Methodology</a>
+            <p class="hero-subtitle">How Global Media Attention Changes During Crises</p>
+            <h2 class="group-name">EsfViz</h2>
+            <div class="team-members">
+                <span class="team-member-badge">Sepehr Khodadadi</span>
+                <span class="team-member-badge">Hesam Mohebi</span>
+                <span class="team-member-badge">Bahar Khalilian</span>
             </div>
             <div class="scroll-indicator">
-                <span>Scroll to explore</span>
+                <span>Scroll to explore our visualizations</span>
                 <div class="scroll-arrow"></div>
             </div>
         </div>
@@ -588,11 +579,18 @@
                 </article>
             </div>
 
-            <!-- Data Flow Diagram -->
-            <div class="data-flow">
-                <h3>Data Pipeline</h3>
+            <!-- Interactive Data Flow Diagram -->
+            <!-- <div class="data-flow">
+                <h3>Interactive Data Pipeline</h3>
+                <p class="data-flow-description">Click on each node to learn more about that stage of our data processing pipeline.</p>
                 <div class="flow-diagram" id="data-flow-diagram"></div>
-            </div>
+                <div class="pipeline-details" id="pipeline-details">
+                    <div class="pipeline-detail-content">
+                        <h4 id="pipeline-detail-title">Select a pipeline stage</h4>
+                        <p id="pipeline-detail-description">Hover over or click on any node in the diagram above to see details about that stage of our data processing workflow.</p>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </section>
 
@@ -610,7 +608,7 @@
                     <p>
                         This visualization project was developed as part of the 
                         <strong>Data Visualization</strong> course at the 
-                        <strong>University of Geneva</strong> (2025-2026).
+                        <strong>University of Genova</strong> (2025-2026).
                     </p>
                     <p>
                         Our goal is to make complex media analysis accessible and to encourage 
@@ -619,7 +617,7 @@
                     </p>
                 </div>
 
-                <div class="team-section">
+                <!-- <div class="team-section">
                     <h3>Team Members</h3>
                     <div class="team-grid">
                         <div class="team-member">
@@ -627,14 +625,33 @@
                                 <span>SK</span>
                             </div>
                             <div class="member-info">
-                                <h4>Sepehr Khodadadeh</h4>
-                                <span class="member-role">Lead Developer & Data Engineer</span>
-                                <p>Data pipeline architecture, D3.js visualizations, frontend development</p>
+                                <h4>Sepehr Khodadadi</h4>
+                                <span class="member-role">Developer & Data Engineer</span>
+                                <p>Data pipeline architecture, D3.js visualizations</p>
                             </div>
                         </div>
-                        <!-- Add more team members as needed -->
+                        <div class="team-member">
+                            <div class="member-avatar">
+                                <span>HM</span>
+                            </div>
+                            <div class="member-info">
+                                <h4>Hesam Mohebi</h4>
+                                <span class="member-role">Developer & Analyst</span>
+                                <p>Data analysis, visualization design</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-avatar">
+                                <span>BK</span>
+                            </div>
+                            <div class="member-info">
+                                <h4>Bahar Khalilian</h4>
+                                <span class="member-role">Developer & Designer</span>
+                                <p>UI/UX design, frontend development</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="acknowledgments">
                     <h3>Acknowledgments</h3>
@@ -644,7 +661,7 @@
                             global news data
                         </li>
                         <li>
-                            <strong>University of Geneva</strong> for the academic framework 
+                            <strong>University of Genova</strong> for the academic framework 
                             and guidance
                         </li>
                         <li>
@@ -654,16 +671,16 @@
                     </ul>
                 </div>
 
-                <div class="citation">
+                <!-- <div class="citation">
                     <h3>How to Cite</h3>
                     <div class="citation-box">
                         <code>
-                            Khodadadeh, S. et al. (2026). "Decoding Media Bias: A Data-Driven Exploration 
-                            of Global News Coverage." University of Geneva Data Visualization Project. 
+                            Khodadadi, S., Mohebi, H., Khalilian, B. (2026). "Decoding Media Bias: A Data-Driven Exploration 
+                            of Global News Coverage." University of Genova Data Visualization Project. 
                             Available at: https://sepehrkdi.github.io/MediaBiasVisualization/
                         </code>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -673,7 +690,7 @@
         <div class="footer-container">
             <div class="footer-main">
                 <div class="footer-brand">
-                    <img src="assets/images/unige-logo.svg" alt="University of Geneva" class="footer-logo">
+                    <h3 class="footer-title">Shifting Spotlights</h3>
                     <p>
                         A Data Visualization project exploring global media bias through 
                         interactive storytelling.
@@ -699,8 +716,8 @@
                     <div class="footer-column">
                         <h4>University</h4>
                         <ul>
-                            <li><a href="https://www.unige.ch/" target="_blank">University of Geneva</a></li>
-                            <li><a href="https://id.unige.ch/" target="_blank">Identity Guidelines</a></li>
+                            <li><a href="https://www.unige.it/" target="_blank">University of Genova</a></li>
+                            <li><a href="https://unige.it/en/about-us" target="_blank">About UniGe</a></li>
                         </ul>
                     </div>
                 </div>

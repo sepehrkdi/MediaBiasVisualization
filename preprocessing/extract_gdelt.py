@@ -2,8 +2,8 @@
 GDELT Data Preprocessing Pipeline
 Connects to PostgreSQL, extracts and transforms GDELT data for visualization.
 
-Author: Sepehr Khodadadeh
-Course: Data Visualization 2025-2026, University of Geneva
+Team: EsfViz (Sepehr Khodadadi, Hesam Mohebi, Bahar Khalilian)
+Course: Data Visualization 2025-2026, University of Genova
 """
 
 import os
