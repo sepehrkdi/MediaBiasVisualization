@@ -11,6 +11,7 @@ export { BarChart, DivergingBarChart, StackedBarChart } from './BarChart.js';
 export { LineChart, AreaChart, MultiLineChart } from './LineChart.js';
 export { ChoroplethMap } from './ChoroplethMap.js';
 export { NetworkGraph } from './NetworkGraph.js';
+export { ConflictTimelineChart } from './ConflictTimelineChart.js';
 
 // Additional chart types
 export { 
@@ -39,7 +40,8 @@ export const ChartRegistry = {
     histogram: 'Histogram',
     parallel: 'ParallelCoordinates',
     uncertainty: 'UncertaintyChart',
-    flow: 'FlowDiagram'
+    flow: 'FlowDiagram',
+    conflictTimeline: 'ConflictTimelineChart'
 };
 
 // Charts namespace for convenient access
@@ -59,7 +61,8 @@ export const Charts = {
     Histogram,
     ParallelCoordinates,
     UncertaintyChart,
-    FlowDiagram
+    FlowDiagram,
+    ConflictTimelineChart
 };
 
 // Factory function to create charts
@@ -79,7 +82,8 @@ export function createChart(type, container, data, options = {}) {
         histogram: Histogram,
         parallel: ParallelCoordinates,
         uncertainty: UncertaintyChart,
-        flow: FlowDiagram
+        flow: FlowDiagram,
+        conflictTimeline: ConflictTimelineChart
     };
     
     const ChartClass = chartMap[type];

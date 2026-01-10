@@ -411,7 +411,7 @@ body {
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 700;
     line-height: 1.1;
-    color: var(--color-white);
+    color: rgb(198, 83, 41);
     margin-bottom: var(--space-lg);
 }
 
@@ -1015,7 +1015,7 @@ body {
     font-family: 'Roboto Slab', Georgia, serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--color-white);
+    color: var(--color-primary);
     margin-bottom: var(--space-md);
 }
 

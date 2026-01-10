@@ -31,6 +31,7 @@ import {
     UncertaintyChart, 
     FlowDiagram 
 } from './charts/OtherCharts.js';
+import { ConflictTimelineChart } from './charts/ConflictTimelineChart.js';
 
 // Create Charts namespace for backward compatibility
 const Charts = {
@@ -48,7 +49,8 @@ const Charts = {
     Histogram,
     ParallelCoordinates,
     UncertaintyChart,
-    FlowDiagram
+    FlowDiagram,
+    ConflictTimelineChart
 };
 
 // Application state
@@ -151,7 +153,8 @@ async function loadAllData() {
         { key: 'bias', path: 'data/bias_comparison.json' },
         { key: 'events', path: 'data/event_types.json' },
         { key: 'timeline', path: 'data/temporal_trends.json' },
-        { key: 'network', path: 'data/source_network.json' }
+        { key: 'network', path: 'data/source_network.json' },
+        { key: 'conflictTimeline', path: 'data/conflict_timeline.json' }
     ];
     
     state.data = {};
@@ -360,7 +363,8 @@ async function initializeCharts() {
         'sentiment-timeline': () => Charts.AreaChart,
         'source-reliability': () => Charts.RadarChart,
         'outlet-comparison': () => Charts.ParallelCoordinates,
-        'uncertainty': () => Charts.UncertaintyChart
+        'uncertainty': () => Charts.UncertaintyChart,
+        'conflict-timeline': () => Charts.ConflictTimelineChart
     };
 }
 
@@ -538,6 +542,13 @@ function getChartConfig(chartType, stepNumber) {
             data: prepareUncertaintyData(state.data),
             options: {
                 title: 'Data Uncertainty Visualization'
+            }
+        },
+        'conflict-timeline': {
+            ChartClass: Charts.ConflictTimelineChart,
+            data: state.data.conflictTimeline,
+            options: {
+                title: 'West African Civil Wars: Coverage vs. Casualties'
             }
         }
     };

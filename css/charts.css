@@ -721,6 +721,105 @@
 .animate-delay-5 { animation-delay: 0.5s; }
 
 /* ==========================================================================
+   Conflict Timeline Chart
+   Dual-panel visualization for Liberia/Sierra Leone case study
+   ========================================================================== */
+
+.conflict-timeline-svg {
+    background-color: var(--bg-primary);
+}
+
+/* Panel styling */
+.panel-background {
+    fill: transparent;
+}
+
+.panel-title {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--color-gray-700);
+}
+
+/* Country-specific line colors */
+.liberia-line {
+    fill: none;
+    stroke: #d62728;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sierra-leone-line {
+    fill: none;
+    stroke: #2ca02c;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Data points */
+.liberia-dot {
+    fill: #d62728;
+    transition: r 0.15s ease-out;
+}
+
+.sierra-leone-dot {
+    fill: #2ca02c;
+    transition: r 0.15s ease-out;
+}
+
+.liberia-dot:hover,
+.sierra-leone-dot:hover {
+    r: 7;
+}
+
+/* Disparity zone highlight */
+.disparity-zone {
+    pointer-events: none;
+}
+
+.disparity-label-group {
+    pointer-events: none;
+}
+
+.disparity-label-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    fill: #795548;
+}
+
+/* Annotation lines for conflict start dates */
+.annotation-liberia {
+    stroke: #d62728;
+}
+
+.annotation-sierraLeone {
+    stroke: #2ca02c;
+}
+
+.annotation-label-group text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+}
+
+/* Legend styling */
+.conflict-timeline-svg .legend-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    fill: var(--color-gray-700);
+}
+
+/* Highlight zone styling for narrative */
+.highlight-zone {
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.3));
+    padding: 1px 4px;
+    border-radius: 2px;
+    border-bottom: 2px solid #FFC107;
+}
+
+/* ==========================================================================
    Responsive Chart Styles
    ========================================================================== */
 

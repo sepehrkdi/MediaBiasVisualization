@@ -1,0 +1,120 @@
+{
+  "timeline": [
+    {
+      "year": 1989,
+      "liberiaDeaths": 45,
+      "liberiaEvents": 6,
+      "liberiaCasualtiesPerEvent": 7.5,
+      "sierraLeoneDeaths": 0,
+      "sierraLeoneEvents": 0,
+      "sierraLeoneCasualtiesPerEvent": 0
+    },
+    {
+      "year": 1990,
+      "liberiaDeaths": 3729,
+      "liberiaEvents": 138,
+      "liberiaCasualtiesPerEvent": 27.0,
+      "sierraLeoneDeaths": 0,
+      "sierraLeoneEvents": 0,
+      "sierraLeoneCasualtiesPerEvent": 0
+    },
+    {
+      "year": 1991,
+      "liberiaDeaths": 578,
+      "liberiaEvents": 19,
+      "liberiaCasualtiesPerEvent": 30.4,
+      "sierraLeoneDeaths": 1225,
+      "sierraLeoneEvents": 128,
+      "sierraLeoneCasualtiesPerEvent": 9.6
+    },
+    {
+      "year": 1992,
+      "liberiaDeaths": 453,
+      "liberiaEvents": 26,
+      "liberiaCasualtiesPerEvent": 17.4,
+      "sierraLeoneDeaths": 531,
+      "sierraLeoneEvents": 64,
+      "sierraLeoneCasualtiesPerEvent": 8.3
+    },
+    {
+      "year": 1993,
+      "liberiaDeaths": 2673,
+      "liberiaEvents": 47,
+      "liberiaCasualtiesPerEvent": 56.9,
+      "sierraLeoneDeaths": 642,
+      "sierraLeoneEvents": 68,
+      "sierraLeoneCasualtiesPerEvent": 9.4
+    },
+    {
+      "year": 1994,
+      "liberiaDeaths": 4167,
+      "liberiaEvents": 92,
+      "liberiaCasualtiesPerEvent": 45.3,
+      "sierraLeoneDeaths": 2097,
+      "sierraLeoneEvents": 164,
+      "sierraLeoneCasualtiesPerEvent": 12.8
+    },
+    {
+      "year": 1995,
+      "liberiaDeaths": 2290,
+      "liberiaEvents": 52,
+      "liberiaCasualtiesPerEvent": 44.0,
+      "sierraLeoneDeaths": 3194,
+      "sierraLeoneEvents": 197,
+      "sierraLeoneCasualtiesPerEvent": 16.2
+    },
+    {
+      "year": 1996,
+      "liberiaDeaths": 3077,
+      "liberiaEvents": 31,
+      "liberiaCasualtiesPerEvent": 99.3,
+      "sierraLeoneDeaths": 943,
+      "sierraLeoneEvents": 100,
+      "sierraLeoneCasualtiesPerEvent": 9.4
+    },
+    {
+      "year": 1997,
+      "liberiaDeaths": 13,
+      "liberiaEvents": 3,
+      "liberiaCasualtiesPerEvent": 4.3,
+      "sierraLeoneDeaths": 1233,
+      "sierraLeoneEvents": 137,
+      "sierraLeoneCasualtiesPerEvent": 9.0
+    }
+  ],
+  "annotations": [
+    {
+      "year": 1989,
+      "label": "Liberia Civil War begins",
+      "description": "Charles Taylor's NPFL invades from Côte d'Ivoire",
+      "country": "liberia"
+    },
+    {
+      "year": 1991,
+      "label": "Sierra Leone Civil War begins",
+      "description": "RUF rebels attack from Liberia",
+      "country": "sierraLeone"
+    }
+  ],
+  "disparityZone": {
+    "start": 1991,
+    "end": 1993,
+    "insight": "Despite Liberia's conflicts being 3-6× deadlier per event, Sierra Leone received 3× more media documentation"
+  },
+  "summary": {
+    "liberia": {
+      "totalDeaths": 17025,
+      "totalEvents": 414,
+      "overallCasualtiesPerEvent": 41.1,
+      "peakYear": 1994,
+      "peakDeaths": 4167
+    },
+    "sierraLeone": {
+      "totalDeaths": 9865,
+      "totalEvents": 858,
+      "overallCasualtiesPerEvent": 11.5,
+      "peakYear": 1995,
+      "peakDeaths": 3194
+    }
+  }
+}
