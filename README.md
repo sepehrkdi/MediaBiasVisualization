@@ -225,21 +225,6 @@ This project uses [GDELT](https://www.gdeltproject.org/), which monitors print, 
 
 ---
 
-## 🌐 Deployment
-
-### GitHub Pages
-
-1. Push to the `main` branch
-2. Go to Settings → Pages
-3. Set source to "Deploy from a branch" → `main` → `/ (root)`
-4. Site will be available at `https://username.github.io/MediaBiasVisualization/`
-
-### Custom Domain
-
-Add a `CNAME` file with your domain name to the root directory.
-
----
-
 ## 🛠️ Development
 
 ### Local Development
