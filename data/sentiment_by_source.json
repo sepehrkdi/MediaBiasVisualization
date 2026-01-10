@@ -1,0 +1,229 @@
+{
+  "sources": [
+    {
+      "name": "BBC News",
+      "country": "GB",
+      "type": "Broadcast",
+      "avgSentiment": 0.234,
+      "stdSentiment": 2.145,
+      "articleCount": 45230,
+      "avgGoldstein": 1.234,
+      "ci_lower": 0.214,
+      "ci_upper": 0.254
+    },
+    {
+      "name": "CNN",
+      "country": "US",
+      "type": "Broadcast",
+      "avgSentiment": -0.156,
+      "stdSentiment": 2.534,
+      "articleCount": 38750,
+      "avgGoldstein": 0.567,
+      "ci_lower": -0.181,
+      "ci_upper": -0.131
+    },
+    {
+      "name": "Reuters",
+      "country": "GB",
+      "type": "Wire Service",
+      "avgSentiment": 0.087,
+      "stdSentiment": 1.876,
+      "articleCount": 52340,
+      "avgGoldstein": 0.234,
+      "ci_lower": 0.071,
+      "ci_upper": 0.103
+    },
+    {
+      "name": "Associated Press",
+      "country": "US",
+      "type": "Wire Service",
+      "avgSentiment": 0.045,
+      "stdSentiment": 1.923,
+      "articleCount": 48920,
+      "avgGoldstein": 0.156,
+      "ci_lower": 0.028,
+      "ci_upper": 0.062
+    },
+    {
+      "name": "New York Times",
+      "country": "US",
+      "type": "Newspaper",
+      "avgSentiment": -0.312,
+      "stdSentiment": 2.456,
+      "articleCount": 28450,
+      "avgGoldstein": -0.234,
+      "ci_lower": -0.341,
+      "ci_upper": -0.283
+    },
+    {
+      "name": "The Guardian",
+      "country": "GB",
+      "type": "Newspaper",
+      "avgSentiment": -0.278,
+      "stdSentiment": 2.312,
+      "articleCount": 31200,
+      "avgGoldstein": -0.189,
+      "ci_lower": -0.304,
+      "ci_upper": -0.252
+    },
+    {
+      "name": "Washington Post",
+      "country": "US",
+      "type": "Newspaper",
+      "avgSentiment": -0.198,
+      "stdSentiment": 2.234,
+      "articleCount": 26780,
+      "avgGoldstein": -0.145,
+      "ci_lower": -0.225,
+      "ci_upper": -0.171
+    },
+    {
+      "name": "Al Jazeera",
+      "country": "QA",
+      "type": "Broadcast",
+      "avgSentiment": -0.534,
+      "stdSentiment": 2.876,
+      "articleCount": 22340,
+      "avgGoldstein": -0.678,
+      "ci_lower": -0.572,
+      "ci_upper": -0.496
+    },
+    {
+      "name": "Fox News",
+      "country": "US",
+      "type": "Broadcast",
+      "avgSentiment": 0.678,
+      "stdSentiment": 3.123,
+      "articleCount": 34560,
+      "avgGoldstein": 0.987,
+      "ci_lower": 0.645,
+      "ci_upper": 0.711
+    },
+    {
+      "name": "MSNBC",
+      "country": "US",
+      "type": "Broadcast",
+      "avgSentiment": -0.723,
+      "stdSentiment": 2.987,
+      "articleCount": 19870,
+      "avgGoldstein": -0.567,
+      "ci_lower": -0.765,
+      "ci_upper": -0.681
+    },
+    {
+      "name": "Deutsche Welle",
+      "country": "DE",
+      "type": "Broadcast",
+      "avgSentiment": 0.145,
+      "stdSentiment": 2.123,
+      "articleCount": 15230,
+      "avgGoldstein": 0.345,
+      "ci_lower": 0.111,
+      "ci_upper": 0.179
+    },
+    {
+      "name": "France 24",
+      "country": "FR",
+      "type": "Broadcast",
+      "avgSentiment": 0.089,
+      "stdSentiment": 2.234,
+      "articleCount": 14560,
+      "avgGoldstein": 0.278,
+      "ci_lower": 0.053,
+      "ci_upper": 0.125
+    },
+    {
+      "name": "RT",
+      "country": "RU",
+      "type": "Broadcast",
+      "avgSentiment": -0.456,
+      "stdSentiment": 3.456,
+      "articleCount": 28900,
+      "avgGoldstein": -1.234,
+      "ci_lower": -0.496,
+      "ci_upper": -0.416
+    },
+    {
+      "name": "CGTN",
+      "country": "CN",
+      "type": "Broadcast",
+      "avgSentiment": 0.534,
+      "stdSentiment": 2.876,
+      "articleCount": 24560,
+      "avgGoldstein": 0.789,
+      "ci_lower": 0.498,
+      "ci_upper": 0.570
+    },
+    {
+      "name": "NHK World",
+      "country": "JP",
+      "type": "Broadcast",
+      "avgSentiment": 0.267,
+      "stdSentiment": 1.987,
+      "articleCount": 12340,
+      "avgGoldstein": 0.456,
+      "ci_lower": 0.232,
+      "ci_upper": 0.302
+    },
+    {
+      "name": "The Economist",
+      "country": "GB",
+      "type": "Magazine",
+      "avgSentiment": -0.134,
+      "stdSentiment": 2.345,
+      "articleCount": 8760,
+      "avgGoldstein": 0.123,
+      "ci_lower": -0.183,
+      "ci_upper": -0.085
+    },
+    {
+      "name": "Politico",
+      "country": "US",
+      "type": "Digital",
+      "avgSentiment": -0.256,
+      "stdSentiment": 2.567,
+      "articleCount": 18920,
+      "avgGoldstein": -0.123,
+      "ci_lower": -0.293,
+      "ci_upper": -0.219
+    },
+    {
+      "name": "Huffington Post",
+      "country": "US",
+      "type": "Digital",
+      "avgSentiment": -0.567,
+      "stdSentiment": 2.876,
+      "articleCount": 21340,
+      "avgGoldstein": -0.456,
+      "ci_lower": -0.606,
+      "ci_upper": -0.528
+    },
+    {
+      "name": "Breitbart",
+      "country": "US",
+      "type": "Digital",
+      "avgSentiment": 0.923,
+      "stdSentiment": 3.567,
+      "articleCount": 15670,
+      "avgGoldstein": 1.234,
+      "ci_lower": 0.867,
+      "ci_upper": 0.979
+    },
+    {
+      "name": "Xinhua",
+      "country": "CN",
+      "type": "Wire Service",
+      "avgSentiment": 0.678,
+      "stdSentiment": 2.123,
+      "articleCount": 42560,
+      "avgGoldstein": 1.567,
+      "ci_lower": 0.658,
+      "ci_upper": 0.698
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-01-15T12:00:00Z",
+    "total_sources": 20,
+    "note": "Sample data for development and demonstration"
+  }
+}

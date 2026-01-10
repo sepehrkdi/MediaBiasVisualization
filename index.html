@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exploring Global Media Bias Through Data - An interactive visualization project analyzing news coverage patterns across the world using GDELT data.">
+    <meta name="author" content="MediaBias Research Team">
+    
+    <title>Decoding Media Bias | A Data-Driven Exploration</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&family=Roboto+Slab:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/scrollytelling.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="assets/images/unige-logo.svg" alt="University of Geneva" class="unige-logo">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#story">The Story</a></li>
+                    <li><a href="#explore">Explore</a></li>
+                    <li><a href="#methodology">Methodology</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-background">
+            <div class="hero-particles" id="hero-particles"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Data Visualization Project 2025-2026</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">Decoding</span>
+                <span class="title-line accent">Media Bias</span>
+            </h1>
+            <p class="hero-subtitle">
+                How do news outlets around the world shape our understanding of events?
+                <br>An interactive exploration of global media coverage patterns.
+            </p>
+            <div class="hero-cta">
+                <a href="#story" class="btn btn-primary">Begin the Journey</a>
+                <a href="#methodology" class="btn btn-secondary">View Methodology</a>
+            </div>
+            <div class="scroll-indicator">
+                <span>Scroll to explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Introduction -->
+    <section class="section intro-section" id="intro">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">The Lens Through Which We See</h2>
+            </div>
+            <div class="intro-grid">
+                <div class="intro-text">
+                    <p class="lead">
+                        Every day, millions of news articles shape our perception of global events. 
+                        But what stories get told—and how—varies dramatically depending on who's telling them.
+                    </p>
+                    <p>
+                        This project analyzes <strong>GDELT (Global Database of Events, Language, and Tone)</strong>, 
+                        one of the largest open datasets of global news coverage, to expose patterns in how 
+                        different media outlets report on the same events.
+                    </p>
+                    <p>
+                        We examine sentiment, coverage volume, geographic focus, and thematic emphasis 
+                        to reveal the invisible editorial choices that influence public understanding.
+                    </p>
+                    <div class="data-highlight">
+                        <div class="highlight-item">
+                            <span class="highlight-number" id="stat-events">--</span>
+                            <span class="highlight-label">Events Analyzed</span>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-number" id="stat-sources">--</span>
+                            <span class="highlight-label">News Sources</span>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-number" id="stat-countries">--</span>
+                            <span class="highlight-label">Countries Covered</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-visual">
+                    <div class="chart-container" id="intro-globe"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scrollytelling Story -->
+    <section class="scrollytelling" id="story">
+        <div class="sticky-container">
+            <div class="sticky-visual">
+                <div class="chart-wrapper">
+                    <div class="chart-container" id="main-chart"></div>
+                    <div class="chart-annotations" id="chart-annotations"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-sections">
+            <!-- Story Step 1: Global Overview -->
+            <article class="scroll-step" data-step="1" data-chart="global-coverage">
+                <div class="step-content">
+                    <span class="step-number">01</span>
+                    <h3>The Global News Landscape</h3>
+                    <p>
+                        Let's start with the big picture. This map shows the volume of news coverage 
+                        by country over the past year. Darker colors indicate more coverage.
+                    </p>
+                    <p class="insight">
+                        <strong>Notice something?</strong> Coverage is heavily concentrated in certain regions. 
+                        This isn't just about where events happen—it's about where media infrastructure exists 
+                        and what audiences care about.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 2: Coverage Disparity -->
+            <article class="scroll-step" data-step="2" data-chart="coverage-disparity">
+                <div class="step-content">
+                    <span class="step-number">02</span>
+                    <h3>The Coverage Gap</h3>
+                    <p>
+                        Some stories dominate headlines while others barely register. 
+                        This chart compares coverage volume for similar events in different regions.
+                    </p>
+                    <p class="caveat">
+                        ⚠️ <strong>Caveat:</strong> GDELT captures primarily English-language sources, 
+                        which inherently skews toward Western media perspectives.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 3: Sentiment Analysis -->
+            <article class="scroll-step" data-step="3" data-chart="sentiment-comparison">
+                <div class="step-content">
+                    <span class="step-number">03</span>
+                    <h3>The Tone of Coverage</h3>
+                    <p>
+                        Beyond volume, we can examine sentiment—how positively or negatively 
+                        events are framed. The same event can be reported with vastly different tones.
+                    </p>
+                    <p>
+                        Here we compare the average tone of coverage for the same events 
+                        across different news sources.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 4: Source Clustering -->
+            <article class="scroll-step" data-step="4" data-chart="source-clusters">
+                <div class="step-content">
+                    <span class="step-number">04</span>
+                    <h3>Birds of a Feather</h3>
+                    <p>
+                        When we cluster news sources by their coverage patterns, 
+                        interesting groupings emerge. Sources with similar editorial perspectives 
+                        tend to cover the same stories in similar ways.
+                    </p>
+                    <p class="insight">
+                        <strong>Explore:</strong> Click on any cluster to see which outlets group together 
+                        and what characteristics they share.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 5: Temporal Patterns -->
+            <article class="scroll-step" data-step="5" data-chart="temporal-patterns">
+                <div class="step-content">
+                    <span class="step-number">05</span>
+                    <h3>The News Cycle in Action</h3>
+                    <p>
+                        Watch how coverage evolves over time for major events. 
+                        Some stories have long tails while others disappear within days.
+                    </p>
+                    <p>
+                        The speed of decline often correlates with the political significance 
+                        of an event to the outlet's primary audience.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 6: Actor Networks -->
+            <article class="scroll-step" data-step="6" data-chart="actor-network">
+                <div class="step-content">
+                    <span class="step-number">06</span>
+                    <h3>Who Gets Mentioned?</h3>
+                    <p>
+                        GDELT tracks actors—the people, organizations, and countries mentioned in news. 
+                        This network shows how different actors are connected through co-mentions.
+                    </p>
+                    <p class="insight">
+                        <strong>Pattern:</strong> Notice how certain actors serve as "bridges" between 
+                        otherwise disconnected groups. These are often the subjects of the most 
+                        polarized coverage.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 7: Event Types -->
+            <article class="scroll-step" data-step="7" data-chart="event-types">
+                <div class="step-content">
+                    <span class="step-number">07</span>
+                    <h3>What Makes News?</h3>
+                    <p>
+                        GDELT classifies events using the CAMEO taxonomy. This breakdown shows 
+                        which types of events receive the most coverage.
+                    </p>
+                    <p>
+                        Conflict dominates, but the ratio varies significantly by source region 
+                        and outlet type.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 8: Geographic Bias -->
+            <article class="scroll-step" data-step="8" data-chart="geographic-bias">
+                <div class="step-content">
+                    <span class="step-number">08</span>
+                    <h3>The Home Court Advantage</h3>
+                    <p>
+                        Media outlets overwhelmingly cover events close to home. 
+                        This chart shows the geographic distribution of coverage for outlets 
+                        from different regions.
+                    </p>
+                    <p class="caveat">
+                        ⚠️ <strong>Limitation:</strong> This reflects GDELT's source collection, 
+                        which may not perfectly represent all media in a given country.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 9: Sentiment Over Time -->
+            <article class="scroll-step" data-step="9" data-chart="sentiment-timeline">
+                <div class="step-content">
+                    <span class="step-number">09</span>
+                    <h3>Shifting Sentiments</h3>
+                    <p>
+                        How does the tone of coverage for specific countries or topics change over time? 
+                        This timeline reveals sentiment shifts that often precede or follow major events.
+                    </p>
+                    <p>
+                        Select different countries or topics to explore their sentiment trajectories.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 10: Source Reliability -->
+            <article class="scroll-step" data-step="10" data-chart="source-reliability">
+                <div class="step-content">
+                    <span class="step-number">10</span>
+                    <h3>Measuring What We Can't See</h3>
+                    <p>
+                        Media bias is notoriously difficult to quantify objectively. 
+                        Here we show multiple metrics side-by-side, revealing how different 
+                        measurement approaches yield different conclusions.
+                    </p>
+                    <p class="caveat">
+                        ⚠️ <strong>Critical note:</strong> No single metric captures "bias." 
+                        Each measurement makes assumptions about what neutral coverage looks like.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Story Step 11: Comparative Analysis -->
+            <article class="scroll-step" data-step="11" data-chart="outlet-comparison">
+                <div class="step-content">
+                    <span class="step-number">11</span>
+                    <h3>Head-to-Head Comparison</h3>
+                    <p>
+                        Select two or more outlets to compare their coverage patterns directly. 
+                        See how they differ in sentiment, topic selection, and geographic focus.
+                    </p>
+                    <div class="interactive-control">
+                        <label for="outlet-select-1">Compare outlets:</label>
+                        <select id="outlet-select-1" class="outlet-select"></select>
+                        <span>vs</span>
+                        <select id="outlet-select-2" class="outlet-select"></select>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Story Step 12: Uncertainty -->
+            <article class="scroll-step" data-step="12" data-chart="uncertainty">
+                <div class="step-content">
+                    <span class="step-number">12</span>
+                    <h3>The Uncertainty in Our Data</h3>
+                    <p>
+                        Every visualization in this project comes with uncertainty. 
+                        Here we make that uncertainty explicit, showing confidence intervals 
+                        and data quality indicators.
+                    </p>
+                    <p class="insight">
+                        <strong>Transparency:</strong> Hover over any data point to see its 
+                        confidence interval and sample size.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Interactive Exploration -->
+    <section class="section explore-section" id="explore">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Explore the Data</h2>
+                <p class="section-description">
+                    Dive deeper into the data with these interactive tools. 
+                    Filter, compare, and discover patterns on your own.
+                </p>
+            </div>
+            
+            <div class="explore-controls">
+                <div class="control-group">
+                    <label for="date-range">Time Period</label>
+                    <div class="date-range-slider" id="date-range"></div>
+                </div>
+                <div class="control-group">
+                    <label for="region-filter">Region</label>
+                    <select id="region-filter" class="filter-select">
+                        <option value="all">All Regions</option>
+                        <option value="americas">Americas</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia-Pacific</option>
+                        <option value="mena">Middle East & North Africa</option>
+                        <option value="africa">Sub-Saharan Africa</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="event-filter">Event Type</label>
+                    <select id="event-filter" class="filter-select">
+                        <option value="all">All Events</option>
+                        <option value="conflict">Conflict</option>
+                        <option value="cooperation">Cooperation</option>
+                        <option value="diplomatic">Diplomatic</option>
+                        <option value="protest">Protest</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="apply-filters">Apply Filters</button>
+                <button class="btn btn-secondary" id="reset-filters">Reset</button>
+            </div>
+
+            <div class="explore-grid">
+                <div class="explore-card">
+                    <h3>Coverage Volume</h3>
+                    <div class="chart-container" id="explore-volume"></div>
+                </div>
+                <div class="explore-card">
+                    <h3>Sentiment Distribution</h3>
+                    <div class="chart-container" id="explore-sentiment"></div>
+                </div>
+                <div class="explore-card wide">
+                    <h3>Source Comparison Matrix</h3>
+                    <div class="chart-container" id="explore-matrix"></div>
+                </div>
+                <div class="explore-card">
+                    <h3>Topic Breakdown</h3>
+                    <div class="chart-container" id="explore-topics"></div>
+                </div>
+                <div class="explore-card">
+                    <h3>Geographic Focus</h3>
+                    <div class="chart-container" id="explore-geo"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section class="section methodology-section" id="methodology">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Methodology</h2>
+                <p class="section-description">
+                    Understanding how we collected, processed, and visualized this data is 
+                    essential for interpreting the results critically.
+                </p>
+            </div>
+
+            <div class="methodology-grid">
+                <article class="method-card" id="data-sources">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"/>
+                            <path d="M4 7h16M9 4v3M15 4v3M9 14h6M9 17h3"/>
+                        </svg>
+                    </div>
+                    <h3>Data Sources</h3>
+                    <p>
+                        <strong>GDELT (Global Database of Events, Language, and Tone)</strong> 
+                        monitors broadcast, print, and web news media from nearly every country. 
+                        It processes over 100,000 articles daily, extracting events, actors, 
+                        sentiment, and themes.
+                    </p>
+                    <ul class="method-details">
+                        <li><strong>Events Table:</strong> Who did what to whom, when, and where</li>
+                        <li><strong>GKG (Global Knowledge Graph):</strong> Themes, emotions, and locations</li>
+                        <li><strong>Mentions Table:</strong> Links events to specific articles</li>
+                    </ul>
+                    <p class="method-caveat">
+                        <strong>Important:</strong> GDELT has English-language bias and relies on 
+                        automated processing that can introduce errors.
+                    </p>
+                </article>
+
+                <article class="method-card" id="data-processing">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                        </svg>
+                    </div>
+                    <h3>Data Processing Pipeline</h3>
+                    <p>Raw GDELT data undergoes several transformations before visualization:</p>
+                    <ol class="method-steps">
+                        <li>
+                            <strong>Extraction:</strong> PostgreSQL queries retrieve relevant 
+                            events, filtered by date range and quality thresholds
+                        </li>
+                        <li>
+                            <strong>Cleaning:</strong> Remove duplicates, handle missing values, 
+                            normalize source names
+                        </li>
+                        <li>
+                            <strong>Aggregation:</strong> Calculate metrics at source, region, 
+                            and time period levels
+                        </li>
+                        <li>
+                            <strong>Metric Computation:</strong> Derive sentiment scores, 
+                            coverage indices, and bias indicators
+                        </li>
+                        <li>
+                            <strong>Export:</strong> Output JSON/CSV files optimized for 
+                            web visualization
+                        </li>
+                    </ol>
+                </article>
+
+                <article class="method-card" id="bias-metrics">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3v18h18"/>
+                            <path d="M7 16l4-4 4 4 5-6"/>
+                        </svg>
+                    </div>
+                    <h3>Bias Metrics</h3>
+                    <p>We employ multiple metrics to capture different dimensions of media bias:</p>
+                    <ul class="method-details">
+                        <li>
+                            <strong>Sentiment Deviation:</strong> How far a source's average tone 
+                            deviates from the global mean for similar events
+                        </li>
+                        <li>
+                            <strong>Coverage Selectivity:</strong> Which stories a source chooses 
+                            to cover vs. ignore
+                        </li>
+                        <li>
+                            <strong>Geographic Concentration:</strong> How focused coverage is 
+                            on specific regions
+                        </li>
+                        <li>
+                            <strong>Actor Framing:</strong> Whether specific actors are 
+                            consistently portrayed positively or negatively
+                        </li>
+                    </ul>
+                    <p class="method-caveat">
+                        <strong>Limitation:</strong> These metrics capture patterns but cannot 
+                        definitively establish intent or distinguish bias from legitimate 
+                        editorial focus.
+                    </p>
+                </article>
+
+                <article class="method-card" id="limitations">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 8v4M12 16h.01"/>
+                        </svg>
+                    </div>
+                    <h3>Limitations & Caveats</h3>
+                    <p>This analysis has significant limitations that must be acknowledged:</p>
+                    <ul class="limitations-list">
+                        <li>
+                            <strong>Source Bias:</strong> GDELT's source collection is not 
+                            comprehensive; smaller outlets and non-English media are underrepresented
+                        </li>
+                        <li>
+                            <strong>Automated Processing:</strong> Event extraction and sentiment 
+                            analysis use algorithms that can misclassify content
+                        </li>
+                        <li>
+                            <strong>Temporal Gaps:</strong> Coverage may be inconsistent for 
+                            certain periods or regions
+                        </li>
+                        <li>
+                            <strong>Definitional Ambiguity:</strong> "Bias" is contested; our 
+                            metrics operationalize one interpretation
+                        </li>
+                        <li>
+                            <strong>Correlation ≠ Causation:</strong> Patterns don't reveal 
+                            why outlets make editorial decisions
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="method-card" id="uncertainty">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 10 10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h3>Uncertainty & Confidence</h3>
+                    <p>We communicate uncertainty throughout the visualizations:</p>
+                    <ul class="method-details">
+                        <li>
+                            <strong>Confidence Intervals:</strong> Shown on hover for 
+                            aggregated metrics
+                        </li>
+                        <li>
+                            <strong>Sample Size Indicators:</strong> Visual encoding of 
+                            data volume underlying each point
+                        </li>
+                        <li>
+                            <strong>Missing Data:</strong> Explicitly marked rather than 
+                            interpolated or hidden
+                        </li>
+                        <li>
+                            <strong>Quality Flags:</strong> Data quality warnings appear 
+                            when thresholds aren't met
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="method-card" id="tech-stack">
+                    <div class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                        </svg>
+                    </div>
+                    <h3>Technical Implementation</h3>
+                    <p>This project uses the following technology stack:</p>
+                    <ul class="tech-list">
+                        <li><strong>Data Storage:</strong> PostgreSQL database with GDELT schema</li>
+                        <li><strong>Preprocessing:</strong> Python (pandas, psycopg2, numpy)</li>
+                        <li><strong>Visualization:</strong> D3.js v7</li>
+                        <li><strong>Frontend:</strong> Vanilla HTML, CSS, JavaScript</li>
+                        <li><strong>Hosting:</strong> GitHub Pages</li>
+                    </ul>
+                    <p>
+                        All code is open source and available in our 
+                        <a href="https://github.com/sepehrkdi/MediaBiasVisualization" target="_blank" rel="noopener">
+                            GitHub repository
+                        </a>.
+                    </p>
+                </article>
+            </div>
+
+            <!-- Data Flow Diagram -->
+            <div class="data-flow">
+                <h3>Data Pipeline</h3>
+                <div class="flow-diagram" id="data-flow-diagram"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">About This Project</h2>
+            </div>
+
+            <div class="about-content">
+                <div class="project-info">
+                    <h3>Project Context</h3>
+                    <p>
+                        This visualization project was developed as part of the 
+                        <strong>Data Visualization</strong> course at the 
+                        <strong>University of Geneva</strong> (2025-2026).
+                    </p>
+                    <p>
+                        Our goal is to make complex media analysis accessible and to encourage 
+                        critical thinking about news consumption. We believe transparency about 
+                        methodology and limitations is essential for responsible data journalism.
+                    </p>
+                </div>
+
+                <div class="team-section">
+                    <h3>Team Members</h3>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <div class="member-avatar">
+                                <span>SK</span>
+                            </div>
+                            <div class="member-info">
+                                <h4>Sepehr Khodadadeh</h4>
+                                <span class="member-role">Lead Developer & Data Engineer</span>
+                                <p>Data pipeline architecture, D3.js visualizations, frontend development</p>
+                            </div>
+                        </div>
+                        <!-- Add more team members as needed -->
+                    </div>
+                </div>
+
+                <div class="acknowledgments">
+                    <h3>Acknowledgments</h3>
+                    <ul>
+                        <li>
+                            <strong>GDELT Project</strong> for providing open access to 
+                            global news data
+                        </li>
+                        <li>
+                            <strong>University of Geneva</strong> for the academic framework 
+                            and guidance
+                        </li>
+                        <li>
+                            Course instructors and teaching assistants for their feedback 
+                            and support
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="citation">
+                    <h3>How to Cite</h3>
+                    <div class="citation-box">
+                        <code>
+                            Khodadadeh, S. et al. (2026). "Decoding Media Bias: A Data-Driven Exploration 
+                            of Global News Coverage." University of Geneva Data Visualization Project. 
+                            Available at: https://sepehrkdi.github.io/MediaBiasVisualization/
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <img src="assets/images/unige-logo.svg" alt="University of Geneva" class="footer-logo">
+                    <p>
+                        A Data Visualization project exploring global media bias through 
+                        interactive storytelling.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a href="#story">The Story</a></li>
+                            <li><a href="#explore">Interactive Explorer</a></li>
+                            <li><a href="#methodology">Methodology</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="https://github.com/sepehrkdi/MediaBiasVisualization" target="_blank">GitHub Repository</a></li>
+                            <li><a href="https://www.gdeltproject.org/" target="_blank">GDELT Project</a></li>
+                            <li><a href="https://d3js.org/" target="_blank">D3.js</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>University</h4>
+                        <ul>
+                            <li><a href="https://www.unige.ch/" target="_blank">University of Geneva</a></li>
+                            <li><a href="https://id.unige.ch/" target="_blank">Identity Guidelines</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2026 MediaBias Visualization Project. 
+                    Data provided by <a href="https://www.gdeltproject.org/" target="_blank">GDELT</a>.
+                </p>
+                <p class="disclaimer">
+                    This is an academic project. Visualizations should not be taken as 
+                    definitive assessments of media bias.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tooltip Container -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading visualizations...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

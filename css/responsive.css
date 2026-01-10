@@ -1,0 +1,496 @@
+/* ==========================================================================
+   Responsive Styles - Media Bias Visualization
+   Mobile-first approach with breakpoints
+   ========================================================================== */
+
+/* ==========================================================================
+   Breakpoint Reference
+   - Mobile:  < 576px
+   - Tablet:  576px - 768px
+   - Desktop: 768px - 1024px
+   - Large:   1024px - 1200px
+   - XLarge:  > 1200px
+   ========================================================================== */
+
+/* ==========================================================================
+   Mobile Styles (Base - applies to all)
+   ========================================================================== */
+
+/* Header mobile */
+@media (max-width: 768px) {
+    .site-header {
+        height: 60px;
+    }
+    
+    :root {
+        --header-height: 60px;
+    }
+    
+    .unige-logo {
+        height: 32px;
+    }
+    
+    .main-nav {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-primary);
+        padding: var(--space-xl);
+        transform: translateX(100%);
+        transition: transform var(--transition-base);
+        z-index: var(--z-overlay);
+    }
+    
+    .main-nav.is-open {
+        transform: translateX(0);
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+    
+    .nav-list a {
+        font-size: 1.25rem;
+    }
+    
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-toggle.is-active .hamburger {
+        background: transparent;
+    }
+    
+    .nav-toggle.is-active .hamburger::before {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .nav-toggle.is-active .hamburger::after {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+}
+
+/* Hero mobile */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 100svh;
+        padding-top: 60px;
+    }
+    
+    .hero-content {
+        padding: var(--space-xl) var(--space-md);
+    }
+    
+    .hero-badge span {
+        font-size: 0.75rem;
+        padding: var(--space-xxs) var(--space-sm);
+    }
+    
+    .hero-cta {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    
+    .hero-cta .btn {
+        width: 100%;
+    }
+}
+
+/* Intro section mobile */
+@media (max-width: 768px) {
+    .intro-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .intro-visual {
+        min-height: 300px;
+        order: -1;
+    }
+    
+    .data-highlight {
+        flex-wrap: wrap;
+        gap: var(--space-lg);
+    }
+    
+    .highlight-item {
+        flex: 1;
+        min-width: 100px;
+    }
+    
+    .highlight-number {
+        font-size: 2rem;
+    }
+}
+
+/* Explore section mobile */
+@media (max-width: 768px) {
+    .explore-controls {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .control-group {
+        width: 100%;
+    }
+    
+    .explore-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .explore-card.wide {
+        grid-column: span 1;
+    }
+    
+    .explore-card .chart-container {
+        min-height: 250px;
+    }
+}
+
+/* Methodology section mobile */
+@media (max-width: 768px) {
+    .methodology-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .method-card {
+        padding: var(--space-lg);
+    }
+}
+
+/* About section mobile */
+@media (max-width: 768px) {
+    .team-member {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .member-avatar {
+        margin: 0 auto;
+    }
+}
+
+/* Footer mobile */
+@media (max-width: 768px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .footer-brand {
+        text-align: center;
+    }
+    
+    .footer-brand p {
+        max-width: none;
+    }
+    
+    .footer-logo {
+        margin: 0 auto var(--space-md);
+    }
+    
+    .footer-links {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+/* ==========================================================================
+   Tablet Styles (576px - 1024px)
+   ========================================================================== */
+
+@media (min-width: 576px) and (max-width: 1024px) {
+    .intro-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .methodology-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .explore-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .footer-links {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ==========================================================================
+   Desktop Styles (768px+)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    .nav-toggle {
+        display: none;
+    }
+    
+    .main-nav {
+        position: static;
+        transform: none;
+        padding: 0;
+        background: transparent;
+    }
+    
+    .nav-list {
+        flex-direction: row;
+    }
+}
+
+/* ==========================================================================
+   Large Desktop Styles (1200px+)
+   ========================================================================== */
+
+@media (min-width: 1200px) {
+    .container {
+        padding: 0 var(--space-xl);
+    }
+    
+    .intro-grid {
+        gap: var(--space-xxxl);
+    }
+    
+    .explore-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .methodology-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ==========================================================================
+   Touch Device Optimizations
+   ========================================================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .btn {
+        min-height: 44px;
+        padding: var(--space-md) var(--space-xl);
+    }
+    
+    .filter-select {
+        min-height: 44px;
+    }
+    
+    .nav-list a {
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    /* Disable hover effects */
+    .bar:hover,
+    .scatter-point:hover,
+    .country:hover {
+        opacity: 1;
+    }
+    
+    /* Make tooltips tap-activated */
+    .tooltip {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+        max-width: none;
+        padding: var(--space-lg);
+    }
+}
+
+/* ==========================================================================
+   High Contrast / Accessibility
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+    :root {
+        --color-gray-400: #555;
+        --color-gray-500: #444;
+        --text-secondary: #333;
+    }
+    
+    .bar:hover,
+    .line.is-highlighted,
+    .scatter-point.is-highlighted {
+        outline: 3px solid var(--color-gray-900);
+    }
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .scroll-indicator {
+        animation: none;
+    }
+    
+    .step-content {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .site-header,
+    .site-footer,
+    .scroll-progress,
+    .step-indicators,
+    .nav-toggle,
+    .loading-overlay,
+    .tooltip {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        background: #fff;
+    }
+    
+    .section {
+        padding: 1cm 0;
+        page-break-inside: avoid;
+    }
+    
+    .scrollytelling {
+        display: block;
+    }
+    
+    .sticky-visual {
+        position: relative;
+        height: auto;
+        page-break-after: always;
+    }
+    
+    .step-content {
+        opacity: 1;
+        transform: none;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        margin-bottom: 1cm;
+        page-break-inside: avoid;
+    }
+    
+    a {
+        color: #000;
+        text-decoration: underline;
+    }
+    
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 10pt;
+        color: #666;
+    }
+    
+    .chart-container {
+        page-break-inside: avoid;
+    }
+    
+    h1, h2, h3 {
+        page-break-after: avoid;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support (optional enhancement)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    /* Uncomment to enable automatic dark mode
+    :root {
+        --bg-primary: var(--color-gray-900);
+        --bg-secondary: var(--color-gray-800);
+        --text-primary: var(--color-gray-100);
+        --text-secondary: var(--color-gray-400);
+        --text-muted: var(--color-gray-500);
+        --border-color: var(--color-gray-700);
+    }
+    
+    .site-header {
+        background: rgba(45, 45, 45, 0.95);
+        border-bottom-color: var(--color-gray-700);
+    }
+    
+    .step-content,
+    .explore-card,
+    .method-card {
+        background: var(--color-gray-800);
+        border-color: var(--color-gray-700);
+    }
+    */
+}
+
+/* ==========================================================================
+   Container Queries (modern browsers)
+   ========================================================================== */
+
+@supports (container-type: inline-size) {
+    .chart-container {
+        container-type: inline-size;
+    }
+    
+    @container (max-width: 400px) {
+        .chart-title-text {
+            font-size: 14px;
+        }
+        
+        .axis text {
+            font-size: 9px;
+        }
+        
+        .legend {
+            display: none;
+        }
+    }
+}
+
+/* ==========================================================================
+   Orientation Specific
+   ========================================================================== */
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .hero {
+        min-height: auto;
+        padding: var(--space-xl) 0;
+    }
+    
+    .hero-content {
+        padding: var(--space-lg);
+    }
+    
+    .scroll-indicator {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   High DPI / Retina Displays
+   ========================================================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Ensure crisp lines on retina */
+    .axis path,
+    .axis line,
+    .grid line {
+        shape-rendering: crispEdges;
+    }
+}

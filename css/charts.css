@@ -1,0 +1,747 @@
+/* ==========================================================================
+   Chart Styles - Media Bias Visualization
+   All D3.js visualization styling via CSS selectors
+   No inline SVG styling allowed
+   ========================================================================== */
+
+/* ==========================================================================
+   Chart Containers
+   ========================================================================== */
+
+.chart-container {
+    width: 100%;
+    position: relative;
+    background-color: var(--bg-primary);
+}
+
+.chart-container svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-annotations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Chart Loading State */
+.chart-container.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   Axes
+   ========================================================================== */
+
+/* Axis lines */
+.axis path,
+.axis line {
+    fill: none;
+    stroke: var(--color-gray-300);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.axis-x path,
+.axis-y path {
+    stroke: var(--color-gray-400);
+}
+
+/* Hide axis domain line when not needed */
+.axis.no-domain path {
+    display: none;
+}
+
+/* Axis tick labels */
+.axis text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    fill: var(--color-gray-600);
+}
+
+/* Axis labels (titles) */
+.axis-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--color-gray-700);
+}
+
+.axis-label-x {
+    text-anchor: middle;
+}
+
+.axis-label-y {
+    text-anchor: middle;
+}
+
+/* Grid lines */
+.grid line {
+    stroke: var(--color-gray-200);
+    stroke-opacity: 0.7;
+    stroke-dasharray: 2, 4;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+/* ==========================================================================
+   Chart Titles & Labels
+   ========================================================================== */
+
+.chart-title-text {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 16px;
+    font-weight: 600;
+    fill: var(--color-gray-900);
+}
+
+.chart-subtitle-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    fill: var(--color-gray-600);
+}
+
+.data-label-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    fill: var(--color-gray-700);
+    pointer-events: none;
+}
+
+.annotation-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    fill: var(--color-gray-700);
+}
+
+.annotation-line {
+    stroke: var(--color-gray-500);
+    stroke-width: 1;
+    stroke-dasharray: 4, 2;
+}
+
+/* ==========================================================================
+   Color Palettes
+   ========================================================================== */
+
+/* Primary categorical palette */
+.color-1 { fill: #CF0063; stroke: #CF0063; }  /* Primary magenta */
+.color-2 { fill: #003366; stroke: #003366; }  /* Dark blue */
+.color-3 { fill: #FF6B35; stroke: #FF6B35; }  /* Orange */
+.color-4 { fill: #2E7D32; stroke: #2E7D32; }  /* Green */
+.color-5 { fill: #7B1FA2; stroke: #7B1FA2; }  /* Purple */
+.color-6 { fill: #00838F; stroke: #00838F; }  /* Teal */
+.color-7 { fill: #F9A825; stroke: #F9A825; }  /* Yellow */
+.color-8 { fill: #5D4037; stroke: #5D4037; }  /* Brown */
+
+/* Sentiment colors */
+.sentiment-negative {
+    fill: var(--color-sentiment-negative);
+    stroke: var(--color-sentiment-negative);
+}
+
+.sentiment-neutral {
+    fill: var(--color-sentiment-neutral);
+    stroke: var(--color-sentiment-neutral);
+}
+
+.sentiment-positive {
+    fill: var(--color-sentiment-positive);
+    stroke: var(--color-sentiment-positive);
+}
+
+/* Sequential scale (for heatmaps, choropleth) */
+.sequential-1 { fill: #FCE4EC; }
+.sequential-2 { fill: #F8BBD9; }
+.sequential-3 { fill: #F48FB1; }
+.sequential-4 { fill: #EC407A; }
+.sequential-5 { fill: #E91E63; }
+.sequential-6 { fill: #D81B60; }
+.sequential-7 { fill: #C2185B; }
+.sequential-8 { fill: #AD1457; }
+.sequential-9 { fill: #880E4F; }
+
+/* Diverging scale (for comparisons) */
+.diverging-negative-4 { fill: #B71C1C; }
+.diverging-negative-3 { fill: #D32F2F; }
+.diverging-negative-2 { fill: #EF5350; }
+.diverging-negative-1 { fill: #FFCDD2; }
+.diverging-neutral { fill: #EEEEEE; }
+.diverging-positive-1 { fill: #C8E6C9; }
+.diverging-positive-2 { fill: #66BB6A; }
+.diverging-positive-3 { fill: #388E3C; }
+.diverging-positive-4 { fill: #1B5E20; }
+
+/* ==========================================================================
+   Bar Charts
+   ========================================================================== */
+
+.bar {
+    transition: fill var(--transition-fast), opacity var(--transition-fast);
+}
+
+.bar:hover {
+    opacity: 0.8;
+}
+
+.bar.is-highlighted {
+    stroke: var(--color-gray-900);
+    stroke-width: 2;
+}
+
+.bar.is-dimmed {
+    opacity: 0.3;
+}
+
+/* Grouped bars */
+.bar-group .bar {
+    rx: 2;
+}
+
+/* Stacked bars */
+.bar-stack .bar {
+    stroke: var(--bg-primary);
+    stroke-width: 1;
+}
+
+/* Horizontal bar chart labels */
+.bar-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    fill: var(--color-gray-700);
+}
+
+.bar-value {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    fill: var(--color-gray-900);
+}
+
+/* ==========================================================================
+   Line Charts
+   ========================================================================== */
+
+.line {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.line.is-highlighted {
+    stroke-width: 3;
+}
+
+.line.is-dimmed {
+    stroke-opacity: 0.2;
+}
+
+/* Line area fills */
+.area {
+    stroke: none;
+    opacity: 0.15;
+}
+
+/* Data points on lines */
+.dot {
+    stroke: var(--bg-primary);
+    stroke-width: 2;
+    transition: r var(--transition-fast);
+}
+
+.dot:hover {
+    r: 6;
+}
+
+.dot.is-highlighted {
+    stroke-width: 3;
+}
+
+/* Confidence bands */
+.confidence-band {
+    fill-opacity: 0.2;
+    stroke: none;
+}
+
+/* ==========================================================================
+   Scatter Plots
+   ========================================================================== */
+
+.scatter-point {
+    stroke: var(--bg-primary);
+    stroke-width: 1.5;
+    transition: r var(--transition-fast), opacity var(--transition-fast);
+}
+
+.scatter-point:hover {
+    stroke-width: 2;
+    cursor: pointer;
+}
+
+.scatter-point.is-highlighted {
+    stroke: var(--color-gray-900);
+    stroke-width: 2;
+}
+
+.scatter-point.is-dimmed {
+    opacity: 0.2;
+}
+
+/* Bubble chart - size encoding */
+.bubble {
+    fill-opacity: 0.7;
+    stroke: var(--bg-primary);
+    stroke-width: 1;
+}
+
+.bubble:hover {
+    fill-opacity: 1;
+}
+
+/* ==========================================================================
+   Maps / Choropleth
+   ========================================================================== */
+
+.map-container {
+    background-color: var(--color-gray-100);
+}
+
+.country {
+    stroke: var(--bg-primary);
+    stroke-width: 0.5;
+    transition: fill var(--transition-fast), stroke-width var(--transition-fast);
+}
+
+.country:hover {
+    stroke-width: 1.5;
+    stroke: var(--color-gray-600);
+}
+
+.country.is-highlighted {
+    stroke: var(--color-gray-900);
+    stroke-width: 2;
+}
+
+.country.is-selected {
+    stroke: var(--color-primary);
+    stroke-width: 2;
+}
+
+.country.no-data {
+    fill: var(--color-gray-200);
+    fill-opacity: 0.5;
+}
+
+/* Map markers */
+.map-marker {
+    fill: var(--color-primary);
+    stroke: var(--bg-primary);
+    stroke-width: 2;
+}
+
+.map-marker-pulse {
+    fill: var(--color-primary);
+    opacity: 0;
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Graticule (lat/long lines) */
+.graticule {
+    fill: none;
+    stroke: var(--color-gray-300);
+    stroke-width: 0.5;
+    stroke-opacity: 0.5;
+}
+
+/* ==========================================================================
+   Network / Force Layout
+   ========================================================================== */
+
+.network-node {
+    stroke: var(--bg-primary);
+    stroke-width: 2;
+    cursor: pointer;
+    transition: r var(--transition-fast);
+}
+
+.network-node:hover {
+    stroke-width: 3;
+}
+
+.network-node.is-highlighted {
+    stroke: var(--color-gray-900);
+    stroke-width: 3;
+}
+
+.network-node.is-dimmed {
+    opacity: 0.2;
+}
+
+.network-link {
+    stroke: var(--color-gray-400);
+    stroke-opacity: 0.4;
+    fill: none;
+}
+
+.network-link.is-highlighted {
+    stroke: var(--color-primary);
+    stroke-opacity: 1;
+    stroke-width: 2;
+}
+
+.network-link.is-dimmed {
+    stroke-opacity: 0.1;
+}
+
+.network-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+    fill: var(--color-gray-700);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Pie / Donut Charts
+   ========================================================================== */
+
+.pie-arc {
+    stroke: var(--bg-primary);
+    stroke-width: 2;
+    transition: transform var(--transition-fast);
+}
+
+.pie-arc:hover {
+    transform: scale(1.03);
+}
+
+.pie-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    fill: var(--color-gray-800);
+    pointer-events: none;
+}
+
+.pie-value {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--bg-primary);
+    pointer-events: none;
+}
+
+/* Donut center text */
+.donut-center-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    fill: var(--color-gray-600);
+    text-anchor: middle;
+}
+
+.donut-center-value {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    fill: var(--color-gray-900);
+    text-anchor: middle;
+}
+
+/* ==========================================================================
+   Heatmaps
+   ========================================================================== */
+
+.heatmap-cell {
+    stroke: var(--bg-primary);
+    stroke-width: 1;
+    transition: stroke-width var(--transition-fast);
+}
+
+.heatmap-cell:hover {
+    stroke: var(--color-gray-600);
+    stroke-width: 2;
+}
+
+.heatmap-label-row,
+.heatmap-label-col {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+    fill: var(--color-gray-700);
+}
+
+/* ==========================================================================
+   Treemaps
+   ========================================================================== */
+
+.treemap-cell {
+    stroke: var(--bg-primary);
+    stroke-width: 2;
+    transition: stroke-width var(--transition-fast);
+}
+
+.treemap-cell:hover {
+    stroke-width: 3;
+}
+
+.treemap-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    fill: var(--bg-primary);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Legends
+   ========================================================================== */
+
+.legend {
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.legend-item {
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.legend-item:hover {
+    opacity: 0.7;
+}
+
+.legend-item.is-inactive {
+    opacity: 0.3;
+}
+
+.legend-swatch {
+    stroke: none;
+}
+
+.legend-label {
+    font-size: 11px;
+    fill: var(--color-gray-700);
+}
+
+.legend-title {
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--color-gray-900);
+}
+
+/* Gradient legend */
+.legend-gradient-bar {
+    stroke: var(--color-gray-400);
+    stroke-width: 1;
+}
+
+.legend-gradient-tick {
+    stroke: var(--color-gray-600);
+    stroke-width: 1;
+}
+
+.legend-gradient-label {
+    font-size: 10px;
+    fill: var(--color-gray-600);
+}
+
+/* ==========================================================================
+   Interactive Elements
+   ========================================================================== */
+
+/* Brush selection */
+.brush .selection {
+    fill: var(--color-primary);
+    fill-opacity: 0.2;
+    stroke: var(--color-primary);
+    stroke-width: 1;
+}
+
+.brush .handle {
+    fill: var(--color-primary);
+}
+
+/* Zoom controls */
+.zoom-rect {
+    fill: none;
+    pointer-events: all;
+}
+
+/* Reference lines */
+.reference-line {
+    stroke: var(--color-gray-600);
+    stroke-width: 1;
+    stroke-dasharray: 6, 4;
+}
+
+.reference-line-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+    fill: var(--color-gray-600);
+}
+
+/* Focus indicator for accessibility */
+.focusable:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Voronoi overlay for better hover detection */
+.voronoi {
+    fill: none;
+    pointer-events: all;
+}
+
+/* ==========================================================================
+   Uncertainty Visualization
+   ========================================================================== */
+
+/* Error bars */
+.error-bar {
+    stroke: var(--color-gray-600);
+    stroke-width: 1.5;
+}
+
+.error-bar-cap {
+    stroke: var(--color-gray-600);
+    stroke-width: 1.5;
+}
+
+/* Confidence intervals */
+.ci-band {
+    fill-opacity: 0.2;
+    stroke: none;
+}
+
+.ci-line {
+    stroke-dasharray: 4, 3;
+    stroke-opacity: 0.6;
+}
+
+/* Missing data indicators */
+.missing-data-marker {
+    fill: none;
+    stroke: var(--color-gray-400);
+    stroke-width: 1;
+    stroke-dasharray: 2, 2;
+}
+
+.missing-data-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 10px;
+    font-style: italic;
+    fill: var(--color-gray-500);
+}
+
+/* Data quality indicator */
+.quality-indicator {
+    stroke: none;
+}
+
+.quality-high { fill: var(--color-positive); }
+.quality-medium { fill: var(--color-warning); }
+.quality-low { fill: var(--color-negative); }
+
+/* ==========================================================================
+   Animation Classes
+   ========================================================================== */
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease forwards;
+}
+
+.animate-draw {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Staggered animation delays */
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+.animate-delay-5 { animation-delay: 0.5s; }
+
+/* ==========================================================================
+   Responsive Chart Styles
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .axis text {
+        font-size: 10px;
+    }
+    
+    .axis-label {
+        font-size: 11px;
+    }
+    
+    .chart-title-text {
+        font-size: 14px;
+    }
+    
+    .legend-label {
+        font-size: 10px;
+    }
+    
+    .data-label-text {
+        font-size: 9px;
+    }
+}

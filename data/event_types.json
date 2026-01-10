@@ -1,0 +1,26 @@
+{
+  "types": [
+    {"code": "01", "rootCode": "01", "name": "Public Statement", "count": 254320, "percent": 25.43, "avgTone": 0.567, "avgGoldstein": 2.345},
+    {"code": "14", "rootCode": "14", "name": "Protest", "count": 82340, "percent": 8.23, "avgTone": -1.234, "avgGoldstein": -3.456},
+    {"code": "02", "rootCode": "02", "name": "Appeal", "count": 78920, "percent": 7.89, "avgTone": 0.345, "avgGoldstein": 1.567},
+    {"code": "03", "rootCode": "03", "name": "Cooperation Intent", "count": 71230, "percent": 7.12, "avgTone": 1.234, "avgGoldstein": 3.890},
+    {"code": "10", "rootCode": "10", "name": "Demand", "count": 62450, "percent": 6.25, "avgTone": -0.789, "avgGoldstein": -1.890},
+    {"code": "13", "rootCode": "13", "name": "Threaten", "count": 58760, "percent": 5.88, "avgTone": -2.345, "avgGoldstein": -5.678},
+    {"code": "04", "rootCode": "04", "name": "Consultation", "count": 58120, "percent": 5.81, "avgTone": 0.890, "avgGoldstein": 2.567},
+    {"code": "11", "rootCode": "11", "name": "Disapproval", "count": 52340, "percent": 5.23, "avgTone": -1.567, "avgGoldstein": -3.234},
+    {"code": "05", "rootCode": "05", "name": "Diplomatic Cooperation", "count": 48920, "percent": 4.89, "avgTone": 1.567, "avgGoldstein": 4.567},
+    {"code": "12", "rootCode": "12", "name": "Reject", "count": 41230, "percent": 4.12, "avgTone": -1.890, "avgGoldstein": -4.123},
+    {"code": "06", "rootCode": "06", "name": "Material Cooperation", "count": 38760, "percent": 3.88, "avgTone": 1.890, "avgGoldstein": 5.234},
+    {"code": "17", "rootCode": "17", "name": "Coercion", "count": 38120, "percent": 3.81, "avgTone": -2.890, "avgGoldstein": -6.789},
+    {"code": "18", "rootCode": "18", "name": "Assault", "count": 32450, "percent": 3.25, "avgTone": -3.456, "avgGoldstein": -8.234},
+    {"code": "15", "rootCode": "15", "name": "Exhibit Force", "count": 28760, "percent": 2.88, "avgTone": -2.567, "avgGoldstein": -5.890},
+    {"code": "07", "rootCode": "07", "name": "Aid Provision", "count": 28120, "percent": 2.81, "avgTone": 2.345, "avgGoldstein": 6.789},
+    {"code": "19", "rootCode": "19", "name": "Fight", "count": 18920, "percent": 1.89, "avgTone": -4.234, "avgGoldstein": -9.567},
+    {"code": "20", "rootCode": "20", "name": "Military Engagement", "count": 5620, "percent": 0.56, "avgTone": -5.123, "avgGoldstein": -10.0}
+  ],
+  "metadata": {
+    "generated_at": "2025-01-15T12:00:00Z",
+    "total_events": 1000000,
+    "unique_types": 17
+  }
+}

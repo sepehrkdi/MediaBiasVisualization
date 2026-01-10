@@ -1,0 +1,523 @@
+/* ==========================================================================
+   Scrollytelling Styles - Media Bias Visualization
+   ========================================================================== */
+
+/* ==========================================================================
+   Scrollytelling Container
+   ========================================================================== */
+
+.scrollytelling {
+    position: relative;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   Sticky Visual Container
+   ========================================================================== */
+
+.sticky-container {
+    position: relative;
+    width: 100%;
+}
+
+.sticky-visual {
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    background: var(--bg-secondary);
+    overflow: hidden;
+}
+
+.sticky-visual .chart-wrapper {
+    width: 100%;
+    max-width: 900px;
+    height: 80%;
+    max-height: 600px;
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-lg);
+    position: relative;
+}
+
+.sticky-visual .chart-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* ==========================================================================
+   Scroll Steps (Text Content)
+   ========================================================================== */
+
+.scroll-sections {
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.scroll-step {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: var(--space-xxl) var(--container-padding);
+}
+
+.scroll-step:first-child {
+    padding-top: calc(50vh + var(--header-height));
+}
+
+.scroll-step:last-child {
+    padding-bottom: 50vh;
+}
+
+.step-content {
+    width: 100%;
+    max-width: 380px;
+    margin-left: auto;
+    background: var(--bg-primary);
+    padding: var(--space-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    pointer-events: auto;
+    opacity: 0.3;
+    transform: translateY(20px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.scroll-step.is-active .step-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.step-number {
+    display: inline-block;
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-sm);
+    padding: var(--space-xxs) var(--space-sm);
+    background: rgba(207, 0, 99, 0.1);
+    border-radius: var(--border-radius-sm);
+}
+
+.step-content h3 {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+}
+
+.step-content p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1.65;
+}
+
+.step-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Interactive controls within steps */
+.interactive-control {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.interactive-control label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.interactive-control select {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.875rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-primary);
+}
+
+.outlet-select {
+    min-width: 140px;
+}
+
+/* ==========================================================================
+   Chart Annotations (positioned over sticky visual)
+   ========================================================================== */
+
+.chart-annotations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.annotation {
+    position: absolute;
+    max-width: 200px;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-primary);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.annotation.is-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.annotation::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--bg-primary);
+    transform: rotate(45deg);
+}
+
+.annotation.arrow-left::before {
+    left: -4px;
+    top: 50%;
+    margin-top: -4px;
+    box-shadow: -2px 2px 3px rgba(0,0,0,0.05);
+}
+
+.annotation.arrow-right::before {
+    right: -4px;
+    top: 50%;
+    margin-top: -4px;
+    box-shadow: 2px -2px 3px rgba(0,0,0,0.05);
+}
+
+.annotation.arrow-top::before {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+    box-shadow: -2px -2px 3px rgba(0,0,0,0.05);
+}
+
+.annotation.arrow-bottom::before {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   Progress Indicator
+   ========================================================================== */
+
+.scroll-progress {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--color-gray-200);
+    z-index: var(--z-sticky);
+}
+
+.scroll-progress-bar {
+    height: 100%;
+    background: var(--color-primary);
+    width: 0;
+    transition: width 100ms linear;
+}
+
+/* Step indicators (dots) */
+.step-indicators {
+    position: fixed;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.step-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-gray-300);
+    border: 2px solid var(--bg-primary);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.step-indicator:hover {
+    background: var(--color-gray-400);
+}
+
+.step-indicator.is-active {
+    background: var(--color-primary);
+    transform: scale(1.2);
+}
+
+.step-indicator.is-passed {
+    background: var(--color-primary-light);
+}
+
+/* ==========================================================================
+   Chart Transitions
+   ========================================================================== */
+
+/* Fade transition */
+.chart-transition-fade {
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+}
+
+.chart-transition-fade.is-visible {
+    opacity: 1;
+}
+
+/* Slide transitions */
+.chart-transition-slide-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.chart-transition-slide-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.chart-transition-slide-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.chart-transition-slide-left.is-visible,
+.chart-transition-slide-right.is-visible,
+.chart-transition-slide-up.is-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* ==========================================================================
+   Scroll-triggered Highlights
+   ========================================================================== */
+
+.highlight-pulse {
+    animation: highlightPulse 1.5s ease-in-out;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        filter: none;
+    }
+    50% {
+        filter: drop-shadow(0 0 8px var(--color-primary));
+    }
+}
+
+.highlight-glow {
+    filter: drop-shadow(0 0 6px var(--color-primary));
+}
+
+/* ==========================================================================
+   Narrative Elements
+   ========================================================================== */
+
+/* Quote/Callout in story */
+.story-callout {
+    position: relative;
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) 0;
+    background: linear-gradient(135deg, rgba(207, 0, 99, 0.05) 0%, rgba(0, 51, 102, 0.05) 100%);
+    border-radius: var(--border-radius-md);
+    border-left: 3px solid var(--color-primary);
+}
+
+.story-callout p {
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Reveal animation for key numbers */
+.reveal-number {
+    display: inline-block;
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.reveal-number.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Key insight marker */
+.key-insight {
+    position: relative;
+    padding-left: var(--space-lg);
+}
+
+.key-insight::before {
+    content: '💡';
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* ==========================================================================
+   Mini Charts in Step Content
+   ========================================================================== */
+
+.step-mini-chart {
+    width: 100%;
+    height: 120px;
+    margin: var(--space-md) 0;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.step-mini-chart svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ==========================================================================
+   Responsive Scrollytelling
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .sticky-visual {
+        height: 50vh;
+        min-height: 400px;
+    }
+    
+    .scroll-step {
+        min-height: auto;
+        padding: var(--space-xl) var(--container-padding);
+    }
+    
+    .scroll-step:first-child {
+        padding-top: calc(50vh + var(--space-xl));
+    }
+    
+    .step-content {
+        max-width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .scrollytelling {
+        display: block;
+    }
+    
+    .sticky-visual {
+        position: relative;
+        top: 0;
+        height: 60vh;
+        min-height: 350px;
+    }
+    
+    .sticky-visual .chart-wrapper {
+        padding: var(--space-md);
+    }
+    
+    .scroll-sections {
+        position: relative;
+    }
+    
+    .scroll-step {
+        min-height: auto;
+        padding: var(--space-lg) var(--container-padding);
+    }
+    
+    .scroll-step:first-child {
+        padding-top: var(--space-lg);
+    }
+    
+    .scroll-step:last-child {
+        padding-bottom: var(--space-lg);
+    }
+    
+    .step-content {
+        opacity: 1;
+        transform: none;
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+    }
+    
+    .step-indicators {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   Alternative Layout: Side-by-side
+   ========================================================================== */
+
+.scrollytelling.layout-sidebyside .sticky-visual {
+    width: 55%;
+    margin-left: auto;
+}
+
+.scrollytelling.layout-sidebyside .scroll-sections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+}
+
+.scrollytelling.layout-sidebyside .step-content {
+    margin-left: 0;
+    margin-right: auto;
+    max-width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .scrollytelling.layout-sidebyside .sticky-visual,
+    .scrollytelling.layout-sidebyside .scroll-sections {
+        position: relative;
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   Debug Mode (development only)
+   ========================================================================== */
+
+.scrollytelling.debug .scroll-step {
+    border: 2px dashed var(--color-warning);
+}
+
+.scrollytelling.debug .scroll-step.is-active {
+    border-color: var(--color-positive);
+}
+
+.scrollytelling.debug .sticky-visual {
+    border: 2px solid var(--color-info);
+}

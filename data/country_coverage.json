@@ -1,0 +1,39 @@
+{
+  "countries": [
+    {"code": "US", "name": "United States", "coverage": 498234, "normalizedCoverage": 1.0, "avgTone": 0.234, "avgGoldstein": 1.234, "avgMentions": 12.5, "sourceCount": 456},
+    {"code": "CN", "name": "China", "coverage": 378456, "normalizedCoverage": 0.76, "avgTone": -0.567, "avgGoldstein": -1.234, "avgMentions": 8.7, "sourceCount": 312},
+    {"code": "RU", "name": "Russia", "coverage": 324567, "normalizedCoverage": 0.65, "avgTone": -1.234, "avgGoldstein": -2.567, "avgMentions": 9.3, "sourceCount": 287},
+    {"code": "GB", "name": "United Kingdom", "coverage": 276890, "normalizedCoverage": 0.56, "avgTone": 0.456, "avgGoldstein": 1.567, "avgMentions": 7.2, "sourceCount": 234},
+    {"code": "UA", "name": "Ukraine", "coverage": 256789, "normalizedCoverage": 0.52, "avgTone": -0.789, "avgGoldstein": -1.890, "avgMentions": 11.4, "sourceCount": 298},
+    {"code": "DE", "name": "Germany", "coverage": 198456, "normalizedCoverage": 0.40, "avgTone": 0.345, "avgGoldstein": 1.234, "avgMentions": 6.8, "sourceCount": 198},
+    {"code": "FR", "name": "France", "coverage": 187654, "normalizedCoverage": 0.38, "avgTone": 0.234, "avgGoldstein": 0.987, "avgMentions": 6.5, "sourceCount": 187},
+    {"code": "IL", "name": "Israel", "coverage": 223456, "normalizedCoverage": 0.45, "avgTone": -0.345, "avgGoldstein": -0.678, "avgMentions": 10.2, "sourceCount": 245},
+    {"code": "PS", "name": "Palestine", "coverage": 209876, "normalizedCoverage": 0.42, "avgTone": -0.567, "avgGoldstein": -1.234, "avgMentions": 9.8, "sourceCount": 212},
+    {"code": "IR", "name": "Iran", "coverage": 176543, "normalizedCoverage": 0.35, "avgTone": -1.567, "avgGoldstein": -2.890, "avgMentions": 7.6, "sourceCount": 178},
+    {"code": "IN", "name": "India", "coverage": 165432, "normalizedCoverage": 0.33, "avgTone": 0.123, "avgGoldstein": 0.567, "avgMentions": 5.9, "sourceCount": 167},
+    {"code": "JP", "name": "Japan", "coverage": 124567, "normalizedCoverage": 0.25, "avgTone": 0.567, "avgGoldstein": 1.890, "avgMentions": 5.2, "sourceCount": 143},
+    {"code": "BR", "name": "Brazil", "coverage": 109876, "normalizedCoverage": 0.22, "avgTone": -0.123, "avgGoldstein": 0.234, "avgMentions": 4.8, "sourceCount": 112},
+    {"code": "AU", "name": "Australia", "coverage": 98765, "normalizedCoverage": 0.20, "avgTone": 0.456, "avgGoldstein": 1.345, "avgMentions": 4.5, "sourceCount": 98},
+    {"code": "CA", "name": "Canada", "coverage": 94567, "normalizedCoverage": 0.19, "avgTone": 0.345, "avgGoldstein": 1.123, "avgMentions": 4.3, "sourceCount": 94},
+    {"code": "SA", "name": "Saudi Arabia", "coverage": 124567, "normalizedCoverage": 0.25, "avgTone": -0.234, "avgGoldstein": -0.567, "avgMentions": 6.7, "sourceCount": 156},
+    {"code": "TR", "name": "Turkey", "coverage": 109876, "normalizedCoverage": 0.22, "avgTone": -0.345, "avgGoldstein": -0.789, "avgMentions": 5.9, "sourceCount": 134},
+    {"code": "EG", "name": "Egypt", "coverage": 89765, "normalizedCoverage": 0.18, "avgTone": -0.234, "avgGoldstein": -0.456, "avgMentions": 5.1, "sourceCount": 112},
+    {"code": "KR", "name": "South Korea", "coverage": 84567, "normalizedCoverage": 0.17, "avgTone": 0.345, "avgGoldstein": 0.890, "avgMentions": 4.7, "sourceCount": 98},
+    {"code": "PK", "name": "Pakistan", "coverage": 79876, "normalizedCoverage": 0.16, "avgTone": -0.567, "avgGoldstein": -1.234, "avgMentions": 5.3, "sourceCount": 89},
+    {"code": "MX", "name": "Mexico", "coverage": 74567, "normalizedCoverage": 0.15, "avgTone": -0.123, "avgGoldstein": 0.123, "avgMentions": 4.2, "sourceCount": 78},
+    {"code": "IT", "name": "Italy", "coverage": 69876, "normalizedCoverage": 0.14, "avgTone": 0.234, "avgGoldstein": 0.678, "avgMentions": 3.9, "sourceCount": 87},
+    {"code": "ES", "name": "Spain", "coverage": 64567, "normalizedCoverage": 0.13, "avgTone": 0.189, "avgGoldstein": 0.567, "avgMentions": 3.7, "sourceCount": 76},
+    {"code": "PL", "name": "Poland", "coverage": 59876, "normalizedCoverage": 0.12, "avgTone": 0.123, "avgGoldstein": 0.456, "avgMentions": 3.5, "sourceCount": 67},
+    {"code": "NG", "name": "Nigeria", "coverage": 54567, "normalizedCoverage": 0.11, "avgTone": -0.345, "avgGoldstein": -0.678, "avgMentions": 4.1, "sourceCount": 56},
+    {"code": "ZA", "name": "South Africa", "coverage": 49876, "normalizedCoverage": 0.10, "avgTone": -0.123, "avgGoldstein": 0.234, "avgMentions": 3.8, "sourceCount": 54},
+    {"code": "ID", "name": "Indonesia", "coverage": 44567, "normalizedCoverage": 0.09, "avgTone": 0.089, "avgGoldstein": 0.345, "avgMentions": 3.4, "sourceCount": 48},
+    {"code": "AR", "name": "Argentina", "coverage": 39876, "normalizedCoverage": 0.08, "avgTone": -0.067, "avgGoldstein": 0.123, "avgMentions": 3.1, "sourceCount": 43},
+    {"code": "TH", "name": "Thailand", "coverage": 34567, "normalizedCoverage": 0.07, "avgTone": 0.145, "avgGoldstein": 0.456, "avgMentions": 2.9, "sourceCount": 38},
+    {"code": "VN", "name": "Vietnam", "coverage": 29876, "normalizedCoverage": 0.06, "avgTone": 0.078, "avgGoldstein": 0.234, "avgMentions": 2.7, "sourceCount": 34}
+  ],
+  "metadata": {
+    "generated_at": "2025-01-15T12:00:00Z",
+    "total_countries": 30,
+    "max_coverage": 498234
+  }
+}
