@@ -17,14 +17,53 @@ export class ConflictTimelineChart {
         }
         
         this.data = data;
+        
+        // Default country configuration (Liberia/Sierra Leone for backward compatibility)
+        const defaultCountries = {
+            country1: {
+                name: 'Liberia',
+                color: '#d62728',
+                fieldPrefix: 'liberia'
+            },
+            country2: {
+                name: 'Sierra Leone', 
+                color: '#2ca02c',
+                fieldPrefix: 'sierraLeone'
+            }
+        };
+        
         this.options = {
-            margin: { top: 60, right: 100, bottom: 50, left: 70 },
+            margin: { top: 80, right: 100, bottom: 50, left: 70 },
             panelGap: 60,
             animate: true,
             animationDuration: 1500,
             responsive: true,
+            countries: defaultCountries,
+            title: 'Conflict Timeline',
+            subtitle: '',
             ...options
         };
+        
+        // Override country config from data metadata if available
+        if (data?.metadata) {
+            if (data.metadata.country1) {
+                this.options.countries.country1 = {
+                    name: data.metadata.country1.name || defaultCountries.country1.name,
+                    color: data.metadata.country1.color || defaultCountries.country1.color,
+                    fieldPrefix: 'country1'
+                };
+            }
+            if (data.metadata.country2) {
+                this.options.countries.country2 = {
+                    name: data.metadata.country2.name || defaultCountries.country2.name,
+                    color: data.metadata.country2.color || defaultCountries.country2.color,
+                    fieldPrefix: 'country2'
+                };
+            }
+            if (data.metadata.period) {
+                this.options.subtitle = data.metadata.period;
+            }
+        }
         
         this.tooltip = options.tooltip;
         
@@ -124,6 +163,15 @@ export class ConflictTimelineChart {
         const timeline = this.data.timeline;
         const annotations = this.data.annotations || [];
         const disparityZone = this.data.disparityZone;
+        
+        // Get field prefixes from config
+        const c1 = this.options.countries.country1.fieldPrefix;
+        const c2 = this.options.countries.country2.fieldPrefix;
+        
+        // Field name getters
+        this.getEventsField = (prefix) => `${prefix}Events`;
+        this.getDeathsField = (prefix) => `${prefix}Deaths`;
+        this.getCasualtiesField = (prefix) => `${prefix}CasualtiesPerEvent`;
 
         // Create scales
         this.xScale = d3.scaleLinear()
@@ -131,8 +179,14 @@ export class ConflictTimelineChart {
             .range([0, this.width]);
 
         // Y scales for each panel
-        const maxEvents = d3.max(timeline, d => Math.max(d.liberiaEvents, d.sierraLeoneEvents));
-        const maxIntensity = d3.max(timeline, d => Math.max(d.liberiaCasualtiesPerEvent, d.sierraLeoneCasualtiesPerEvent));
+        const maxEvents = d3.max(timeline, d => Math.max(
+            d[this.getEventsField(c1)] || 0, 
+            d[this.getEventsField(c2)] || 0
+        ));
+        const maxIntensity = d3.max(timeline, d => Math.max(
+            d[this.getCasualtiesField(c1)] || 0, 
+            d[this.getCasualtiesField(c2)] || 0
+        ));
 
         this.yScaleEvents = d3.scaleLinear()
             .domain([0, maxEvents * 1.1])
@@ -157,12 +211,15 @@ export class ConflictTimelineChart {
         this.renderPanel(this.bottomPanel, timeline, 'intensity', this.yScaleIntensity, 
             'Conflict Intensity (Casualties per Event)', 'Deaths/Event');
 
+        // Add conflict period zones (transparent background areas)
+        this.renderConflictPeriods(annotations);
+
         // Add disparity zone highlight
         if (disparityZone) {
             this.renderDisparityZone(disparityZone);
         }
 
-        // Add conflict start annotations
+        // Add conflict start annotations (vertical lines and labels)
         this.renderAnnotations(annotations);
 
         // Add legend
@@ -172,21 +229,31 @@ export class ConflictTimelineChart {
     addChartTitle() {
         // Clear existing title
         this.titleGroup.selectAll('*').remove();
+        
+        const c1Name = this.options.countries.country1.name;
+        const c2Name = this.options.countries.country2.name;
+        const title = this.options.title || `${c1Name} vs ${c2Name}: Coverage vs. Casualties`;
+        const subtitle = this.options.subtitle || `${c1Name} & ${c2Name}`;
 
         this.titleGroup.append('text')
             .attr('class', 'chart-title-text')
-            .text('West African Civil Wars: Coverage vs. Casualties');
+            .text(title);
         
         this.titleGroup.append('text')
             .attr('class', 'chart-subtitle-text')
             .attr('y', 20)
-            .text('Liberia & Sierra Leone (1989-1997)');
+            .text(subtitle);
     }
 
     renderPanel(panel, data, type, yScale, title, yLabel) {
+        const c1 = this.options.countries.country1.fieldPrefix;
+        const c2 = this.options.countries.country2.fieldPrefix;
+        const c1Color = this.options.countries.country1.color;
+        const c2Color = this.options.countries.country2.color;
+        
         const valueKey = type === 'events' 
-            ? { liberia: 'liberiaEvents', sierraLeone: 'sierraLeoneEvents' }
-            : { liberia: 'liberiaCasualtiesPerEvent', sierraLeone: 'sierraLeoneCasualtiesPerEvent' };
+            ? { country1: this.getEventsField(c1), country2: this.getEventsField(c2) }
+            : { country1: this.getCasualtiesField(c1), country2: this.getCasualtiesField(c2) };
 
         // Panel background
         panel.append('rect')
@@ -199,7 +266,7 @@ export class ConflictTimelineChart {
         panel.append('text')
             .attr('class', 'panel-title')
             .attr('x', 0)
-            .attr('y', -15)
+            .attr('y', -8)
             .text(title);
 
         // Grid
@@ -232,38 +299,38 @@ export class ConflictTimelineChart {
             .text(yLabel);
 
         // Line generators
-        const liberiaLine = d3.line()
+        const country1Line = d3.line()
             .x(d => this.xScale(d.year))
-            .y(d => yScale(d[valueKey.liberia]))
+            .y(d => yScale(d[valueKey.country1] || 0))
             .curve(d3.curveMonotoneX);
 
-        const sierraLeoneLine = d3.line()
+        const country2Line = d3.line()
             .x(d => this.xScale(d.year))
-            .y(d => yScale(d[valueKey.sierraLeone]))
+            .y(d => yScale(d[valueKey.country2] || 0))
             .curve(d3.curveMonotoneX);
 
-        // Draw Liberia line
-        const liberiaPath = panel.append('path')
+        // Draw Country 1 line
+        const country1Path = panel.append('path')
             .datum(data)
-            .attr('class', 'line liberia-line')
-            .attr('d', liberiaLine)
+            .attr('class', 'line country1-line')
+            .attr('d', country1Line)
             .attr('fill', 'none')
-            .attr('stroke', '#d62728')
+            .attr('stroke', c1Color)
             .attr('stroke-width', 2.5);
 
-        // Draw Sierra Leone line
-        const sierraLeonePath = panel.append('path')
+        // Draw Country 2 line
+        const country2Path = panel.append('path')
             .datum(data)
-            .attr('class', 'line sierra-leone-line')
-            .attr('d', sierraLeoneLine)
+            .attr('class', 'line country2-line')
+            .attr('d', country2Line)
             .attr('fill', 'none')
-            .attr('stroke', '#2ca02c')
+            .attr('stroke', c2Color)
             .attr('stroke-width', 2.5);
 
         // Animate lines
         if (this.options.animate) {
-            this.animateLine(liberiaPath);
-            this.animateLine(sierraLeonePath);
+            this.animateLine(country1Path);
+            this.animateLine(country2Path);
         }
 
         // Add data points with hover
@@ -304,14 +371,17 @@ export class ConflictTimelineChart {
     }
 
     addDataPoints(panel, data, valueKey, yScale, type) {
+        const c1 = this.options.countries.country1;
+        const c2 = this.options.countries.country2;
+        
         const countries = [
-            { key: 'liberia', class: 'liberia-dot', valueKey: valueKey.liberia, color: '#d62728' },
-            { key: 'sierraLeone', class: 'sierra-leone-dot', valueKey: valueKey.sierraLeone, color: '#2ca02c' }
+            { key: 'country1', class: 'country1-dot', valueKey: valueKey.country1, color: c1.color, name: c1.name, fieldPrefix: c1.fieldPrefix },
+            { key: 'country2', class: 'country2-dot', valueKey: valueKey.country2, color: c2.color, name: c2.name, fieldPrefix: c2.fieldPrefix }
         ];
 
         countries.forEach(country => {
             panel.selectAll(`.${country.class}`)
-                .data(data.filter(d => d[country.valueKey] > 0))
+                .data(data.filter(d => (d[country.valueKey] || 0) > 0))
                 .join('circle')
                 .attr('class', `dot ${country.class}`)
                 .attr('cx', d => this.xScale(d.year))
@@ -321,20 +391,24 @@ export class ConflictTimelineChart {
                 .attr('stroke', '#fff')
                 .attr('stroke-width', 2)
                 .style('cursor', 'pointer')
-                .on('mouseenter', (event, d) => this.handleDotHover(event, d, country.key, type))
+                .on('mouseenter', (event, d) => this.handleDotHover(event, d, country, type))
                 .on('mousemove', (event) => this.moveTooltip(event))
                 .on('mouseleave', () => this.hideTooltip());
         });
     }
 
-    handleDotHover(event, d, country, type) {
-        const countryNames = { liberia: 'Liberia', sierraLeone: 'Sierra Leone' };
-        const countryName = countryNames[country];
+    handleDotHover(event, d, countryInfo, type) {
+        const countryName = countryInfo.name;
+        const prefix = countryInfo.fieldPrefix;
+        
+        const eventsField = this.getEventsField(prefix);
+        const deathsField = this.getDeathsField(prefix);
+        const casualtiesField = this.getCasualtiesField(prefix);
         
         let content;
         if (type === 'events') {
-            const events = country === 'liberia' ? d.liberiaEvents : d.sierraLeoneEvents;
-            const deaths = country === 'liberia' ? d.liberiaDeaths : d.sierraLeoneDeaths;
+            const events = d[eventsField] || 0;
+            const deaths = d[deathsField] || 0;
             content = {
                 title: `${countryName} - ${d.year}`,
                 rows: [
@@ -343,9 +417,9 @@ export class ConflictTimelineChart {
                 ]
             };
         } else {
-            const intensity = country === 'liberia' ? d.liberiaCasualtiesPerEvent : d.sierraLeoneCasualtiesPerEvent;
-            const deaths = country === 'liberia' ? d.liberiaDeaths : d.sierraLeoneDeaths;
-            const events = country === 'liberia' ? d.liberiaEvents : d.sierraLeoneEvents;
+            const intensity = d[casualtiesField] || 0;
+            const deaths = d[deathsField] || 0;
+            const events = d[eventsField] || 0;
             content = {
                 title: `${countryName} - ${d.year}`,
                 rows: [
@@ -356,15 +430,19 @@ export class ConflictTimelineChart {
             };
         }
 
-        // Add disparity insight for 1991-1993
-        if (d.year >= 1991 && d.year <= 1993 && type === 'intensity') {
-            const liberiaIntensity = d.liberiaCasualtiesPerEvent;
-            const slIntensity = d.sierraLeoneCasualtiesPerEvent;
-            if (liberiaIntensity > 0 && slIntensity > 0) {
-                const ratio = (liberiaIntensity / slIntensity).toFixed(1);
+        // Add disparity insight if in disparity zone
+        const disparityZone = this.data.disparityZone;
+        if (disparityZone && d.year >= disparityZone.start && d.year <= disparityZone.end && type === 'intensity') {
+            const c1Prefix = this.options.countries.country1.fieldPrefix;
+            const c2Prefix = this.options.countries.country2.fieldPrefix;
+            const c1Intensity = d[this.getCasualtiesField(c1Prefix)] || 0;
+            const c2Intensity = d[this.getCasualtiesField(c2Prefix)] || 0;
+            if (c1Intensity > 0 && c2Intensity > 0) {
+                const ratio = (c1Intensity / c2Intensity).toFixed(1);
+                const c1Name = this.options.countries.country1.name;
                 content.rows.push({
                     label: '⚠️ Intensity Ratio',
-                    value: `Liberia ${ratio}× deadlier`,
+                    value: `${c1Name} ${ratio}× deadlier`,
                     format: 'text',
                     highlight: true
                 });
@@ -435,7 +513,7 @@ export class ConflictTimelineChart {
             .attr('class', 'disparity-label-text')
             .attr('text-anchor', 'middle')
             .attr('dy', 4)
-            .text('⚠️ Coverage Gap: High deaths, low documentation');
+            .text(`⚠️ ${zone.label || 'Coverage Gap: High deaths, low documentation'}`);
 
         labelGroup.transition()
             .delay(this.options.animationDuration + 500)
@@ -443,47 +521,112 @@ export class ConflictTimelineChart {
             .style('opacity', 1);
     }
 
-    renderAnnotations(annotations) {
-        annotations.forEach(annotation => {
-            const x = this.xScale(annotation.year);
-            const color = annotation.country === 'liberia' ? '#d62728' : '#2ca02c';
-
-            // Vertical line spanning both panels
+    renderConflictPeriods(annotations) {
+        const c1Color = this.options.countries.country1.color;
+        const c2Color = this.options.countries.country2.color;
+        const timeline = this.data.timeline;
+        const endYear = d3.max(timeline, d => d.year);
+        
+        // Sort annotations by year to handle overlapping properly
+        const sortedAnnotations = [...annotations].sort((a, b) => a.year - b.year);
+        
+        sortedAnnotations.forEach((annotation, index) => {
+            const startX = this.xScale(annotation.year);
+            const endX = this.xScale(endYear);
+            const zoneWidth = endX - startX;
+            
+            // Determine color based on country
+            let color;
+            if (annotation.country === 'country1' || annotation.country === 'liberia') {
+                color = c1Color;
+            } else {
+                color = c2Color;
+            }
+            
+            // Add transparent filled area to both panels
             [this.topPanel, this.bottomPanel].forEach(panel => {
-                panel.append('line')
+                panel.insert('rect', ':first-child')
+                    .attr('class', `conflict-period-zone conflict-${annotation.country}`)
+                    .attr('x', startX)
+                    .attr('y', 0)
+                    .attr('width', zoneWidth)
+                    .attr('height', this.panelHeight)
+                    .attr('fill', color)
+                    .attr('opacity', 0)
+                    .transition()
+                    .delay(this.options.animationDuration * 0.5 + index * 300)
+                    .duration(800)
+                    .attr('opacity', 0.08);
+            });
+        });
+    }
+
+    renderAnnotations(annotations) {
+        const c1Color = this.options.countries.country1.color;
+        const c2Color = this.options.countries.country2.color;
+        
+        annotations.forEach((annotation, index) => {
+            const x = this.xScale(annotation.year);
+            // Support both old format (liberia/sierraLeone) and new format (country1/country2)
+            let color;
+            if (annotation.country === 'country1' || annotation.country === 'liberia') {
+                color = c1Color;
+            } else {
+                color = c2Color;
+            }
+
+            // Vertical line spanning both panels (animated)
+            [this.topPanel, this.bottomPanel].forEach(panel => {
+                const line = panel.append('line')
                     .attr('class', `annotation-line annotation-${annotation.country}`)
                     .attr('x1', x)
                     .attr('x2', x)
                     .attr('y1', 0)
-                    .attr('y2', this.panelHeight)
+                    .attr('y2', 0)
                     .attr('stroke', color)
-                    .attr('stroke-width', 1.5)
+                    .attr('stroke-width', 2)
                     .attr('stroke-dasharray', '6,3')
-                    .attr('opacity', 0.7);
+                    .attr('opacity', 0.8);
+                
+                // Animate line growing down
+                line.transition()
+                    .delay(this.options.animationDuration * 0.5 + index * 300)
+                    .duration(600)
+                    .attr('y2', this.panelHeight);
             });
 
-            // Annotation label at top
-            this.topPanel.append('g')
+            // Annotation label - positioned inside the chart area at the top
+            const labelGroup = this.topPanel.append('g')
                 .attr('class', 'annotation-label-group')
-                .attr('transform', `translate(${x}, -30)`)
-                .call(g => {
-                    g.append('rect')
-                        .attr('x', -60)
-                        .attr('y', -10)
-                        .attr('width', 120)
-                        .attr('height', 20)
-                        .attr('rx', 3)
-                        .attr('fill', color)
-                        .attr('opacity', 0.1);
-                    
-                    g.append('text')
-                        .attr('class', 'annotation-text')
-                        .attr('text-anchor', 'middle')
-                        .attr('dy', 4)
-                        .attr('fill', color)
-                        .attr('font-weight', 500)
-                        .text(annotation.label);
-                });
+                .attr('transform', `translate(${x + 5}, 15)`)
+                .style('opacity', 0);
+            
+            // Background for better readability
+            const text = labelGroup.append('text')
+                .attr('class', 'annotation-text')
+                .attr('text-anchor', 'start')
+                .attr('fill', color)
+                .attr('font-weight', 600)
+                .attr('font-size', '11px')
+                .text(annotation.label);
+            
+            // Get text dimensions for background
+            const bbox = text.node().getBBox();
+            
+            labelGroup.insert('rect', 'text')
+                .attr('x', bbox.x - 3)
+                .attr('y', bbox.y - 2)
+                .attr('width', bbox.width + 6)
+                .attr('height', bbox.height + 4)
+                .attr('rx', 2)
+                .attr('fill', 'white')
+                .attr('opacity', 0.85);
+            
+            // Animate label appearing
+            labelGroup.transition()
+                .delay(this.options.animationDuration * 0.5 + index * 300 + 400)
+                .duration(400)
+                .style('opacity', 1);
         });
     }
 
@@ -491,8 +634,8 @@ export class ConflictTimelineChart {
         this.legendGroup.selectAll('*').remove();
 
         const legendItems = [
-            { label: 'Liberia', color: '#d62728' },
-            { label: 'Sierra Leone', color: '#2ca02c' }
+            { label: this.options.countries.country1.name, color: this.options.countries.country1.color },
+            { label: this.options.countries.country2.name, color: this.options.countries.country2.color }
         ];
 
         const legendItem = this.legendGroup.selectAll('.legend-item')

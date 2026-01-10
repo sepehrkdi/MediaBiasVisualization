@@ -99,6 +99,7 @@
   "disparityZone": {
     "start": 1991,
     "end": 1993,
+    "label": "Coverage Gap: High deaths, low documentation",
     "insight": "Despite Liberia's conflicts being 3-6× deadlier per event, Sierra Leone received 3× more media documentation"
   },
   "summary": {

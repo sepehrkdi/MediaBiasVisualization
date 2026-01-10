@@ -154,7 +154,8 @@ async function loadAllData() {
         { key: 'events', path: 'data/event_types.json' },
         { key: 'timeline', path: 'data/temporal_trends.json' },
         { key: 'network', path: 'data/source_network.json' },
-        { key: 'conflictTimeline', path: 'data/conflict_timeline.json' }
+        { key: 'conflictTimeline', path: 'data/conflict_timeline.json' },
+        { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' }
     ];
     
     state.data = {};
@@ -549,6 +550,13 @@ function getChartConfig(chartType, stepNumber) {
             data: state.data.conflictTimeline,
             options: {
                 title: 'West African Civil Wars: Coverage vs. Casualties'
+            }
+        },
+        'yemen-myanmar-timeline': {
+            ChartClass: Charts.ConflictTimelineChart,
+            data: state.data.yemenMyanmarTimeline,
+            options: {
+                title: 'The Shifting Spotlight: Yemen vs Myanmar'
             }
         }
     };
