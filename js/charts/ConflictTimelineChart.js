@@ -179,22 +179,22 @@ export class ConflictTimelineChart {
             .range([0, this.width]);
 
         // Y scales for each panel
+        const maxDeaths = d3.max(timeline, d => Math.max(
+            d[this.getDeathsField(c1)] || 0, 
+            d[this.getDeathsField(c2)] || 0
+        ));
         const maxEvents = d3.max(timeline, d => Math.max(
             d[this.getEventsField(c1)] || 0, 
             d[this.getEventsField(c2)] || 0
         ));
-        const maxIntensity = d3.max(timeline, d => Math.max(
-            d[this.getCasualtiesField(c1)] || 0, 
-            d[this.getCasualtiesField(c2)] || 0
-        ));
 
-        this.yScaleEvents = d3.scaleLinear()
-            .domain([0, maxEvents * 1.1])
+        this.yScaleDeaths = d3.scaleLinear()
+            .domain([0, maxDeaths * 1.1])
             .range([this.panelHeight, 0])
             .nice();
 
-        this.yScaleIntensity = d3.scaleLinear()
-            .domain([0, maxIntensity * 1.1])
+        this.yScaleEvents = d3.scaleLinear()
+            .domain([0, maxEvents * 1.1])
             .range([this.panelHeight, 0])
             .nice();
 
@@ -205,11 +205,11 @@ export class ConflictTimelineChart {
         // Add title
         this.addChartTitle();
 
-        // Render both panels
-        this.renderPanel(this.topPanel, timeline, 'events', this.yScaleEvents, 
-            'Media Coverage (Documented Events)', 'Events');
-        this.renderPanel(this.bottomPanel, timeline, 'intensity', this.yScaleIntensity, 
-            'Conflict Intensity (Casualties per Event)', 'Deaths/Event');
+        // Render both panels - Deaths on top, Events on bottom (like the notebook)
+        this.renderPanel(this.topPanel, timeline, 'deaths', this.yScaleDeaths, 
+            'Total Deaths per Year', 'Deaths');
+        this.renderPanel(this.bottomPanel, timeline, 'events', this.yScaleEvents, 
+            'Number of Conflict Events per Year', 'Events');
 
         // Add conflict period zones (transparent background areas)
         this.renderConflictPeriods(annotations);
@@ -251,9 +251,15 @@ export class ConflictTimelineChart {
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
         
-        const valueKey = type === 'events' 
-            ? { country1: this.getEventsField(c1), country2: this.getEventsField(c2) }
-            : { country1: this.getCasualtiesField(c1), country2: this.getCasualtiesField(c2) };
+        // Determine value keys based on type
+        let valueKey;
+        if (type === 'deaths') {
+            valueKey = { country1: this.getDeathsField(c1), country2: this.getDeathsField(c2) };
+        } else if (type === 'events') {
+            valueKey = { country1: this.getEventsField(c1), country2: this.getEventsField(c2) };
+        } else {
+            valueKey = { country1: this.getCasualtiesField(c1), country2: this.getCasualtiesField(c2) };
+        }
 
         // Panel background
         panel.append('rect')
@@ -405,21 +411,29 @@ export class ConflictTimelineChart {
         const deathsField = this.getDeathsField(prefix);
         const casualtiesField = this.getCasualtiesField(prefix);
         
+        const events = d[eventsField] || 0;
+        const deaths = d[deathsField] || 0;
+        const intensity = d[casualtiesField] || 0;
+        
         let content;
-        if (type === 'events') {
-            const events = d[eventsField] || 0;
-            const deaths = d[deathsField] || 0;
+        if (type === 'deaths') {
             content = {
                 title: `${countryName} - ${d.year}`,
                 rows: [
-                    { label: 'Documented Events', value: events, format: 'number' },
+                    { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' },
+                    { label: 'Events', value: events, format: 'number' },
+                    { label: 'Avg per Event', value: intensity.toFixed(1), format: 'text' }
+                ]
+            };
+        } else if (type === 'events') {
+            content = {
+                title: `${countryName} - ${d.year}`,
+                rows: [
+                    { label: 'Conflict Events', value: events, format: 'number' },
                     { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' }
                 ]
             };
         } else {
-            const intensity = d[casualtiesField] || 0;
-            const deaths = d[deathsField] || 0;
-            const events = d[eventsField] || 0;
             content = {
                 title: `${countryName} - ${d.year}`,
                 rows: [

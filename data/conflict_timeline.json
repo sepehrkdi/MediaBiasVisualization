@@ -102,20 +102,8 @@
     "label": "Coverage Gap: High deaths, low documentation",
     "insight": "Despite Liberia's conflicts being 3-6× deadlier per event, Sierra Leone received 3× more media documentation"
   },
-  "summary": {
-    "liberia": {
-      "totalDeaths": 17025,
-      "totalEvents": 414,
-      "overallCasualtiesPerEvent": 41.1,
-      "peakYear": 1994,
-      "peakDeaths": 4167
-    },
-    "sierraLeone": {
-      "totalDeaths": 9865,
-      "totalEvents": 858,
-      "overallCasualtiesPerEvent": 11.5,
-      "peakYear": 1995,
-      "peakDeaths": 3194
-    }
+  "metadata": {
+    "period": "1989-1997",
+    "source": "Uppsala Conflict Data Program (UCDP) GED"
   }
 }

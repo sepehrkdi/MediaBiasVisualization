@@ -32,6 +32,7 @@ import {
     FlowDiagram 
 } from './charts/OtherCharts.js';
 import { ConflictTimelineChart } from './charts/ConflictTimelineChart.js';
+import { IntensityComparisonChart } from './charts/IntensityComparisonChart.js';
 
 // Create Charts namespace for backward compatibility
 const Charts = {
@@ -50,7 +51,8 @@ const Charts = {
     ParallelCoordinates,
     UncertaintyChart,
     FlowDiagram,
-    ConflictTimelineChart
+    ConflictTimelineChart,
+    IntensityComparisonChart
 };
 
 // Application state
@@ -550,6 +552,13 @@ function getChartConfig(chartType, stepNumber) {
             data: state.data.conflictTimeline,
             options: {
                 title: 'West African Civil Wars: Coverage vs. Casualties'
+            }
+        },
+        'conflict-intensity': {
+            ChartClass: Charts.IntensityComparisonChart,
+            data: state.data.conflictTimeline,
+            options: {
+                title: 'Average Casualties per Event'
             }
         },
         'yemen-myanmar-timeline': {

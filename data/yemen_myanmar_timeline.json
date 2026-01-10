@@ -1,114 +1,150 @@
 {
   "timeline": [
     {
+      "year": 2011,
+      "country1Deaths": 1430,
+      "country1Events": 219,
+      "country1CasualtiesPerEvent": 6.53,
+      "country2Deaths": 811,
+      "country2Events": 265,
+      "country2CasualtiesPerEvent": 3.06
+    },
+    {
+      "year": 2012,
+      "country1Deaths": 2461,
+      "country1Events": 253,
+      "country1CasualtiesPerEvent": 9.73,
+      "country2Deaths": 971,
+      "country2Events": 77,
+      "country2CasualtiesPerEvent": 12.61
+    },
+    {
+      "year": 2013,
+      "country1Deaths": 578,
+      "country1Events": 126,
+      "country1CasualtiesPerEvent": 4.59,
+      "country2Deaths": 358,
+      "country2Events": 86,
+      "country2CasualtiesPerEvent": 4.16
+    },
+    {
+      "year": 2014,
+      "country1Deaths": 2364,
+      "country1Events": 281,
+      "country1CasualtiesPerEvent": 8.41,
+      "country2Deaths": 256,
+      "country2Events": 35,
+      "country2CasualtiesPerEvent": 7.31
+    },
+    {
       "year": 2015,
-      "country1Deaths": 6421,
-      "country1Events": 2621,
-      "country1CasualtiesPerEvent": 2.45,
-      "country2Deaths": 274,
-      "country2Events": 149,
-      "country2CasualtiesPerEvent": 1.84
+      "country1Deaths": 8125,
+      "country1Events": 605,
+      "country1CasualtiesPerEvent": 13.43,
+      "country2Deaths": 705,
+      "country2Events": 198,
+      "country2CasualtiesPerEvent": 3.56
     },
     {
       "year": 2016,
-      "country1Deaths": 5520,
-      "country1Events": 3092,
-      "country1CasualtiesPerEvent": 1.79,
-      "country2Deaths": 428,
-      "country2Events": 211,
-      "country2CasualtiesPerEvent": 2.03
+      "country1Deaths": 4027,
+      "country1Events": 343,
+      "country1CasualtiesPerEvent": 11.74,
+      "country2Deaths": 183,
+      "country2Events": 57,
+      "country2CasualtiesPerEvent": 3.21
     },
     {
       "year": 2017,
-      "country1Deaths": 2680,
-      "country1Events": 2296,
-      "country1CasualtiesPerEvent": 1.17,
-      "country2Deaths": 907,
-      "country2Events": 257,
-      "country2CasualtiesPerEvent": 3.53
+      "country1Deaths": 3620,
+      "country1Events": 397,
+      "country1CasualtiesPerEvent": 9.12,
+      "country2Deaths": 2395,
+      "country2Events": 88,
+      "country2CasualtiesPerEvent": 27.22
     },
     {
       "year": 2018,
-      "country1Deaths": 3692,
-      "country1Events": 2507,
-      "country1CasualtiesPerEvent": 1.47,
-      "country2Deaths": 384,
-      "country2Events": 227,
-      "country2CasualtiesPerEvent": 1.69
+      "country1Deaths": 4996,
+      "country1Events": 387,
+      "country1CasualtiesPerEvent": 12.91,
+      "country2Deaths": 122,
+      "country2Events": 71,
+      "country2CasualtiesPerEvent": 1.72
     },
     {
       "year": 2019,
-      "country1Deaths": 3451,
-      "country1Events": 3156,
-      "country1CasualtiesPerEvent": 1.09,
-      "country2Deaths": 429,
-      "country2Events": 248,
-      "country2CasualtiesPerEvent": 1.73
+      "country1Deaths": 2959,
+      "country1Events": 304,
+      "country1CasualtiesPerEvent": 9.73,
+      "country2Deaths": 587,
+      "country2Events": 148,
+      "country2CasualtiesPerEvent": 3.97
     },
     {
       "year": 2020,
-      "country1Deaths": 2172,
-      "country1Events": 2059,
-      "country1CasualtiesPerEvent": 1.05,
-      "country2Deaths": 309,
-      "country2Events": 176,
-      "country2CasualtiesPerEvent": 1.76
-    },
-    {
-      "year": 2021,
-      "country1Deaths": 2131,
-      "country1Events": 1711,
-      "country1CasualtiesPerEvent": 1.25,
-      "country2Deaths": 4247,
-      "country2Events": 1579,
+      "country1Deaths": 6754,
+      "country1Events": 657,
+      "country1CasualtiesPerEvent": 10.28,
+      "country2Deaths": 207,
+      "country2Events": 77,
       "country2CasualtiesPerEvent": 2.69
     },
     {
+      "year": 2021,
+      "country1Deaths": 23463,
+      "country1Events": 768,
+      "country1CasualtiesPerEvent": 30.55,
+      "country2Deaths": 1781,
+      "country2Events": 857,
+      "country2CasualtiesPerEvent": 2.08
+    },
+    {
       "year": 2022,
-      "country1Deaths": 983,
-      "country1Events": 851,
-      "country1CasualtiesPerEvent": 1.16,
-      "country2Deaths": 2025,
-      "country2Events": 1467,
-      "country2CasualtiesPerEvent": 1.38
+      "country1Deaths": 3220,
+      "country1Events": 455,
+      "country1CasualtiesPerEvent": 7.08,
+      "country2Deaths": 2761,
+      "country2Events": 1549,
+      "country2CasualtiesPerEvent": 1.78
     },
     {
       "year": 2023,
-      "country1Deaths": 786,
-      "country1Events": 561,
-      "country1CasualtiesPerEvent": 1.40,
-      "country2Deaths": 1217,
-      "country2Events": 1127,
-      "country2CasualtiesPerEvent": 1.08
+      "country1Deaths": 931,
+      "country1Events": 319,
+      "country1CasualtiesPerEvent": 2.92,
+      "country2Deaths": 3065,
+      "country2Events": 2085,
+      "country2CasualtiesPerEvent": 1.47
     },
     {
       "year": 2024,
-      "country1Deaths": 768,
-      "country1Events": 476,
-      "country1CasualtiesPerEvent": 1.61,
-      "country2Deaths": 283,
-      "country2Events": 227,
-      "country2CasualtiesPerEvent": 1.25
+      "country1Deaths": 990,
+      "country1Events": 184,
+      "country1CasualtiesPerEvent": 5.38,
+      "country2Deaths": 2896,
+      "country2Events": 1096,
+      "country2CasualtiesPerEvent": 2.64
     }
   ],
   "metadata": {
     "country1": {
       "name": "Yemen",
-      "totalDeaths": 28604,
-      "color": "#e41a1c"
+      "totalDeaths": 65918,
+      "color": "#ff7f0e"
     },
     "country2": {
       "name": "Myanmar",
-      "totalDeaths": 10503,
-      "color": "#377eb8"
+      "totalDeaths": 17098,
+      "color": "#2ca02c"
     },
-    "period": "2015-2024",
+    "period": "2011-2024",
     "source": "Uppsala Conflict Data Program (UCDP) GED"
   },
   "annotations": [
     {
       "year": 2015,
-      "label": "Yemen Civil War escalates",
+      "label": "Yemen Civil War",
       "description": "Saudi-led coalition intervention begins",
       "country": "country1"
     },
@@ -123,6 +159,6 @@
     "start": 2021,
     "end": 2024,
     "label": "Media attention shifts to Myanmar",
-    "description": "Despite Yemen having ~3x more cumulative deaths, Myanmar coup receives more international media attention"
+    "description": "Despite Yemen having higher cumulative deaths, Myanmar coup receives more international media attention"
   }
 }
