@@ -10,27 +10,27 @@ import { Tooltip } from './modules/tooltip.js';
 import { setupNavigation } from './modules/navigation.js';
 
 // Import charts individually to avoid circular dependencies
-import { 
-    BarChart, 
-    DivergingBarChart, 
-    StackedBarChart 
+import {
+    BarChart,
+    DivergingBarChart,
+    StackedBarChart
 } from './charts/BarChart.js';
-import { 
-    LineChart, 
-    AreaChart, 
-    MultiLineChart 
+import {
+    LineChart,
+    AreaChart,
+    MultiLineChart
 } from './charts/LineChart.js';
 import { ChoroplethMap } from './charts/ChoroplethMap.js';
 import { AnimatedChoroplethMap } from './charts/AnimatedChoroplethMap.js';
 import { NetworkGraph } from './charts/NetworkGraph.js';
-import { 
-    ScatterPlot, 
-    TreeMap, 
-    RadarChart, 
-    Histogram, 
-    ParallelCoordinates, 
-    UncertaintyChart, 
-    FlowDiagram 
+import {
+    ScatterPlot,
+    TreeMap,
+    RadarChart,
+    Histogram,
+    ParallelCoordinates,
+    UncertaintyChart,
+    FlowDiagram
 } from './charts/OtherCharts.js';
 import { ConflictTimelineChart } from './charts/ConflictTimelineChart.js';
 import { IntensityComparisonChart } from './charts/IntensityComparisonChart.js';
@@ -80,7 +80,7 @@ const elements = {
  */
 async function init() {
     console.log('Initializing Media Bias Visualization...');
-    
+
     try {
         // Setup navigation
         try {
@@ -88,56 +88,56 @@ async function init() {
         } catch (e) {
             console.warn('Navigation setup failed:', e);
         }
-        
+
         // Initialize tooltip
         try {
             state.tooltip = new Tooltip(elements.tooltip);
         } catch (e) {
             console.warn('Tooltip initialization failed:', e);
         }
-        
+
         // Load data
         state.dataManager = new DataManager();
         await loadAllData();
-        
+
         // Update statistics
         try {
             updateStatistics();
         } catch (e) {
             console.warn('Statistics update failed:', e);
         }
-        
+
         // Initialize charts
         try {
             await initializeCharts();
         } catch (e) {
             console.warn('Chart initialization failed:', e);
         }
-        
+
         // Setup scrollytelling
         try {
             setupScrollytelling();
         } catch (e) {
             console.warn('Scrollytelling setup failed:', e);
         }
-        
+
         // Setup explore section
         try {
             setupExploreSection();
         } catch (e) {
             console.warn('Explore section setup failed:', e);
         }
-        
+
         // Setup data flow diagram
         try {
             setupDataFlowDiagram();
         } catch (e) {
             console.warn('Data flow diagram setup failed:', e);
         }
-        
+
         // Hide loading overlay
         hideLoading();
-        
+
         console.log('Application initialized successfully');
     } catch (error) {
         console.error('Failed to initialize application:', error);
@@ -160,11 +160,12 @@ async function loadAllData() {
         { key: 'timeline', path: 'data/temporal_trends.json' },
         { key: 'network', path: 'data/source_network.json' },
         { key: 'conflictTimeline', path: 'data/conflict_timeline.json' },
-        { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' }
+        { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' },
+        { key: 'bosniaAfghanistanTimeline', path: 'data/bosnia_afghanistan_timeline.json' }
     ];
-    
+
     state.data = {};
-    
+
     for (const file of dataFiles) {
         try {
             state.data[file.key] = await state.dataManager.loadJSON(file.path);
@@ -199,7 +200,7 @@ function generateSampleData(key) {
                 dateRange: { start: '2024-01-01', end: '2025-01-01' }
             }
         }),
-        
+
         sentiment: () => ({
             sources: [
                 { name: 'Reuters', avgSentiment: 0.02, articles: 45000, category: 'wire' },
@@ -212,7 +213,7 @@ function generateSampleData(key) {
                 { name: 'RT', avgSentiment: -0.25, articles: 18000, category: 'state' }
             ]
         }),
-        
+
         sources: () => ({
             sources: [
                 { id: 'reuters', name: 'Reuters', country: 'UK', type: 'wire', bias: 0.02 },
@@ -222,7 +223,7 @@ function generateSampleData(key) {
                 { id: 'aljazeera', name: 'Al Jazeera', country: 'QA', type: 'international', bias: -0.12 }
             ]
         }),
-        
+
         events: () => ({
             types: [
                 { code: '01', name: 'Make Statement', count: 125000, percent: 32.5 },
@@ -238,7 +239,7 @@ function generateSampleData(key) {
                 { code: '20', name: 'Use Conventional Military Force', count: 18000, percent: 4.7 }
             ]
         }),
-        
+
         timeline: () => {
             const data = [];
             const startDate = new Date('2024-01-01');
@@ -253,7 +254,7 @@ function generateSampleData(key) {
             }
             return { timeline: data };
         },
-        
+
         network: () => ({
             nodes: [
                 { id: 'USA', name: 'United States', group: 'country', size: 100 },
@@ -274,10 +275,10 @@ function generateSampleData(key) {
                 { source: 'GBR', target: 'EU', weight: 60 }
             ]
         }),
-        
+
         world: () => null // Will use TopoJSON from CDN
     };
-    
+
     return sampleGenerators[key] ? sampleGenerators[key]() : {};
 }
 
@@ -303,26 +304,26 @@ function updateStatistics() {
  */
 function animateNumber(element, target) {
     if (!element) return;
-    
+
     const duration = 2000;
     const start = 0;
     const startTime = performance.now();
-    
+
     function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        
+
         // Easing function
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
         const current = Math.floor(start + (target - start) * easeOutQuart);
-        
+
         element.textContent = formatNumber(current);
-        
+
         if (progress < 1) {
             requestAnimationFrame(update);
         }
     }
-    
+
     requestAnimationFrame(update);
 }
 
@@ -355,7 +356,7 @@ async function initializeCharts() {
             console.warn('Failed to initialize main chart:', e);
         }
     }
-    
+
     // Store chart types for switching during scroll
     state.chartTypes = {
         'global-coverage': () => Charts.ChoroplethMap,
@@ -395,15 +396,15 @@ function setupScrollytelling() {
 function handleStepEnter(step, direction) {
     const stepNumber = parseInt(step.dataset.step);
     const chartType = step.dataset.chart;
-    
+
     console.log(`Entering step ${stepNumber}: ${chartType}`);
-    
+
     // Mark step as active
     step.classList.add('is-active');
-    
+
     // Update chart
     updateMainChart(chartType, stepNumber);
-    
+
     state.currentStep = stepNumber;
 }
 
@@ -431,14 +432,14 @@ function handleScrollProgress(progress) {
 function updateMainChart(chartType, stepNumber) {
     const container = elements.mainChart;
     if (!container) return;
-    
+
     // Clear existing chart
     container.innerHTML = '';
-    
+
     // Get appropriate chart class and data
     try {
         const chartConfig = getChartConfig(chartType, stepNumber);
-        
+
         if (chartConfig && chartConfig.ChartClass && chartConfig.data) {
             const { ChartClass, data, options } = chartConfig;
             const chart = new ChartClass(container, data, {
@@ -583,9 +584,16 @@ function getChartConfig(chartType, stepNumber) {
             options: {
                 title: 'The Shifting Spotlight: Yemen vs Myanmar'
             }
+        },
+        'bosnia-afghanistan-timeline': {
+            ChartClass: Charts.ConflictTimelineChart,
+            data: state.data.bosniaAfghanistanTimeline,
+            options: {
+                title: 'The 1990s Coverage Gap: Europe vs Central Asia'
+            }
         }
     };
-    
+
     return configs[chartType];
 }
 
@@ -655,15 +663,15 @@ function prepareUncertaintyData(allData) {
 function setupExploreSection() {
     const applyBtn = document.getElementById('apply-filters');
     const resetBtn = document.getElementById('reset-filters');
-    
+
     if (applyBtn) {
         applyBtn.addEventListener('click', applyFilters);
     }
-    
+
     if (resetBtn) {
         resetBtn.addEventListener('click', resetFilters);
     }
-    
+
     // Initialize explore charts
     initializeExploreCharts();
 }
@@ -671,9 +679,9 @@ function setupExploreSection() {
 function applyFilters() {
     const region = document.getElementById('region-filter')?.value;
     const eventType = document.getElementById('event-filter')?.value;
-    
+
     console.log('Applying filters:', { region, eventType });
-    
+
     // Update explore charts with filtered data
     updateExploreCharts({ region, eventType });
 }
@@ -698,7 +706,7 @@ function initializeExploreCharts() {
             console.warn('Failed to initialize volume chart:', e);
         }
     }
-    
+
     // Sentiment distribution
     const sentimentContainer = document.getElementById('explore-sentiment');
     if (sentimentContainer && state.data.sentiment) {
@@ -725,7 +733,7 @@ function updateExploreCharts(filters) {
 function setupDataFlowDiagram() {
     const container = document.getElementById('data-flow-diagram');
     if (!container) return;
-    
+
     try {
         const flowData = {
             nodes: [
@@ -742,7 +750,7 @@ function setupDataFlowDiagram() {
                 { source: 'csv', target: 'd3' }
             ]
         };
-        
+
         // Pipeline stage descriptions for interactivity
         const pipelineDescriptions = {
             gdelt: {
@@ -766,13 +774,13 @@ function setupDataFlowDiagram() {
                 description: 'Interactive visualizations built with D3.js bring the data to life. Each chart is designed to reveal specific patterns in media bias, from geographic distributions to temporal trends and sentiment analysis.'
             }
         };
-        
+
         state.charts.dataFlow = new Charts.FlowDiagram(
             container,
             flowData,
             { tooltip: state.tooltip }
         );
-        
+
         // Setup interactive pipeline details
         setupPipelineInteractivity(pipelineDescriptions);
     } catch (e) {
@@ -787,13 +795,13 @@ function setupPipelineInteractivity(descriptions) {
     const detailsPanel = document.getElementById('pipeline-details');
     const titleEl = document.getElementById('pipeline-detail-title');
     const descEl = document.getElementById('pipeline-detail-description');
-    
+
     if (!detailsPanel || !titleEl || !descEl) return;
-    
+
     // Add click handlers to pipeline nodes
     const diagram = document.getElementById('data-flow-diagram');
     if (!diagram) return;
-    
+
     // Use MutationObserver to wait for SVG to be created
     const observer = new MutationObserver((mutations, obs) => {
         const svg = diagram.querySelector('svg');
@@ -802,9 +810,9 @@ function setupPipelineInteractivity(descriptions) {
             addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl);
         }
     });
-    
+
     observer.observe(diagram, { childList: true, subtree: true });
-    
+
     // Also check if SVG already exists
     const existingSvg = diagram.querySelector('svg');
     if (existingSvg) {
@@ -819,17 +827,17 @@ function setupPipelineInteractivity(descriptions) {
 function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl) {
     const nodeGroups = svg.querySelectorAll('.node');
     let activeNode = null;
-    
+
     nodeGroups.forEach(nodeGroup => {
         nodeGroup.classList.add('pipeline-node');
-        
+
         nodeGroup.addEventListener('click', (e) => {
             e.stopPropagation();
-            
+
             // Get node id from the group or text
             const textEl = nodeGroup.querySelector('text');
             const label = textEl ? textEl.textContent : '';
-            
+
             // Map label to id
             const labelToId = {
                 'GDELT Database': 'gdelt',
@@ -838,24 +846,24 @@ function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descE
                 'CSV/JSON Files': 'csv',
                 'D3.js Visualizations': 'd3'
             };
-            
+
             const nodeId = labelToId[label];
             if (!nodeId || !descriptions[nodeId]) return;
-            
+
             // Update active state
             if (activeNode) {
                 activeNode.classList.remove('active');
             }
             nodeGroup.classList.add('active');
             activeNode = nodeGroup;
-            
+
             // Update details panel
             const info = descriptions[nodeId];
             titleEl.textContent = info.title;
             descEl.textContent = info.description;
             detailsPanel.classList.add('visible');
         });
-        
+
         // Keyboard accessibility
         nodeGroup.setAttribute('tabindex', '0');
         nodeGroup.setAttribute('role', 'button');
@@ -866,7 +874,7 @@ function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descE
             }
         });
     });
-    
+
     // Click outside to hide details
     document.addEventListener('click', (e) => {
         if (!detailsPanel.contains(e.target) && !svg.contains(e.target)) {

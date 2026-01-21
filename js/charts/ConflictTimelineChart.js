@@ -7,17 +7,17 @@
 export class ConflictTimelineChart {
     constructor(container, data, options = {}) {
         // Handle container
-        this.container = typeof container === 'string' 
-            ? document.querySelector(container) 
+        this.container = typeof container === 'string'
+            ? document.querySelector(container)
             : container;
-        
+
         if (!this.container) {
             console.error('ConflictTimelineChart: Container not found');
             return;
         }
-        
+
         this.data = data;
-        
+
         // Default country configuration (Liberia/Sierra Leone for backward compatibility)
         const defaultCountries = {
             country1: {
@@ -26,12 +26,12 @@ export class ConflictTimelineChart {
                 fieldPrefix: 'liberia'
             },
             country2: {
-                name: 'Sierra Leone', 
+                name: 'Sierra Leone',
                 color: '#2ca02c',
                 fieldPrefix: 'sierraLeone'
             }
         };
-        
+
         this.options = {
             margin: { top: 80, right: 100, bottom: 50, left: 70 },
             panelGap: 60,
@@ -43,7 +43,7 @@ export class ConflictTimelineChart {
             subtitle: '',
             ...options
         };
-        
+
         // Override country config from data metadata if available
         if (data?.metadata) {
             if (data.metadata.country1) {
@@ -63,17 +63,28 @@ export class ConflictTimelineChart {
             if (data.metadata.period) {
                 this.options.subtitle = data.metadata.period;
             }
+            // Detect time format (monthly vs yearly)
+            if (data.metadata.timeFormat) {
+                this.options.timeFormat = data.metadata.timeFormat;
+            }
         }
-        
+
+        // Default to yearly if not specified
+        if (!this.options.timeFormat) {
+            // Auto-detect from data
+            const firstEntry = data?.timeline?.[0];
+            this.options.timeFormat = firstEntry?.year_month ? 'monthly' : 'yearly';
+        }
+
         this.tooltip = options.tooltip;
-        
+
         // Initialize
         this.setup();
-        
+
         if (this.data) {
             this.render();
         }
-        
+
         // Setup resize observer
         if (this.options.responsive) {
             this.setupResizeObserver();
@@ -83,13 +94,13 @@ export class ConflictTimelineChart {
     setup() {
         // Clear container
         this.container.innerHTML = '';
-        
+
         // Get dimensions
         this.updateDimensions();
-        
+
         // Calculate panel heights (two stacked panels)
         this.panelHeight = (this.height - this.options.panelGap) / 2;
-        
+
         // Create SVG
         this.svg = d3.select(this.container)
             .append('svg')
@@ -111,7 +122,7 @@ export class ConflictTimelineChart {
         // Create panel groups
         this.topPanel = this.chartGroup.append('g')
             .attr('class', 'panel panel-top');
-        
+
         this.bottomPanel = this.chartGroup.append('g')
             .attr('class', 'panel panel-bottom')
             .attr('transform', `translate(0, ${this.panelHeight + this.options.panelGap})`);
@@ -120,13 +131,13 @@ export class ConflictTimelineChart {
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
             .attr('transform', `translate(${this.options.margin.left + this.width - 200}, 25)`);
-        
+
         // Title group
         this.titleGroup = this.svg.append('g')
             .attr('class', 'chart-title-group')
             .attr('transform', `translate(${this.options.margin.left}, 25)`);
     }
-    
+
     setupResizeObserver() {
         this.resizeObserver = new ResizeObserver(entries => {
             clearTimeout(this.resizeTimeout);
@@ -145,12 +156,12 @@ export class ConflictTimelineChart {
             .attr('x2', '0%')
             .attr('y1', '0%')
             .attr('y2', '100%');
-        
+
         disparityGradient.append('stop')
             .attr('offset', '0%')
             .attr('stop-color', '#FFC107')
             .attr('stop-opacity', 0.15);
-        
+
         disparityGradient.append('stop')
             .attr('offset', '100%')
             .attr('stop-color', '#FFC107')
@@ -163,28 +174,50 @@ export class ConflictTimelineChart {
         const timeline = this.data.timeline;
         const annotations = this.data.annotations || [];
         const disparityZone = this.data.disparityZone;
-        
+
         // Get field prefixes from config
         const c1 = this.options.countries.country1.fieldPrefix;
         const c2 = this.options.countries.country2.fieldPrefix;
-        
+
         // Field name getters
         this.getEventsField = (prefix) => `${prefix}Events`;
         this.getDeathsField = (prefix) => `${prefix}Deaths`;
         this.getCasualtiesField = (prefix) => `${prefix}CasualtiesPerEvent`;
 
-        // Create scales
-        this.xScale = d3.scaleLinear()
-            .domain(d3.extent(timeline, d => d.year))
-            .range([0, this.width]);
+        // Time accessor based on format
+        this.isMonthly = this.options.timeFormat === 'monthly';
+        this.getTimeValue = this.isMonthly
+            ? (d) => d.year_month
+            : (d) => d.year;
+
+        // Create scales based on time format
+        if (this.isMonthly) {
+            // Parse year_month strings to dates for proper scaling
+            const parseTime = d3.timeParse('%Y-%m');
+            this.timeParser = parseTime;
+            const timeExtent = d3.extent(timeline, d => parseTime(d.year_month));
+
+            this.xScale = d3.scaleTime()
+                .domain(timeExtent)
+                .range([0, this.width]);
+
+            // Helper to get x position
+            this.getXPosition = (d) => this.xScale(parseTime(d.year_month));
+        } else {
+            this.xScale = d3.scaleLinear()
+                .domain(d3.extent(timeline, d => d.year))
+                .range([0, this.width]);
+
+            this.getXPosition = (d) => this.xScale(d.year);
+        }
 
         // Y scales for each panel
         const maxDeaths = d3.max(timeline, d => Math.max(
-            d[this.getDeathsField(c1)] || 0, 
+            d[this.getDeathsField(c1)] || 0,
             d[this.getDeathsField(c2)] || 0
         ));
         const maxEvents = d3.max(timeline, d => Math.max(
-            d[this.getEventsField(c1)] || 0, 
+            d[this.getEventsField(c1)] || 0,
             d[this.getEventsField(c2)] || 0
         ));
 
@@ -205,11 +238,14 @@ export class ConflictTimelineChart {
         // Add title
         this.addChartTitle();
 
+        // Panel titles adapt based on time format
+        const timePeriod = this.isMonthly ? 'Month' : 'Year';
+
         // Render both panels - Deaths on top, Events on bottom (like the notebook)
-        this.renderPanel(this.topPanel, timeline, 'deaths', this.yScaleDeaths, 
-            'Total Deaths per Year', 'Deaths');
-        this.renderPanel(this.bottomPanel, timeline, 'events', this.yScaleEvents, 
-            'Number of Conflict Events per Year', 'Events');
+        this.renderPanel(this.topPanel, timeline, 'deaths', this.yScaleDeaths,
+            `Total Deaths per ${timePeriod}`, 'Deaths');
+        this.renderPanel(this.bottomPanel, timeline, 'events', this.yScaleEvents,
+            `Number of Conflict Events per ${timePeriod}`, 'Events');
 
         // Add conflict period zones (transparent background areas)
         this.renderConflictPeriods(annotations);
@@ -229,7 +265,7 @@ export class ConflictTimelineChart {
     addChartTitle() {
         // Clear existing title
         this.titleGroup.selectAll('*').remove();
-        
+
         const c1Name = this.options.countries.country1.name;
         const c2Name = this.options.countries.country2.name;
         const title = this.options.title || `${c1Name} vs ${c2Name}: Coverage vs. Casualties`;
@@ -238,7 +274,7 @@ export class ConflictTimelineChart {
         this.titleGroup.append('text')
             .attr('class', 'chart-title-text')
             .text(title);
-        
+
         this.titleGroup.append('text')
             .attr('class', 'chart-subtitle-text')
             .attr('y', 20)
@@ -250,7 +286,7 @@ export class ConflictTimelineChart {
         const c2 = this.options.countries.country2.fieldPrefix;
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
-        
+
         // Determine value keys based on type
         let valueKey;
         if (type === 'deaths') {
@@ -278,10 +314,19 @@ export class ConflictTimelineChart {
         // Grid
         this.renderGrid(panel, yScale);
 
-        // X Axis
-        const xAxis = d3.axisBottom(this.xScale)
-            .tickFormat(d3.format('d'))
-            .ticks(9);
+        // X Axis - format based on time type
+        const isMonthly = this.options.timeFormat === 'monthly';
+        let xAxis;
+        if (isMonthly) {
+            // For monthly data, show only January of each year for cleaner labels
+            xAxis = d3.axisBottom(this.xScale)
+                .tickFormat(d3.timeFormat('%Y'))
+                .ticks(d3.timeYear.every(1));
+        } else {
+            xAxis = d3.axisBottom(this.xScale)
+                .tickFormat(d3.format('d'))
+                .ticks(9);
+        }
 
         panel.append('g')
             .attr('class', 'axis axis-x')
@@ -304,14 +349,14 @@ export class ConflictTimelineChart {
             .attr('y', -50)
             .text(yLabel);
 
-        // Line generators
+        // Line generators - use getXPosition helper for time-based positioning
         const country1Line = d3.line()
-            .x(d => this.xScale(d.year))
+            .x(d => this.getXPosition(d))
             .y(d => yScale(d[valueKey.country1] || 0))
             .curve(d3.curveMonotoneX);
 
         const country2Line = d3.line()
-            .x(d => this.xScale(d.year))
+            .x(d => this.getXPosition(d))
             .y(d => yScale(d[valueKey.country2] || 0))
             .curve(d3.curveMonotoneX);
 
@@ -359,12 +404,12 @@ export class ConflictTimelineChart {
 
     animateLine(path) {
         const totalLength = path.node().getTotalLength();
-        
+
         // Set initial state for animation
         path
             .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
             .attr('stroke-dashoffset', totalLength);
-        
+
         // Animate the line
         path.transition()
             .duration(this.options.animationDuration || 1500)
@@ -379,7 +424,7 @@ export class ConflictTimelineChart {
     addDataPoints(panel, data, valueKey, yScale, type) {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
-        
+
         const countries = [
             { key: 'country1', class: 'country1-dot', valueKey: valueKey.country1, color: c1.color, name: c1.name, fieldPrefix: c1.fieldPrefix },
             { key: 'country2', class: 'country2-dot', valueKey: valueKey.country2, color: c2.color, name: c2.name, fieldPrefix: c2.fieldPrefix }
@@ -390,12 +435,12 @@ export class ConflictTimelineChart {
                 .data(data.filter(d => (d[country.valueKey] || 0) > 0))
                 .join('circle')
                 .attr('class', `dot ${country.class}`)
-                .attr('cx', d => this.xScale(d.year))
+                .attr('cx', d => this.getXPosition(d))
                 .attr('cy', d => yScale(d[country.valueKey]))
-                .attr('r', 5)
+                .attr('r', this.options.timeFormat === 'monthly' ? 3 : 5) // Smaller dots for monthly data
                 .attr('fill', country.color)
                 .attr('stroke', '#fff')
-                .attr('stroke-width', 2)
+                .attr('stroke-width', this.options.timeFormat === 'monthly' ? 1 : 2)
                 .style('cursor', 'pointer')
                 .on('mouseenter', (event, d) => this.handleDotHover(event, d, country, type))
                 .on('mousemove', (event) => this.moveTooltip(event))
@@ -406,19 +451,23 @@ export class ConflictTimelineChart {
     handleDotHover(event, d, countryInfo, type) {
         const countryName = countryInfo.name;
         const prefix = countryInfo.fieldPrefix;
-        
+
         const eventsField = this.getEventsField(prefix);
         const deathsField = this.getDeathsField(prefix);
         const casualtiesField = this.getCasualtiesField(prefix);
-        
+
         const events = d[eventsField] || 0;
         const deaths = d[deathsField] || 0;
         const intensity = d[casualtiesField] || 0;
-        
+
+        // Get time label based on format
+        const isMonthly = this.options.timeFormat === 'monthly';
+        const timeLabel = isMonthly ? d.year_month : d.year;
+
         let content;
         if (type === 'deaths') {
             content = {
-                title: `${countryName} - ${d.year}`,
+                title: `${countryName} - ${timeLabel}`,
                 rows: [
                     { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' },
                     { label: 'Events', value: events, format: 'number' },
@@ -427,7 +476,7 @@ export class ConflictTimelineChart {
             };
         } else if (type === 'events') {
             content = {
-                title: `${countryName} - ${d.year}`,
+                title: `${countryName} - ${timeLabel}`,
                 rows: [
                     { label: 'Conflict Events', value: events, format: 'number' },
                     { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' }
@@ -435,7 +484,7 @@ export class ConflictTimelineChart {
             };
         } else {
             content = {
-                title: `${countryName} - ${d.year}`,
+                title: `${countryName} - ${timeLabel}`,
                 rows: [
                     { label: 'Casualties per Event', value: intensity.toFixed(1), format: 'text' },
                     { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' },
@@ -467,8 +516,17 @@ export class ConflictTimelineChart {
     }
 
     renderDisparityZone(zone) {
-        const x1 = this.xScale(zone.start);
-        const x2 = this.xScale(zone.end);
+        // Handle both yearly (numeric) and monthly (string) formats
+        const isMonthly = this.options.timeFormat === 'monthly';
+        let x1, x2;
+
+        if (isMonthly && this.timeParser) {
+            x1 = this.xScale(this.timeParser(zone.start));
+            x2 = this.xScale(this.timeParser(zone.end));
+        } else {
+            x1 = this.xScale(zone.start);
+            x2 = this.xScale(zone.end);
+        }
         const zoneWidth = x2 - x1;
 
         // Top panel disparity zone
@@ -507,7 +565,7 @@ export class ConflictTimelineChart {
 
         // Disparity label (positioned between panels)
         const labelY = this.panelHeight + this.options.panelGap / 2;
-        
+
         const labelGroup = this.chartGroup.append('g')
             .attr('class', 'disparity-label-group')
             .attr('transform', `translate(${x1 + zoneWidth / 2}, ${labelY})`)
@@ -539,16 +597,36 @@ export class ConflictTimelineChart {
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
         const timeline = this.data.timeline;
-        const endYear = d3.max(timeline, d => d.year);
-        
-        // Sort annotations by year to handle overlapping properly
-        const sortedAnnotations = [...annotations].sort((a, b) => a.year - b.year);
-        
+        const isMonthly = this.options.timeFormat === 'monthly';
+
+        // Get end time value
+        let endTime;
+        if (isMonthly) {
+            const lastEntry = timeline[timeline.length - 1];
+            endTime = this.timeParser(lastEntry.year_month);
+        } else {
+            endTime = d3.max(timeline, d => d.year);
+        }
+
+        // Sort annotations by time to handle overlapping properly
+        const sortedAnnotations = [...annotations].sort((a, b) => {
+            if (isMonthly) {
+                return (a.year_month || '').localeCompare(b.year_month || '');
+            }
+            return a.year - b.year;
+        });
+
         sortedAnnotations.forEach((annotation, index) => {
-            const startX = this.xScale(annotation.year);
-            const endX = this.xScale(endYear);
+            // Get x position based on format
+            let startX;
+            if (isMonthly && annotation.year_month) {
+                startX = this.xScale(this.timeParser(annotation.year_month));
+            } else {
+                startX = this.xScale(annotation.year);
+            }
+            const endX = this.xScale(endTime);
             const zoneWidth = endX - startX;
-            
+
             // Determine color based on country
             let color;
             if (annotation.country === 'country1' || annotation.country === 'liberia') {
@@ -556,7 +634,7 @@ export class ConflictTimelineChart {
             } else {
                 color = c2Color;
             }
-            
+
             // Add transparent filled area to both panels
             [this.topPanel, this.bottomPanel].forEach(panel => {
                 panel.insert('rect', ':first-child')
@@ -578,9 +656,17 @@ export class ConflictTimelineChart {
     renderAnnotations(annotations) {
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
-        
+        const isMonthly = this.options.timeFormat === 'monthly';
+
         annotations.forEach((annotation, index) => {
-            const x = this.xScale(annotation.year);
+            // Get x position based on format
+            let x;
+            if (isMonthly && annotation.year_month) {
+                x = this.xScale(this.timeParser(annotation.year_month));
+            } else {
+                x = this.xScale(annotation.year);
+            }
+
             // Support both old format (liberia/sierraLeone) and new format (country1/country2)
             let color;
             if (annotation.country === 'country1' || annotation.country === 'liberia') {
@@ -601,7 +687,7 @@ export class ConflictTimelineChart {
                     .attr('stroke-width', 2)
                     .attr('stroke-dasharray', '6,3')
                     .attr('opacity', 0.8);
-                
+
                 // Animate line growing down
                 line.transition()
                     .delay(this.options.animationDuration * 0.5 + index * 300)
@@ -614,7 +700,7 @@ export class ConflictTimelineChart {
                 .attr('class', 'annotation-label-group')
                 .attr('transform', `translate(${x + 5}, 15)`)
                 .style('opacity', 0);
-            
+
             // Background for better readability
             const text = labelGroup.append('text')
                 .attr('class', 'annotation-text')
@@ -623,10 +709,10 @@ export class ConflictTimelineChart {
                 .attr('font-weight', 600)
                 .attr('font-size', '11px')
                 .text(annotation.label);
-            
+
             // Get text dimensions for background
             const bbox = text.node().getBBox();
-            
+
             labelGroup.insert('rect', 'text')
                 .attr('x', bbox.x - 3)
                 .attr('y', bbox.y - 2)
@@ -635,7 +721,7 @@ export class ConflictTimelineChart {
                 .attr('rx', 2)
                 .attr('fill', 'white')
                 .attr('opacity', 0.85);
-            
+
             // Animate label appearing
             labelGroup.transition()
                 .delay(this.options.animationDuration * 0.5 + index * 300 + 400)
@@ -685,15 +771,15 @@ export class ConflictTimelineChart {
         const containerRect = this.container.getBoundingClientRect();
         this.width = (containerRect.width || 800) - this.options.margin.left - this.options.margin.right;
         this.height = (containerRect.height || 600) - this.options.margin.top - this.options.margin.bottom;
-        
+
         // Ensure minimum dimensions
         this.width = Math.max(this.width, 400);
         this.height = Math.max(this.height, 400);
-        
+
         // Recalculate panel height
         this.panelHeight = (this.height - this.options.panelGap) / 2;
     }
-    
+
     resize() {
         this.updateDimensions();
         this.setup();
@@ -701,25 +787,25 @@ export class ConflictTimelineChart {
             this.render();
         }
     }
-    
+
     showTooltip(content, event) {
         if (this.tooltip) {
             this.tooltip.show(content, event);
         }
     }
-    
+
     hideTooltip() {
         if (this.tooltip) {
             this.tooltip.hide();
         }
     }
-    
+
     moveTooltip(event) {
         if (this.tooltip) {
             this.tooltip.move(event);
         }
     }
-    
+
     destroy() {
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
