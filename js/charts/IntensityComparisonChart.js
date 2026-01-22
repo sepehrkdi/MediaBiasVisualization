@@ -1,7 +1,8 @@
 /**
  * Intensity Comparison Chart
- * Single-panel visualization showing average casualties per event
- * with horizontal reference lines for overall averages
+ * Dual-panel visualization showing:
+ *   Top panel: Average casualties per event (with horizontal average reference lines)
+ *   Bottom panel: Number of conflict events per year
  */
 
 export class IntensityComparisonChart {
@@ -32,7 +33,8 @@ export class IntensityComparisonChart {
         };
         
         this.options = {
-            margin: { top: 60, right: 120, bottom: 60, left: 80 },
+            margin: { top: 80, right: 100, bottom: 50, left: 70 },
+            panelGap: 60,
             animate: true,
             animationDuration: 1500,
             responsive: true,
@@ -79,6 +81,9 @@ export class IntensityComparisonChart {
         this.container.innerHTML = '';
         this.updateDimensions();
         
+        // Calculate panel heights (two stacked panels)
+        this.panelHeight = (this.height - this.options.panelGap) / 2;
+        
         this.svg = d3.select(this.container)
             .append('svg')
             .attr('class', 'intensity-comparison-svg')
@@ -87,13 +92,23 @@ export class IntensityComparisonChart {
             .attr('viewBox', `0 0 ${this.width + this.options.margin.left + this.options.margin.right} ${this.height + this.options.margin.top + this.options.margin.bottom}`)
             .attr('preserveAspectRatio', 'xMidYMid meet');
 
+        // Main chart group
         this.chartGroup = this.svg.append('g')
             .attr('class', 'chart-group')
             .attr('transform', `translate(${this.options.margin.left}, ${this.options.margin.top})`);
 
+        // Create panel groups
+        this.topPanel = this.chartGroup.append('g')
+            .attr('class', 'panel panel-top');
+
+        this.bottomPanel = this.chartGroup.append('g')
+            .attr('class', 'panel panel-bottom')
+            .attr('transform', `translate(0, ${this.panelHeight + this.options.panelGap})`);
+
+        // Legend group
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${this.options.margin.left + this.width + 15}, ${this.options.margin.top + 20})`);
+            .attr('transform', `translate(${this.options.margin.left + this.width - 200}, 25)`);
         
         this.titleGroup = this.svg.append('g')
             .attr('class', 'chart-title-group')
@@ -111,7 +126,10 @@ export class IntensityComparisonChart {
     updateDimensions() {
         const rect = this.container.getBoundingClientRect();
         this.width = Math.max((rect.width || 800) - this.options.margin.left - this.options.margin.right, 400);
-        this.height = Math.max((rect.height || 500) - this.options.margin.top - this.options.margin.bottom, 300);
+        this.height = Math.max((rect.height || 600) - this.options.margin.top - this.options.margin.bottom, 400);
+        
+        // Recalculate panel height
+        this.panelHeight = (this.height - this.options.panelGap) / 2;
     }
 
     render() {
@@ -122,45 +140,48 @@ export class IntensityComparisonChart {
         const c2 = this.options.countries.country2;
         
         // Field names
-        const c1Field = `${c1.fieldPrefix}CasualtiesPerEvent`;
-        const c2Field = `${c2.fieldPrefix}CasualtiesPerEvent`;
+        const c1CasualtiesField = `${c1.fieldPrefix}CasualtiesPerEvent`;
+        const c2CasualtiesField = `${c2.fieldPrefix}CasualtiesPerEvent`;
+        const c1EventsField = `${c1.fieldPrefix}Events`;
+        const c2EventsField = `${c2.fieldPrefix}Events`;
         
-        // Calculate averages (only where there's data)
-        const c1Data = timeline.filter(d => d[c1Field] > 0);
-        const c2Data = timeline.filter(d => d[c2Field] > 0);
-        const c1Avg = d3.mean(c1Data, d => d[c1Field]) || 0;
-        const c2Avg = d3.mean(c2Data, d => d[c2Field]) || 0;
+        // Calculate averages for casualties per event (only where there's data)
+        const c1Data = timeline.filter(d => d[c1CasualtiesField] > 0);
+        const c2Data = timeline.filter(d => d[c2CasualtiesField] > 0);
+        const c1Avg = d3.mean(c1Data, d => d[c1CasualtiesField]) || 0;
+        const c2Avg = d3.mean(c2Data, d => d[c2CasualtiesField]) || 0;
 
-        // Scales
+        // X Scale (shared)
         this.xScale = d3.scaleLinear()
             .domain(d3.extent(timeline, d => d.year))
             .range([0, this.width]);
 
-        const maxIntensity = d3.max(timeline, d => Math.max(d[c1Field] || 0, d[c2Field] || 0));
-        this.yScale = d3.scaleLinear()
+        // Y Scale for casualties per event (top panel)
+        const maxIntensity = d3.max(timeline, d => Math.max(d[c1CasualtiesField] || 0, d[c2CasualtiesField] || 0));
+        this.yScaleCasualties = d3.scaleLinear()
             .domain([0, maxIntensity * 1.15])
-            .range([this.height, 0])
+            .range([this.panelHeight, 0])
+            .nice();
+
+        // Y Scale for events (bottom panel)
+        const maxEvents = d3.max(timeline, d => Math.max(d[c1EventsField] || 0, d[c2EventsField] || 0));
+        this.yScaleEvents = d3.scaleLinear()
+            .domain([0, maxEvents * 1.1])
+            .range([this.panelHeight, 0])
             .nice();
 
         // Clear previous
-        this.chartGroup.selectAll('*').remove();
+        this.topPanel.selectAll('*').remove();
+        this.bottomPanel.selectAll('*').remove();
         this.titleGroup.selectAll('*').remove();
         this.legendGroup.selectAll('*').remove();
 
         // Add title
         this.addTitle();
 
-        // Grid
-        this.renderGrid();
-
-        // Axes
-        this.renderAxes();
-
-        // Average reference lines (render first, behind data lines)
-        this.renderAverageLines(c1Avg, c2Avg, c1, c2);
-
-        // Data lines
-        this.renderDataLines(timeline, c1Field, c2Field, c1, c2);
+        // Render both panels
+        this.renderCasualtiesPanel(timeline, c1CasualtiesField, c2CasualtiesField, c1, c2, c1Avg, c2Avg);
+        this.renderEventsPanel(timeline, c1EventsField, c2EventsField, c1, c2);
 
         // Legend
         this.renderLegend(c1, c2, c1Avg, c2Avg);
@@ -172,79 +193,123 @@ export class IntensityComparisonChart {
         
         this.titleGroup.append('text')
             .attr('class', 'chart-title-text')
-            .attr('font-size', '18px')
-            .attr('font-weight', 'bold')
             .text(this.options.title);
         
         this.titleGroup.append('text')
             .attr('class', 'chart-subtitle-text')
-            .attr('y', 22)
-            .attr('font-size', '14px')
-            .attr('fill', '#666')
+            .attr('y', 20)
             .text(`${c1Name} vs ${c2Name} (${this.options.subtitle})`);
     }
 
-    renderGrid() {
-        this.chartGroup.append('g')
-            .attr('class', 'grid grid-y')
-            .call(d3.axisLeft(this.yScale)
-                .tickSize(-this.width)
-                .tickFormat('')
-                .ticks(6)
-            )
-            .selectAll('line')
-            .attr('stroke', '#e0e0e0')
-            .attr('stroke-dasharray', '2,2');
-    }
+    renderCasualtiesPanel(timeline, c1Field, c2Field, c1, c2, c1Avg, c2Avg) {
+        const panel = this.topPanel;
+        const yScale = this.yScaleCasualties;
 
-    renderAxes() {
+        // Panel background
+        panel.append('rect')
+            .attr('class', 'panel-background')
+            .attr('width', this.width)
+            .attr('height', this.panelHeight)
+            .attr('fill', 'transparent');
+
+        // Panel title
+        panel.append('text')
+            .attr('class', 'panel-title')
+            .attr('x', 0)
+            .attr('y', -8)
+            .text('Average Casualties per Event');
+
+        // Grid
+        this.renderGrid(panel, yScale);
+
         // X Axis
-        const xAxis = d3.axisBottom(this.xScale)
-            .tickFormat(d3.format('d'))
-            .ticks(9);
-
-        this.chartGroup.append('g')
+        panel.append('g')
             .attr('class', 'axis axis-x')
-            .attr('transform', `translate(0, ${this.height})`)
-            .call(xAxis);
-
-        // X Axis label
-        this.chartGroup.append('text')
-            .attr('class', 'axis-label')
-            .attr('x', this.width / 2)
-            .attr('y', this.height + 45)
-            .attr('text-anchor', 'middle')
-            .attr('fill', '#666')
-            .text('Year');
+            .attr('transform', `translate(0, ${this.panelHeight})`)
+            .call(d3.axisBottom(this.xScale).tickFormat(d3.format('d')).ticks(9));
 
         // Y Axis
-        const yAxis = d3.axisLeft(this.yScale).ticks(6);
-
-        this.chartGroup.append('g')
+        const yAxisGroup = panel.append('g')
             .attr('class', 'axis axis-y')
-            .call(yAxis);
+            .call(d3.axisLeft(yScale).ticks(5));
 
-        // Y Axis label
-        this.chartGroup.append('text')
-            .attr('class', 'axis-label')
+        yAxisGroup.append('text')
+            .attr('class', 'axis-label axis-label-y')
             .attr('transform', 'rotate(-90)')
-            .attr('x', -this.height / 2)
-            .attr('y', -55)
-            .attr('text-anchor', 'middle')
-            .attr('fill', '#666')
-            .text('Average Casualties per Event');
+            .attr('x', -this.panelHeight / 2)
+            .attr('y', -50)
+            .text('Casualties/Event');
+
+        // Average reference lines
+        this.renderAverageLines(panel, yScale, c1Avg, c2Avg, c1, c2);
+
+        // Data lines
+        this.renderDataLines(panel, timeline, c1Field, c2Field, c1, c2, yScale, 'casualties');
     }
 
-    renderAverageLines(c1Avg, c2Avg, c1, c2) {
+    renderEventsPanel(timeline, c1Field, c2Field, c1, c2) {
+        const panel = this.bottomPanel;
+        const yScale = this.yScaleEvents;
+
+        // Panel background
+        panel.append('rect')
+            .attr('class', 'panel-background')
+            .attr('width', this.width)
+            .attr('height', this.panelHeight)
+            .attr('fill', 'transparent');
+
+        // Panel title
+        panel.append('text')
+            .attr('class', 'panel-title')
+            .attr('x', 0)
+            .attr('y', -8)
+            .text('Number of Conflict Events per Year');
+
+        // Grid
+        this.renderGrid(panel, yScale);
+
+        // X Axis
+        panel.append('g')
+            .attr('class', 'axis axis-x')
+            .attr('transform', `translate(0, ${this.panelHeight})`)
+            .call(d3.axisBottom(this.xScale).tickFormat(d3.format('d')).ticks(9));
+
+        // Y Axis
+        const yAxisGroup = panel.append('g')
+            .attr('class', 'axis axis-y')
+            .call(d3.axisLeft(yScale).ticks(5));
+
+        yAxisGroup.append('text')
+            .attr('class', 'axis-label axis-label-y')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -this.panelHeight / 2)
+            .attr('y', -50)
+            .text('Events');
+
+        // Data lines
+        this.renderDataLines(panel, timeline, c1Field, c2Field, c1, c2, yScale, 'events');
+    }
+
+    renderGrid(panel, yScale) {
+        panel.append('g')
+            .attr('class', 'grid grid-y')
+            .call(d3.axisLeft(yScale)
+                .tickSize(-this.width)
+                .tickFormat('')
+                .ticks(5)
+            );
+    }
+
+    renderAverageLines(panel, yScale, c1Avg, c2Avg, c1, c2) {
         // Country 1 average line
-        const c1AvgGroup = this.chartGroup.append('g')
+        const c1AvgGroup = panel.append('g')
             .attr('class', 'avg-line-group c1-avg');
 
         c1AvgGroup.append('line')
             .attr('x1', 0)
             .attr('x2', this.width)
-            .attr('y1', this.yScale(c1Avg))
-            .attr('y2', this.yScale(c1Avg))
+            .attr('y1', yScale(c1Avg))
+            .attr('y2', yScale(c1Avg))
             .attr('stroke', c1.color)
             .attr('stroke-width', 1.5)
             .attr('stroke-dasharray', '8,4')
@@ -252,21 +317,21 @@ export class IntensityComparisonChart {
 
         c1AvgGroup.append('text')
             .attr('x', this.width + 5)
-            .attr('y', this.yScale(c1Avg) + 4)
+            .attr('y', yScale(c1Avg) + 4)
             .attr('fill', c1.color)
             .attr('font-size', '11px')
             .attr('font-weight', 'bold')
             .text(`Avg: ${c1Avg.toFixed(1)}`);
 
         // Country 2 average line
-        const c2AvgGroup = this.chartGroup.append('g')
+        const c2AvgGroup = panel.append('g')
             .attr('class', 'avg-line-group c2-avg');
 
         c2AvgGroup.append('line')
             .attr('x1', 0)
             .attr('x2', this.width)
-            .attr('y1', this.yScale(c2Avg))
-            .attr('y2', this.yScale(c2Avg))
+            .attr('y1', yScale(c2Avg))
+            .attr('y2', yScale(c2Avg))
             .attr('stroke', c2.color)
             .attr('stroke-width', 1.5)
             .attr('stroke-dasharray', '8,4')
@@ -274,27 +339,27 @@ export class IntensityComparisonChart {
 
         c2AvgGroup.append('text')
             .attr('x', this.width + 5)
-            .attr('y', this.yScale(c2Avg) + 4)
+            .attr('y', yScale(c2Avg) + 4)
             .attr('fill', c2.color)
             .attr('font-size', '11px')
             .attr('font-weight', 'bold')
             .text(`Avg: ${c2Avg.toFixed(1)}`);
     }
 
-    renderDataLines(timeline, c1Field, c2Field, c1, c2) {
+    renderDataLines(panel, timeline, c1Field, c2Field, c1, c2, yScale, type) {
         // Line generators
         const c1Line = d3.line()
             .x(d => this.xScale(d.year))
-            .y(d => this.yScale(d[c1Field] || 0))
+            .y(d => yScale(d[c1Field] || 0))
             .curve(d3.curveMonotoneX);
 
         const c2Line = d3.line()
             .x(d => this.xScale(d.year))
-            .y(d => this.yScale(d[c2Field] || 0))
+            .y(d => yScale(d[c2Field] || 0))
             .curve(d3.curveMonotoneX);
 
         // Country 1 line
-        const c1Path = this.chartGroup.append('path')
+        const c1Path = panel.append('path')
             .datum(timeline)
             .attr('class', 'line c1-line')
             .attr('d', c1Line)
@@ -303,7 +368,7 @@ export class IntensityComparisonChart {
             .attr('stroke-width', 2.5);
 
         // Country 2 line
-        const c2Path = this.chartGroup.append('path')
+        const c2Path = panel.append('path')
             .datum(timeline)
             .attr('class', 'line c2-line')
             .attr('d', c2Line)
@@ -318,8 +383,8 @@ export class IntensityComparisonChart {
         }
 
         // Data points
-        this.renderDataPoints(timeline, c1Field, c1);
-        this.renderDataPoints(timeline, c2Field, c2);
+        this.renderDataPoints(panel, timeline, c1Field, c1, yScale, type);
+        this.renderDataPoints(panel, timeline, c2Field, c2, yScale, type);
     }
 
     animateLine(path) {
@@ -334,47 +399,58 @@ export class IntensityComparisonChart {
             .on('end', () => path.attr('stroke-dasharray', null));
     }
 
-    renderDataPoints(timeline, field, country) {
+    renderDataPoints(panel, timeline, field, country, yScale, type) {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
-        const c1Field = `${c1.fieldPrefix}CasualtiesPerEvent`;
-        const c2Field = `${c2.fieldPrefix}CasualtiesPerEvent`;
         
-        this.chartGroup.selectAll(`.dot-${country.fieldPrefix}`)
+        panel.selectAll(`.dot-${country.fieldPrefix}-${type}`)
             .data(timeline.filter(d => d[field] > 0))
             .join('circle')
-            .attr('class', `dot dot-${country.fieldPrefix}`)
+            .attr('class', `dot dot-${country.fieldPrefix}-${type}`)
             .attr('cx', d => this.xScale(d.year))
-            .attr('cy', d => this.yScale(d[field]))
+            .attr('cy', d => yScale(d[field]))
             .attr('r', 5)
             .attr('fill', country.color)
             .attr('stroke', '#fff')
             .attr('stroke-width', 2)
             .style('cursor', 'pointer')
             .on('mouseenter', (event, d) => {
-                const content = {
-                    title: `${country.name} - ${d.year}`,
-                    rows: [
-                        { label: 'Casualties per Event', value: d[field].toFixed(1), format: 'text' },
-                        { label: 'Total Deaths', value: (d[`${country.fieldPrefix}Deaths`] || 0).toLocaleString(), format: 'text' },
-                        { label: 'Events', value: d[`${country.fieldPrefix}Events`] || 0, format: 'number' }
-                    ]
-                };
-                
-                // Add comparison insight
-                const otherField = field === c1Field ? c2Field : c1Field;
-                const otherValue = d[otherField] || 0;
-                if (otherValue > 0) {
-                    const ratio = (d[field] / otherValue).toFixed(1);
-                    const otherName = field === c1Field ? c2.name : c1.name;
-                    if (ratio > 1) {
-                        content.rows.push({
-                            label: '⚠️ Comparison',
-                            value: `${ratio}× more deadly than ${otherName}`,
-                            format: 'text',
-                            highlight: true
-                        });
+                let content;
+                if (type === 'casualties') {
+                    content = {
+                        title: `${country.name} - ${d.year}`,
+                        rows: [
+                            { label: 'Casualties per Event', value: d[field].toFixed(1), format: 'text' },
+                            { label: 'Total Deaths', value: (d[`${country.fieldPrefix}Deaths`] || 0).toLocaleString(), format: 'text' },
+                            { label: 'Events', value: d[`${country.fieldPrefix}Events`] || 0, format: 'number' }
+                        ]
+                    };
+                    
+                    // Add comparison insight
+                    const otherField = country === c1 
+                        ? `${c2.fieldPrefix}CasualtiesPerEvent`
+                        : `${c1.fieldPrefix}CasualtiesPerEvent`;
+                    const otherValue = d[otherField] || 0;
+                    if (otherValue > 0) {
+                        const ratio = (d[field] / otherValue).toFixed(1);
+                        const otherName = country === c1 ? c2.name : c1.name;
+                        if (ratio > 1) {
+                            content.rows.push({
+                                label: '⚠️ Comparison',
+                                value: `${ratio}× more deadly than ${otherName}`,
+                                format: 'text',
+                                highlight: true
+                            });
+                        }
                     }
+                } else {
+                    content = {
+                        title: `${country.name} - ${d.year}`,
+                        rows: [
+                            { label: 'Conflict Events', value: d[field], format: 'number' },
+                            { label: 'Total Deaths', value: (d[`${country.fieldPrefix}Deaths`] || 0).toLocaleString(), format: 'text' }
+                        ]
+                    };
                 }
                 
                 if (this.tooltip) this.tooltip.show(content, event);
@@ -397,18 +473,18 @@ export class IntensityComparisonChart {
             .data(items)
             .join('g')
             .attr('class', 'legend-item')
-            .attr('transform', (d, i) => `translate(0, ${i * 25})`);
+            .attr('transform', (d, i) => `translate(${i * 100}, 0)`);
 
         legendItem.append('line')
             .attr('x1', 0)
-            .attr('x2', 20)
+            .attr('x2', 25)
             .attr('y1', 0)
             .attr('y2', 0)
             .attr('stroke', d => d.color)
             .attr('stroke-width', 2.5);
 
         legendItem.append('circle')
-            .attr('cx', 10)
+            .attr('cx', 12.5)
             .attr('cy', 0)
             .attr('r', 4)
             .attr('fill', d => d.color)
@@ -416,9 +492,9 @@ export class IntensityComparisonChart {
             .attr('stroke-width', 1.5);
 
         legendItem.append('text')
-            .attr('x', 28)
+            .attr('x', 30)
             .attr('y', 4)
-            .attr('font-size', '12px')
+            .attr('class', 'legend-text')
             .text(d => d.label);
     }
 

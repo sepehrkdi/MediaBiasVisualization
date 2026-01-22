@@ -1,7 +1,7 @@
 /**
  * Conflict Timeline Chart
- * Stacked dual-panel visualization comparing media coverage vs. conflict intensity
- * for Liberia and Sierra Leone civil wars (1989-1997)
+ * Single-panel visualization showing Total Deaths per Year
+ * for comparing two countries' conflict data
  */
 
 export class ConflictTimelineChart {
@@ -33,8 +33,7 @@ export class ConflictTimelineChart {
         };
 
         this.options = {
-            margin: { top: 80, right: 100, bottom: 50, left: 70 },
-            panelGap: 60,
+            margin: { top: 80, right: 100, bottom: 60, left: 70 },
             animate: true,
             animationDuration: 1500,
             responsive: true,
@@ -98,9 +97,6 @@ export class ConflictTimelineChart {
         // Get dimensions
         this.updateDimensions();
 
-        // Calculate panel heights (two stacked panels)
-        this.panelHeight = (this.height - this.options.panelGap) / 2;
-
         // Create SVG
         this.svg = d3.select(this.container)
             .append('svg')
@@ -118,14 +114,6 @@ export class ConflictTimelineChart {
         this.chartGroup = this.svg.append('g')
             .attr('class', 'chart-group')
             .attr('transform', `translate(${this.options.margin.left}, ${this.options.margin.top})`);
-
-        // Create panel groups
-        this.topPanel = this.chartGroup.append('g')
-            .attr('class', 'panel panel-top');
-
-        this.bottomPanel = this.chartGroup.append('g')
-            .attr('class', 'panel panel-bottom')
-            .attr('transform', `translate(0, ${this.panelHeight + this.options.panelGap})`);
 
         // Legend group
         this.legendGroup = this.svg.append('g')
@@ -180,9 +168,7 @@ export class ConflictTimelineChart {
         const c2 = this.options.countries.country2.fieldPrefix;
 
         // Field name getters
-        this.getEventsField = (prefix) => `${prefix}Events`;
         this.getDeathsField = (prefix) => `${prefix}Deaths`;
-        this.getCasualtiesField = (prefix) => `${prefix}CasualtiesPerEvent`;
 
         // Time accessor based on format
         this.isMonthly = this.options.timeFormat === 'monthly';
@@ -211,41 +197,30 @@ export class ConflictTimelineChart {
             this.getXPosition = (d) => this.xScale(d.year);
         }
 
-        // Y scales for each panel
+        // Y scale for deaths
         const maxDeaths = d3.max(timeline, d => Math.max(
             d[this.getDeathsField(c1)] || 0,
             d[this.getDeathsField(c2)] || 0
         ));
-        const maxEvents = d3.max(timeline, d => Math.max(
-            d[this.getEventsField(c1)] || 0,
-            d[this.getEventsField(c2)] || 0
-        ));
 
         this.yScaleDeaths = d3.scaleLinear()
             .domain([0, maxDeaths * 1.1])
-            .range([this.panelHeight, 0])
-            .nice();
-
-        this.yScaleEvents = d3.scaleLinear()
-            .domain([0, maxEvents * 1.1])
-            .range([this.panelHeight, 0])
+            .range([this.height, 0])
             .nice();
 
         // Clear previous content
-        this.topPanel.selectAll('*').remove();
-        this.bottomPanel.selectAll('*').remove();
+        this.chartGroup.selectAll('*').remove();
+        this.titleGroup.selectAll('*').remove();
+        this.legendGroup.selectAll('*').remove();
 
         // Add title
         this.addChartTitle();
 
-        // Panel titles adapt based on time format
+        // Time period label
         const timePeriod = this.isMonthly ? 'Month' : 'Year';
 
-        // Render both panels - Deaths on top, Events on bottom (like the notebook)
-        this.renderPanel(this.topPanel, timeline, 'deaths', this.yScaleDeaths,
-            `Total Deaths per ${timePeriod}`, 'Deaths');
-        this.renderPanel(this.bottomPanel, timeline, 'events', this.yScaleEvents,
-            `Number of Conflict Events per ${timePeriod}`, 'Events');
+        // Render single panel for deaths
+        this.renderDeathsPanel(timeline, `Total Deaths per ${timePeriod}`);
 
         // Add conflict period zones (transparent background areas)
         this.renderConflictPeriods(annotations);
@@ -268,7 +243,7 @@ export class ConflictTimelineChart {
 
         const c1Name = this.options.countries.country1.name;
         const c2Name = this.options.countries.country2.name;
-        const title = this.options.title || `${c1Name} vs ${c2Name}: Coverage vs. Casualties`;
+        const title = this.options.title || `${c1Name} vs ${c2Name}: Total Deaths`;
         const subtitle = this.options.subtitle || `${c1Name} & ${c2Name}`;
 
         this.titleGroup.append('text')
@@ -281,38 +256,28 @@ export class ConflictTimelineChart {
             .text(subtitle);
     }
 
-    renderPanel(panel, data, type, yScale, title, yLabel) {
+    renderDeathsPanel(data) {
         const c1 = this.options.countries.country1.fieldPrefix;
         const c2 = this.options.countries.country2.fieldPrefix;
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
+        const yScale = this.yScaleDeaths;
 
-        // Determine value keys based on type
-        let valueKey;
-        if (type === 'deaths') {
-            valueKey = { country1: this.getDeathsField(c1), country2: this.getDeathsField(c2) };
-        } else if (type === 'events') {
-            valueKey = { country1: this.getEventsField(c1), country2: this.getEventsField(c2) };
-        } else {
-            valueKey = { country1: this.getCasualtiesField(c1), country2: this.getCasualtiesField(c2) };
-        }
-
-        // Panel background
-        panel.append('rect')
-            .attr('class', 'panel-background')
-            .attr('width', this.width)
-            .attr('height', this.panelHeight)
-            .attr('fill', 'transparent');
+        const valueKey = { 
+            country1: this.getDeathsField(c1), 
+            country2: this.getDeathsField(c2) 
+        };
 
         // Panel title
-        panel.append('text')
+        const timePeriod = this.isMonthly ? 'Month' : 'Year';
+        this.chartGroup.append('text')
             .attr('class', 'panel-title')
             .attr('x', 0)
             .attr('y', -8)
-            .text(title);
+            .text(`Total Deaths per ${timePeriod}`);
 
         // Grid
-        this.renderGrid(panel, yScale);
+        this.renderGrid(yScale);
 
         // X Axis - format based on time type
         const isMonthly = this.options.timeFormat === 'monthly';
@@ -328,16 +293,25 @@ export class ConflictTimelineChart {
                 .ticks(9);
         }
 
-        panel.append('g')
+        this.chartGroup.append('g')
             .attr('class', 'axis axis-x')
-            .attr('transform', `translate(0, ${this.panelHeight})`)
+            .attr('transform', `translate(0, ${this.height})`)
             .call(xAxis);
+
+        // X Axis label
+        this.chartGroup.append('text')
+            .attr('class', 'axis-label')
+            .attr('x', this.width / 2)
+            .attr('y', this.height + 45)
+            .attr('text-anchor', 'middle')
+            .attr('fill', '#666')
+            .text(isMonthly ? 'Year' : 'Year');
 
         // Y Axis
         const yAxis = d3.axisLeft(yScale)
-            .ticks(5);
+            .ticks(6);
 
-        const yAxisGroup = panel.append('g')
+        const yAxisGroup = this.chartGroup.append('g')
             .attr('class', 'axis axis-y')
             .call(yAxis);
 
@@ -345,9 +319,9 @@ export class ConflictTimelineChart {
         yAxisGroup.append('text')
             .attr('class', 'axis-label axis-label-y')
             .attr('transform', 'rotate(-90)')
-            .attr('x', -this.panelHeight / 2)
+            .attr('x', -this.height / 2)
             .attr('y', -50)
-            .text(yLabel);
+            .text('Deaths');
 
         // Line generators - use getXPosition helper for time-based positioning
         const country1Line = d3.line()
@@ -361,7 +335,7 @@ export class ConflictTimelineChart {
             .curve(d3.curveMonotoneX);
 
         // Draw Country 1 line
-        const country1Path = panel.append('path')
+        const country1Path = this.chartGroup.append('path')
             .datum(data)
             .attr('class', 'line country1-line')
             .attr('d', country1Line)
@@ -370,7 +344,7 @@ export class ConflictTimelineChart {
             .attr('stroke-width', 2.5);
 
         // Draw Country 2 line
-        const country2Path = panel.append('path')
+        const country2Path = this.chartGroup.append('path')
             .datum(data)
             .attr('class', 'line country2-line')
             .attr('d', country2Line)
@@ -385,20 +359,16 @@ export class ConflictTimelineChart {
         }
 
         // Add data points with hover
-        this.addDataPoints(panel, data, valueKey, yScale, type);
+        this.addDataPoints(data, valueKey, yScale);
     }
 
-    renderGrid(panel, yScale) {
-        const gridGroup = panel.append('g')
-            .attr('class', 'grid');
-
-        // Horizontal grid lines
-        gridGroup.append('g')
+    renderGrid(yScale) {
+        this.chartGroup.append('g')
             .attr('class', 'grid grid-y')
             .call(d3.axisLeft(yScale)
                 .tickSize(-this.width)
                 .tickFormat('')
-                .ticks(5)
+                .ticks(6)
             );
     }
 
@@ -421,7 +391,7 @@ export class ConflictTimelineChart {
             });
     }
 
-    addDataPoints(panel, data, valueKey, yScale, type) {
+    addDataPoints(data, valueKey, yScale) {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
 
@@ -431,7 +401,7 @@ export class ConflictTimelineChart {
         ];
 
         countries.forEach(country => {
-            panel.selectAll(`.${country.class}`)
+            this.chartGroup.selectAll(`.${country.class}`)
                 .data(data.filter(d => (d[country.valueKey] || 0) > 0))
                 .join('circle')
                 .attr('class', `dot ${country.class}`)
@@ -442,75 +412,29 @@ export class ConflictTimelineChart {
                 .attr('stroke', '#fff')
                 .attr('stroke-width', this.options.timeFormat === 'monthly' ? 1 : 2)
                 .style('cursor', 'pointer')
-                .on('mouseenter', (event, d) => this.handleDotHover(event, d, country, type))
+                .on('mouseenter', (event, d) => this.handleDotHover(event, d, country))
                 .on('mousemove', (event) => this.moveTooltip(event))
                 .on('mouseleave', () => this.hideTooltip());
         });
     }
 
-    handleDotHover(event, d, countryInfo, type) {
+    handleDotHover(event, d, countryInfo) {
         const countryName = countryInfo.name;
         const prefix = countryInfo.fieldPrefix;
 
-        const eventsField = this.getEventsField(prefix);
         const deathsField = this.getDeathsField(prefix);
-        const casualtiesField = this.getCasualtiesField(prefix);
-
-        const events = d[eventsField] || 0;
         const deaths = d[deathsField] || 0;
-        const intensity = d[casualtiesField] || 0;
 
         // Get time label based on format
         const isMonthly = this.options.timeFormat === 'monthly';
         const timeLabel = isMonthly ? d.year_month : d.year;
 
-        let content;
-        if (type === 'deaths') {
-            content = {
-                title: `${countryName} - ${timeLabel}`,
-                rows: [
-                    { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' },
-                    { label: 'Events', value: events, format: 'number' },
-                    { label: 'Avg per Event', value: intensity.toFixed(1), format: 'text' }
-                ]
-            };
-        } else if (type === 'events') {
-            content = {
-                title: `${countryName} - ${timeLabel}`,
-                rows: [
-                    { label: 'Conflict Events', value: events, format: 'number' },
-                    { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' }
-                ]
-            };
-        } else {
-            content = {
-                title: `${countryName} - ${timeLabel}`,
-                rows: [
-                    { label: 'Casualties per Event', value: intensity.toFixed(1), format: 'text' },
-                    { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' },
-                    { label: 'Events', value: events, format: 'number' }
-                ]
-            };
-        }
-
-        // Add disparity insight if in disparity zone
-        const disparityZone = this.data.disparityZone;
-        if (disparityZone && d.year >= disparityZone.start && d.year <= disparityZone.end && type === 'intensity') {
-            const c1Prefix = this.options.countries.country1.fieldPrefix;
-            const c2Prefix = this.options.countries.country2.fieldPrefix;
-            const c1Intensity = d[this.getCasualtiesField(c1Prefix)] || 0;
-            const c2Intensity = d[this.getCasualtiesField(c2Prefix)] || 0;
-            if (c1Intensity > 0 && c2Intensity > 0) {
-                const ratio = (c1Intensity / c2Intensity).toFixed(1);
-                const c1Name = this.options.countries.country1.name;
-                content.rows.push({
-                    label: '⚠️ Intensity Ratio',
-                    value: `${c1Name} ${ratio}× deadlier`,
-                    format: 'text',
-                    highlight: true
-                });
-            }
-        }
+        const content = {
+            title: `${countryName} - ${timeLabel}`,
+            rows: [
+                { label: 'Total Deaths', value: deaths.toLocaleString(), format: 'text' }
+            ]
+        };
 
         this.showTooltip(content, event);
     }
