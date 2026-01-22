@@ -312,7 +312,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('../assets/heading-background.png') center center / cover no-repeat;
+    background: url('../assets/images/heading-background.png') center center / cover no-repeat;
     overflow: hidden;
 }
 
