@@ -568,7 +568,8 @@ function getChartConfig(chartType, stepNumber) {
             ChartClass: Charts.ConflictTimelineChart,
             data: state.data.conflictTimeline,
             options: {
-                title: 'West African Civil Wars: Coverage vs. Casualties'
+                title: 'West African Civil Wars: Coverage vs. Casualties',
+                chartType: 'stacked-area'
             }
         },
         'conflict-intensity': {

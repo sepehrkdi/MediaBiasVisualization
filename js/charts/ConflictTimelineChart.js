@@ -40,6 +40,7 @@ export class ConflictTimelineChart {
             countries: defaultCountries,
             title: 'Conflict Timeline',
             subtitle: '',
+            chartType: 'line',  // 'line' or 'stacked-area'
             ...options
         };
 
@@ -115,10 +116,16 @@ export class ConflictTimelineChart {
             .attr('class', 'chart-group')
             .attr('transform', `translate(${this.options.margin.left}, ${this.options.margin.top})`);
 
-        // Legend group
+        // Single-panel compatibility: map topPanel/bottomPanel to chartGroup
+        this.topPanel = this.chartGroup;
+        this.bottomPanel = this.chartGroup;
+        this.panelHeight = this.height;
+        this.options.panelGap ??= 0;
+
+        // Legend group - position top right, same level as title
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${this.options.margin.left + this.width - 200}, 25)`);
+            .attr('transform', `translate(${this.options.margin.left + this.width - 220}, 25)`);
 
         // Title group
         this.titleGroup = this.svg.append('g')
@@ -197,11 +204,18 @@ export class ConflictTimelineChart {
             this.getXPosition = (d) => this.xScale(d.year);
         }
 
-        // Y scale for deaths
-        const maxDeaths = d3.max(timeline, d => Math.max(
-            d[this.getDeathsField(c1)] || 0,
-            d[this.getDeathsField(c2)] || 0
-        ));
+        // Y scale for deaths - use stacked total or max based on chartType
+        let maxDeaths;
+        if (this.options.chartType === 'stacked-area') {
+            maxDeaths = d3.max(timeline, d => 
+                (d[this.getDeathsField(c1)] || 0) + (d[this.getDeathsField(c2)] || 0)
+            );
+        } else {
+            maxDeaths = d3.max(timeline, d => Math.max(
+                d[this.getDeathsField(c1)] || 0,
+                d[this.getDeathsField(c2)] || 0
+            ));
+        }
 
         this.yScaleDeaths = d3.scaleLinear()
             .domain([0, maxDeaths * 1.1])
@@ -323,6 +337,15 @@ export class ConflictTimelineChart {
             .attr('y', -50)
             .text('Deaths');
 
+        // Render based on chart type
+        if (this.options.chartType === 'stacked-area') {
+            this.renderStackedArea(data, valueKey, yScale, c1Color, c2Color);
+        } else {
+            this.renderLineChart(data, valueKey, yScale, c1Color, c2Color);
+        }
+    }
+
+    renderLineChart(data, valueKey, yScale, c1Color, c2Color) {
         // Line generators - use getXPosition helper for time-based positioning
         const country1Line = d3.line()
             .x(d => this.getXPosition(d))
@@ -359,7 +382,58 @@ export class ConflictTimelineChart {
         }
 
         // Add data points with hover
-        this.addDataPoints(data, valueKey, yScale);
+        this.addLineDataPoints(data, valueKey, yScale);
+    }
+
+    renderStackedArea(data, valueKey, yScale, c1Color, c2Color) {
+        // Stack order: country2 on bottom, country1 on top
+        const stack = d3.stack()
+            .keys([valueKey.country2, valueKey.country1])
+            .order(d3.stackOrderNone)
+            .offset(d3.stackOffsetNone);
+
+        // Prepare data for stacking (ensure all values exist)
+        const stackData = data.map(d => ({
+            ...d,
+            [valueKey.country1]: d[valueKey.country1] || 0,
+            [valueKey.country2]: d[valueKey.country2] || 0
+        }));
+
+        const stackedData = stack(stackData);
+
+        // Area generator for stacked areas
+        const area = d3.area()
+            .x(d => this.getXPosition(d.data))
+            .y0(d => yScale(d[0]))
+            .y1(d => yScale(d[1]))
+            .curve(d3.curveMonotoneX);
+
+        // Colors mapped to stack order: [country2, country1]
+        const colors = [c2Color, c1Color];
+        const classNames = ['country2-area', 'country1-area'];
+
+        // Draw stacked areas
+        const areaPaths = stackedData.map((layer, i) => {
+            return this.chartGroup.append('path')
+                .datum(layer)
+                .attr('class', `area ${classNames[i]}`)
+                .attr('d', area)
+                .attr('fill', colors[i])
+                .attr('fill-opacity', 0.85)
+                .attr('stroke', colors[i])
+                .attr('stroke-width', 1.5);
+        });
+
+        // Animate areas with fade-in
+        if (this.options.animate) {
+            areaPaths.forEach(path => this.animateArea(path));
+        }
+
+        // Store stacked data for dot positioning
+        this.stackedData = stackedData;
+
+        // Add data points with hover (positioned on stacked layers)
+        this.addStackedDataPoints(data, valueKey, yScale, stackedData);
     }
 
     renderGrid(yScale) {
@@ -391,7 +465,20 @@ export class ConflictTimelineChart {
             });
     }
 
-    addDataPoints(data, valueKey, yScale) {
+    animateArea(path) {
+        // Fade-in animation for stacked areas
+        path
+            .attr('fill-opacity', 0)
+            .attr('stroke-opacity', 0);
+
+        path.transition()
+            .duration(this.options.animationDuration || 1200)
+            .ease(d3.easeCubicOut)
+            .attr('fill-opacity', 0.85)
+            .attr('stroke-opacity', 1);
+    }
+
+    addLineDataPoints(data, valueKey, yScale) {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
 
@@ -407,7 +494,7 @@ export class ConflictTimelineChart {
                 .attr('class', `dot ${country.class}`)
                 .attr('cx', d => this.getXPosition(d))
                 .attr('cy', d => yScale(d[country.valueKey]))
-                .attr('r', this.options.timeFormat === 'monthly' ? 3 : 5) // Smaller dots for monthly data
+                .attr('r', this.options.timeFormat === 'monthly' ? 3 : 5)
                 .attr('fill', country.color)
                 .attr('stroke', '#fff')
                 .attr('stroke-width', this.options.timeFormat === 'monthly' ? 1 : 2)
@@ -416,6 +503,48 @@ export class ConflictTimelineChart {
                 .on('mousemove', (event) => this.moveTooltip(event))
                 .on('mouseleave', () => this.hideTooltip());
         });
+    }
+
+    addStackedDataPoints(data, valueKey, yScale, stackedData) {
+        const c1 = this.options.countries.country1;
+        const c2 = this.options.countries.country2;
+
+        // stackedData[0] = country2 (bottom layer), stackedData[1] = country1 (top layer)
+        // For each data point, we need to position dots at the TOP of their respective stack layer
+        
+        // Country 2 dots (bottom layer) - positioned at y1 of layer 0 (top of country2 area)
+        const country2Layer = stackedData[0];
+        this.chartGroup.selectAll('.country2-dot')
+            .data(country2Layer.filter(d => (d[1] - d[0]) > 0))  // Filter where country2 has data
+            .join('circle')
+            .attr('class', 'dot country2-dot')
+            .attr('cx', d => this.getXPosition(d.data))
+            .attr('cy', d => yScale(d[1]))  // Top of country2's stack
+            .attr('r', this.options.timeFormat === 'monthly' ? 3 : 5)
+            .attr('fill', c2.color)
+            .attr('stroke', '#fff')
+            .attr('stroke-width', this.options.timeFormat === 'monthly' ? 1 : 2)
+            .style('cursor', 'pointer')
+            .on('mouseenter', (event, d) => this.handleDotHover(event, d.data, { key: 'country2', name: c2.name, fieldPrefix: c2.fieldPrefix, color: c2.color }))
+            .on('mousemove', (event) => this.moveTooltip(event))
+            .on('mouseleave', () => this.hideTooltip());
+
+        // Country 1 dots (top layer) - positioned at y1 of layer 1 (top of country1 area = total)
+        const country1Layer = stackedData[1];
+        this.chartGroup.selectAll('.country1-dot')
+            .data(country1Layer.filter(d => (d[1] - d[0]) > 0))  // Filter where country1 has data
+            .join('circle')
+            .attr('class', 'dot country1-dot')
+            .attr('cx', d => this.getXPosition(d.data))
+            .attr('cy', d => yScale(d[1]))  // Top of country1's stack (which is total)
+            .attr('r', this.options.timeFormat === 'monthly' ? 3 : 5)
+            .attr('fill', c1.color)
+            .attr('stroke', '#fff')
+            .attr('stroke-width', this.options.timeFormat === 'monthly' ? 1 : 2)
+            .style('cursor', 'pointer')
+            .on('mouseenter', (event, d) => this.handleDotHover(event, d.data, { key: 'country1', name: c1.name, fieldPrefix: c1.fieldPrefix, color: c1.color }))
+            .on('mousemove', (event) => this.moveTooltip(event))
+            .on('mouseleave', () => this.hideTooltip());
     }
 
     handleDotHover(event, d, countryInfo) {
@@ -666,23 +795,38 @@ export class ConflictTimelineChart {
             .data(legendItems)
             .join('g')
             .attr('class', 'legend-item')
-            .attr('transform', (d, i) => `translate(${i * 100}, 0)`);
+            .attr('transform', (d, i) => `translate(${i * 120}, 0)`);
 
-        legendItem.append('line')
-            .attr('x1', 0)
-            .attr('x2', 25)
-            .attr('y1', 0)
-            .attr('y2', 0)
-            .attr('stroke', d => d.color)
-            .attr('stroke-width', 2.5);
+        if (this.options.chartType === 'stacked-area') {
+            // Filled rectangles for stacked area chart legend
+            legendItem.append('rect')
+                .attr('x', 0)
+                .attr('y', -8)
+                .attr('width', 20)
+                .attr('height', 16)
+                .attr('fill', d => d.color)
+                .attr('fill-opacity', 0.85)
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 1.5)
+                .attr('rx', 2);
+        } else {
+            // Line + circle for line chart legend
+            legendItem.append('line')
+                .attr('x1', 0)
+                .attr('x2', 25)
+                .attr('y1', 0)
+                .attr('y2', 0)
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', 2.5);
 
-        legendItem.append('circle')
-            .attr('cx', 12.5)
-            .attr('cy', 0)
-            .attr('r', 4)
-            .attr('fill', d => d.color)
-            .attr('stroke', '#fff')
-            .attr('stroke-width', 1.5);
+            legendItem.append('circle')
+                .attr('cx', 12.5)
+                .attr('cy', 0)
+                .attr('r', 4)
+                .attr('fill', d => d.color)
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 1.5);
+        }
 
         legendItem.append('text')
             .attr('x', 30)
@@ -700,8 +844,9 @@ export class ConflictTimelineChart {
         this.width = Math.max(this.width, 400);
         this.height = Math.max(this.height, 400);
 
-        // Recalculate panel height
-        this.panelHeight = (this.height - this.options.panelGap) / 2;
+        // Single-panel: panelHeight equals full chart height
+        const panelGap = this.options.panelGap ?? 0;
+        this.panelHeight = this.height;
     }
 
     resize() {
