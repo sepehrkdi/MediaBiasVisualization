@@ -183,6 +183,19 @@ export class IntensityComparisonChart {
         this.renderCasualtiesPanel(timeline, c1CasualtiesField, c2CasualtiesField, c1, c2, c1Avg, c2Avg);
         this.renderEventsPanel(timeline, c1EventsField, c2EventsField, c1, c2);
 
+        // Add conflict period zones (transparent background areas)
+        const annotations = this.data.annotations || [];
+        this.renderConflictPeriods(annotations, timeline);
+
+        // Add disparity zone highlight
+        const disparityZone = this.data.disparityZone;
+        if (disparityZone) {
+            this.renderDisparityZone(disparityZone);
+        }
+
+        // Add conflict start annotations (vertical lines and labels)
+        this.renderAnnotations(annotations);
+
         // Legend
         this.renderLegend(c1, c2, c1Avg, c2Avg);
     }
@@ -461,6 +474,171 @@ export class IntensityComparisonChart {
             .on('mouseleave', () => {
                 if (this.tooltip) this.tooltip.hide();
             });
+    }
+
+    renderConflictPeriods(annotations, timeline) {
+        const c1Color = this.options.countries.country1.color;
+        const c2Color = this.options.countries.country2.color;
+        const endYear = d3.max(timeline, d => d.year);
+
+        // Sort annotations by year
+        const sortedAnnotations = [...annotations].sort((a, b) => a.year - b.year);
+
+        sortedAnnotations.forEach((annotation, index) => {
+            const startX = this.xScale(annotation.year);
+            const endX = this.xScale(endYear);
+            const zoneWidth = endX - startX;
+
+            // Determine color based on country
+            const color = (annotation.country === 'country1' || annotation.country === 'liberia')
+                ? c1Color : c2Color;
+
+            // Add transparent filled area to both panels
+            [this.topPanel, this.bottomPanel].forEach(panel => {
+                panel.insert('rect', ':first-child')
+                    .attr('class', `conflict-period-zone conflict-${annotation.country}`)
+                    .attr('x', startX)
+                    .attr('y', 0)
+                    .attr('width', zoneWidth)
+                    .attr('height', this.panelHeight)
+                    .attr('fill', color)
+                    .attr('opacity', 0)
+                    .transition()
+                    .delay(this.options.animationDuration * 0.5 + index * 300)
+                    .duration(800)
+                    .attr('opacity', 0.08);
+            });
+        });
+    }
+
+    renderDisparityZone(zone) {
+        const x1 = this.xScale(zone.start);
+        const x2 = this.xScale(zone.end);
+        const zoneWidth = x2 - x1;
+
+        // Top panel disparity zone
+        this.topPanel.insert('rect', ':first-child')
+            .attr('class', 'disparity-zone')
+            .attr('x', x1)
+            .attr('y', 0)
+            .attr('width', zoneWidth)
+            .attr('height', this.panelHeight)
+            .attr('fill', '#FFC107')
+            .attr('opacity', 0)
+            .transition()
+            .delay(this.options.animationDuration)
+            .duration(500)
+            .attr('opacity', 0.12);
+
+        // Bottom panel disparity zone
+        this.bottomPanel.insert('rect', ':first-child')
+            .attr('class', 'disparity-zone')
+            .attr('x', x1)
+            .attr('y', 0)
+            .attr('width', zoneWidth)
+            .attr('height', this.panelHeight)
+            .attr('fill', '#FFC107')
+            .attr('opacity', 0)
+            .transition()
+            .delay(this.options.animationDuration)
+            .duration(500)
+            .attr('opacity', 0.12);
+
+        // Disparity label (positioned between panels)
+        const labelY = this.panelHeight + this.options.panelGap / 2;
+
+        const labelGroup = this.chartGroup.append('g')
+            .attr('class', 'disparity-label-group')
+            .attr('transform', `translate(${x1 + zoneWidth / 2}, ${labelY})`)
+            .style('opacity', 0);
+
+        labelGroup.append('rect')
+            .attr('class', 'disparity-label-bg')
+            .attr('x', -160)
+            .attr('y', -12)
+            .attr('width', 320)
+            .attr('height', 24)
+            .attr('rx', 4)
+            .attr('fill', '#FFF8E1')
+            .attr('stroke', '#FFC107');
+
+        labelGroup.append('text')
+            .attr('class', 'disparity-label-text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 4)
+            .attr('font-size', '11px')
+            .text(`⚠️ ${zone.label || 'Coverage Gap: High deaths, low documentation'}`);
+
+        labelGroup.transition()
+            .delay(this.options.animationDuration + 500)
+            .duration(500)
+            .style('opacity', 1);
+    }
+
+    renderAnnotations(annotations) {
+        const c1Color = this.options.countries.country1.color;
+        const c2Color = this.options.countries.country2.color;
+
+        annotations.forEach((annotation, index) => {
+            const x = this.xScale(annotation.year);
+
+            // Determine color based on country
+            const color = (annotation.country === 'country1' || annotation.country === 'liberia')
+                ? c1Color : c2Color;
+
+            // Vertical line spanning both panels (animated)
+            [this.topPanel, this.bottomPanel].forEach(panel => {
+                const line = panel.append('line')
+                    .attr('class', `annotation-line annotation-${annotation.country}`)
+                    .attr('x1', x)
+                    .attr('x2', x)
+                    .attr('y1', 0)
+                    .attr('y2', 0)
+                    .attr('stroke', color)
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', '6,3')
+                    .attr('opacity', 0.8);
+
+                // Animate line growing down
+                line.transition()
+                    .delay(this.options.animationDuration * 0.5 + index * 300)
+                    .duration(600)
+                    .attr('y2', this.panelHeight);
+            });
+
+            // Annotation label - positioned inside the chart area at the top
+            const labelGroup = this.topPanel.append('g')
+                .attr('class', 'annotation-label-group')
+                .attr('transform', `translate(${x + 5}, 15)`)
+                .style('opacity', 0);
+
+            // Background for better readability
+            const text = labelGroup.append('text')
+                .attr('class', 'annotation-text')
+                .attr('text-anchor', 'start')
+                .attr('fill', color)
+                .attr('font-weight', 600)
+                .attr('font-size', '11px')
+                .text(annotation.label);
+
+            // Get text dimensions for background
+            const bbox = text.node().getBBox();
+
+            labelGroup.insert('rect', 'text')
+                .attr('x', bbox.x - 3)
+                .attr('y', bbox.y - 2)
+                .attr('width', bbox.width + 6)
+                .attr('height', bbox.height + 4)
+                .attr('rx', 2)
+                .attr('fill', 'white')
+                .attr('opacity', 0.85);
+
+            // Animate label appearing
+            labelGroup.transition()
+                .delay(this.options.animationDuration * 0.5 + index * 300 + 400)
+                .duration(400)
+                .style('opacity', 1);
+        });
     }
 
     renderLegend(c1, c2, c1Avg, c2Avg) {
