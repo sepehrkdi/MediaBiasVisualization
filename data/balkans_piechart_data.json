@@ -1,0 +1,76 @@
+{
+  "region": "Balkans",
+  "time_period": {
+    "start_year": 1989,
+    "end_year": 2000
+  },
+  "total_events": 10805,
+  "highlighted_countries": [
+    "Bosnia-Herzegovina"
+  ],
+  "countries": [
+    {
+      "name": "Bosnia-Herzegovina",
+      "events": 9340,
+      "percentage": 86.44,
+      "rank": 1,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Serbia (Yugoslavia)",
+      "events": 1203,
+      "percentage": 11.13,
+      "rank": 2,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Croatia",
+      "events": 157,
+      "percentage": 1.45,
+      "rank": 3,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Moldova",
+      "events": 77,
+      "percentage": 0.71,
+      "rank": 4,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Romania",
+      "events": 16,
+      "percentage": 0.15,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Albania",
+      "events": 10,
+      "percentage": 0.09,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "North Macedonia",
+      "events": 2,
+      "percentage": 0.02,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 9340,
+    "highlighted_percentage": 86.44,
+    "top_country": "Bosnia-Herzegovina",
+    "top_country_events": 9340,
+    "num_countries": 7
+  }
+}

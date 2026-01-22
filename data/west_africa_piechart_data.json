@@ -1,0 +1,125 @@
+{
+  "region": "West Africa",
+  "time_period": {
+    "start_year": 1989,
+    "end_year": 2004
+  },
+  "total_events": 3097,
+  "highlighted_countries": [
+    "Liberia",
+    "Sierra Leone"
+  ],
+  "countries": [
+    {
+      "name": "Sierra Leone",
+      "events": 1496,
+      "percentage": 48.3,
+      "rank": 1,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Liberia",
+      "events": 547,
+      "percentage": 17.66,
+      "rank": 2,
+      "highlighted": true,
+      "color": "#FF8C00"
+    },
+    {
+      "name": "Nigeria",
+      "events": 404,
+      "percentage": 13.04,
+      "rank": 3,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Senegal",
+      "events": 247,
+      "percentage": 7.98,
+      "rank": 4,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Ivory Coast",
+      "events": 138,
+      "percentage": 4.46,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Mali",
+      "events": 88,
+      "percentage": 2.84,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Niger",
+      "events": 56,
+      "percentage": 1.81,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Guinea",
+      "events": 37,
+      "percentage": 1.19,
+      "rank": 8,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Ghana",
+      "events": 25,
+      "percentage": 0.81,
+      "rank": 9,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Guinea-Bissau",
+      "events": 22,
+      "percentage": 0.71,
+      "rank": 10,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Mauritania",
+      "events": 22,
+      "percentage": 0.71,
+      "rank": 11,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Togo",
+      "events": 13,
+      "percentage": 0.42,
+      "rank": 12,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Gambia",
+      "events": 2,
+      "percentage": 0.06,
+      "rank": 13,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 2043,
+    "highlighted_percentage": 65.97,
+    "top_country": "Sierra Leone",
+    "top_country_events": 1496,
+    "num_countries": 13
+  }
+}

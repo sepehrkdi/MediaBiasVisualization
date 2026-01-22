@@ -1,0 +1,76 @@
+{
+  "region": "South East Asia",
+  "time_period": {
+    "start_year": 2010,
+    "end_year": 2024
+  },
+  "total_events": 10255,
+  "highlighted_countries": [
+    "Myanmar (Burma)"
+  ],
+  "countries": [
+    {
+      "name": "Myanmar (Burma)",
+      "events": 6739,
+      "percentage": 65.71,
+      "rank": 1,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Philippines",
+      "events": 2183,
+      "percentage": 21.29,
+      "rank": 2,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Thailand",
+      "events": 1024,
+      "percentage": 9.99,
+      "rank": 3,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Indonesia",
+      "events": 253,
+      "percentage": 2.47,
+      "rank": 4,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Papua New Guinea",
+      "events": 36,
+      "percentage": 0.35,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Malaysia",
+      "events": 15,
+      "percentage": 0.15,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Cambodia (Kampuchea)",
+      "events": 5,
+      "percentage": 0.05,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 6739,
+    "highlighted_percentage": 65.71,
+    "top_country": "Myanmar (Burma)",
+    "top_country_events": 6739,
+    "num_countries": 7
+  }
+}

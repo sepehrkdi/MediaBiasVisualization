@@ -1,0 +1,84 @@
+{
+  "region": "Central Africa",
+  "time_period": {
+    "start_year": 2000,
+    "end_year": 2024
+  },
+  "total_events": 15152,
+  "highlighted_countries": [
+    "DR Congo (Zaire)"
+  ],
+  "countries": [
+    {
+      "name": "DR Congo (Zaire)",
+      "events": 8192,
+      "percentage": 54.07,
+      "rank": 1,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Cameroon",
+      "events": 2113,
+      "percentage": 13.95,
+      "rank": 2,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Central African Republic",
+      "events": 2025,
+      "percentage": 13.36,
+      "rank": 3,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Burundi",
+      "events": 1783,
+      "percentage": 11.77,
+      "rank": 4,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Angola",
+      "events": 576,
+      "percentage": 3.8,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Chad",
+      "events": 326,
+      "percentage": 2.15,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Rwanda",
+      "events": 79,
+      "percentage": 0.52,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Congo",
+      "events": 58,
+      "percentage": 0.38,
+      "rank": 8,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 8192,
+    "highlighted_percentage": 54.07,
+    "top_country": "DR Congo (Zaire)",
+    "top_country_events": 8192,
+    "num_countries": 8
+  }
+}

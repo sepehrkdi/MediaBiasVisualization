@@ -8,6 +8,7 @@ export { BaseChart } from './BaseChart.js';
 
 // Core chart types
 export { BarChart, DivergingBarChart, StackedBarChart } from './BarChart.js';
+export { PieChart } from './PieChart.js';
 export { LineChart, AreaChart, MultiLineChart } from './LineChart.js';
 export { ChoroplethMap } from './ChoroplethMap.js';
 export { AnimatedChoroplethMap } from './AnimatedChoroplethMap.js';
@@ -42,7 +43,9 @@ export const ChartRegistry = {
     parallel: 'ParallelCoordinates',
     uncertainty: 'UncertaintyChart',
     flow: 'FlowDiagram',
-    conflictTimeline: 'ConflictTimelineChart'
+    conflictTimeline: 'ConflictTimelineChart',
+    pie: 'PieChart',
+    'regional-pie': 'PieChart'
 };
 
 // Charts namespace for convenient access
@@ -63,7 +66,8 @@ export const Charts = {
     ParallelCoordinates,
     UncertaintyChart,
     FlowDiagram,
-    ConflictTimelineChart
+    ConflictTimelineChart,
+    PieChart
 };
 
 // Factory function to create charts
@@ -84,7 +88,9 @@ export function createChart(type, container, data, options = {}) {
         parallel: ParallelCoordinates,
         uncertainty: UncertaintyChart,
         flow: FlowDiagram,
-        conflictTimeline: ConflictTimelineChart
+        conflictTimeline: ConflictTimelineChart,
+        pie: PieChart,
+        'regional-pie': PieChart
     };
     
     const ChartClass = chartMap[type];

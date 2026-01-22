@@ -1,0 +1,124 @@
+{
+  "region": "Middle East",
+  "time_period": {
+    "start_year": 2010,
+    "end_year": 2024
+  },
+  "total_events": 109371,
+  "highlighted_countries": [
+    "Yemen (North Yemen)"
+  ],
+  "countries": [
+    {
+      "name": "Syria",
+      "events": 87857,
+      "percentage": 80.33,
+      "rank": 1,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Iraq",
+      "events": 6210,
+      "percentage": 5.68,
+      "rank": 2,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Israel",
+      "events": 5737,
+      "percentage": 5.25,
+      "rank": 3,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Yemen (North Yemen)",
+      "events": 5361,
+      "percentage": 4.9,
+      "rank": 4,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Turkey",
+      "events": 1555,
+      "percentage": 1.42,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Lebanon",
+      "events": 1287,
+      "percentage": 1.18,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Egypt",
+      "events": 775,
+      "percentage": 0.71,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Iran",
+      "events": 453,
+      "percentage": 0.41,
+      "rank": 8,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Saudi Arabia",
+      "events": 102,
+      "percentage": 0.09,
+      "rank": 9,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Bahrain",
+      "events": 24,
+      "percentage": 0.02,
+      "rank": 10,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Jordan",
+      "events": 7,
+      "percentage": 0.01,
+      "rank": 11,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "United Arab Emirates",
+      "events": 2,
+      "percentage": 0.0,
+      "rank": 12,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Kuwait",
+      "events": 1,
+      "percentage": 0.0,
+      "rank": 13,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 5361,
+    "highlighted_percentage": 4.9,
+    "top_country": "Syria",
+    "top_country_events": 87857,
+    "num_countries": 13
+  }
+}

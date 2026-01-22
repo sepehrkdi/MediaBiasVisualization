@@ -532,11 +532,37 @@
 .pie-arc {
     stroke: var(--bg-primary);
     stroke-width: 2;
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
 .pie-arc:hover {
     transform: scale(1.03);
+}
+
+.pie-arc.is-highlighted {
+    filter: drop-shadow(0 0 8px rgba(255, 68, 68, 0.5));
+}
+
+.pie-arc.is-highlighted.pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.pie-arc.is-dimmed {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.pie-arc.is-isolated {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 14px rgba(255, 68, 68, 0.7));
+    }
 }
 
 .pie-label {
@@ -568,6 +594,72 @@
     font-weight: 700;
     fill: var(--color-gray-900);
     text-anchor: middle;
+}
+
+/* Pie Chart Legend */
+.legend-item {
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.legend-item:hover {
+    opacity: 0.8;
+}
+
+.legend-swatch {
+    transition: transform var(--transition-fast);
+}
+
+.legend-swatch.is-highlighted {
+    stroke: var(--color-gray-900);
+    stroke-width: 2;
+}
+
+.legend-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    fill: var(--color-gray-700);
+}
+
+.legend-value {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    fill: var(--color-gray-500);
+}
+
+.legend-more {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-style: italic;
+    fill: var(--color-gray-500);
+}
+
+/* Pie Summary Box (SVG-based) */
+.pie-summary-bg {
+    fill: rgba(255, 255, 255, 0.95);
+    stroke: rgba(255, 68, 68, 0.3);
+    stroke-width: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.pie-summary-title {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--color-gray-700);
+}
+
+.pie-summary-value {
+    font-family: 'Roboto Slab', Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    fill: #FF4444;
+}
+
+.pie-summary-label {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 9px;
+    fill: var(--color-gray-500);
 }
 
 /* ==========================================================================

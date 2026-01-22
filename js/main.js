@@ -34,6 +34,7 @@ import {
 } from './charts/OtherCharts.js';
 import { ConflictTimelineChart } from './charts/ConflictTimelineChart.js';
 import { IntensityComparisonChart } from './charts/IntensityComparisonChart.js';
+import { PieChart } from './charts/PieChart.js';
 
 // Create Charts namespace for backward compatibility
 const Charts = {
@@ -54,7 +55,8 @@ const Charts = {
     UncertaintyChart,
     FlowDiagram,
     ConflictTimelineChart,
-    IntensityComparisonChart
+    IntensityComparisonChart,
+    PieChart
 };
 
 // Application state
@@ -162,7 +164,14 @@ async function loadAllData() {
         { key: 'conflictTimeline', path: 'data/conflict_timeline.json' },
         { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' },
         { key: 'bosniaAfghanistanTimeline', path: 'data/bosnia_afghanistan_timeline.json' },
-        { key: 'afghanistanKivuTimeline', path: 'data/afghanistan_kivu_timeline.json' }
+        { key: 'afghanistanKivuTimeline', path: 'data/afghanistan_kivu_timeline.json' },
+        // Regional pie chart data
+        { key: 'westAfricaPie', path: 'data/west_africa_piechart_data.json' },
+        { key: 'balkansPie', path: 'data/balkans_piechart_data.json' },
+        { key: 'centralAfricaPie', path: 'data/central_africa_piechart_data.json' },
+        { key: 'middleEastPie', path: 'data/middle_east_piechart_data.json' },
+        { key: 'southAsiaPie', path: 'data/south_asia_piechart_data.json' },
+        { key: 'southeastAsiaPie', path: 'data/southeast_asia_piechart_data.json' }
     ];
 
     state.data = {};
@@ -671,6 +680,73 @@ function getChartConfig(chartType, stepNumber) {
                         color: '#2ca02c'
                     }
                 }
+            }
+        },
+        // Regional Pie Charts
+        'regional-pie-west-africa': {
+            ChartClass: Charts.PieChart,
+            data: state.data.westAfricaPie,
+            options: {
+                title: 'West Africa Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
+            }
+        },
+        'regional-pie-balkans': {
+            ChartClass: Charts.PieChart,
+            data: state.data.balkansPie,
+            options: {
+                title: 'Balkans Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
+            }
+        },
+        'regional-pie-central-africa': {
+            ChartClass: Charts.PieChart,
+            data: state.data.centralAfricaPie,
+            options: {
+                title: 'Central Africa Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
+            }
+        },
+        'regional-pie-middle-east': {
+            ChartClass: Charts.PieChart,
+            data: state.data.middleEastPie,
+            options: {
+                title: 'Middle East Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
+            }
+        },
+        'regional-pie-south-asia': {
+            ChartClass: Charts.PieChart,
+            data: state.data.southAsiaPie,
+            options: {
+                title: 'South Asia Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
+            }
+        },
+        'regional-pie-southeast-asia': {
+            ChartClass: Charts.PieChart,
+            data: state.data.southeastAsiaPie,
+            options: {
+                title: 'Southeast Asia Conflict Distribution',
+                innerRadiusRatio: 0.45,
+                showLegend: true,
+                showSummary: true,
+                animatePulse: true
             }
         }
     };

@@ -1,0 +1,76 @@
+{
+  "region": "South Asia",
+  "time_period": {
+    "start_year": 1989,
+    "end_year": 2000
+  },
+  "total_events": 10007,
+  "highlighted_countries": [
+    "Afghanistan"
+  ],
+  "countries": [
+    {
+      "name": "India",
+      "events": 4632,
+      "percentage": 46.29,
+      "rank": 1,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Sri Lanka",
+      "events": 2170,
+      "percentage": 21.68,
+      "rank": 2,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Afghanistan",
+      "events": 1954,
+      "percentage": 19.53,
+      "rank": 3,
+      "highlighted": true,
+      "color": "#FF4444"
+    },
+    {
+      "name": "Nepal",
+      "events": 754,
+      "percentage": 7.53,
+      "rank": 4,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Pakistan",
+      "events": 275,
+      "percentage": 2.75,
+      "rank": 5,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Bangladesh",
+      "events": 221,
+      "percentage": 2.21,
+      "rank": 6,
+      "highlighted": false,
+      "color": "#4682B4"
+    },
+    {
+      "name": "Bhutan",
+      "events": 1,
+      "percentage": 0.01,
+      "rank": 7,
+      "highlighted": false,
+      "color": "#4682B4"
+    }
+  ],
+  "summary": {
+    "highlighted_total_events": 1954,
+    "highlighted_percentage": 19.53,
+    "top_country": "India",
+    "top_country_events": 4632,
+    "num_countries": 7
+  }
+}
