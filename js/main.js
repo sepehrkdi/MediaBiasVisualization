@@ -579,11 +579,19 @@ function getChartConfig(chartType, stepNumber) {
                 title: 'Average Casualties per Event'
             }
         },
+        'yemen-myanmar-intensity': {
+            ChartClass: Charts.IntensityComparisonChart,
+            data: state.data.yemenMyanmarTimeline,
+            options: {
+                title: 'Conflict Intensity: Yemen vs Myanmar'
+            }
+        },
         'yemen-myanmar-timeline': {
             ChartClass: Charts.ConflictTimelineChart,
             data: state.data.yemenMyanmarTimeline,
             options: {
-                title: 'The Shifting Spotlight: Yemen vs Myanmar'
+                title: 'The Shifting Spotlight: Yemen vs Myanmar',
+                chartType: 'stacked-area'
             }
         },
         'bosnia-afghanistan-timeline': {
