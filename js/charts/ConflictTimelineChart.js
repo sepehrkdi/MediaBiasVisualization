@@ -795,7 +795,7 @@ export class ConflictTimelineChart {
             .data(legendItems)
             .join('g')
             .attr('class', 'legend-item')
-            .attr('transform', (d, i) => `translate(${i * 120}, 0)`);
+            .attr('transform', (d, i) => `translate(${i * 140}, 0)`);
 
         if (this.options.chartType === 'stacked-area') {
             // Filled rectangles for stacked area chart legend

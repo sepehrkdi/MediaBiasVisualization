@@ -161,7 +161,8 @@ async function loadAllData() {
         { key: 'network', path: 'data/source_network.json' },
         { key: 'conflictTimeline', path: 'data/conflict_timeline.json' },
         { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' },
-        { key: 'bosniaAfghanistanTimeline', path: 'data/bosnia_afghanistan_timeline.json' }
+        { key: 'bosniaAfghanistanTimeline', path: 'data/bosnia_afghanistan_timeline.json' },
+        { key: 'afghanistanKivuTimeline', path: 'data/afghanistan_kivu_timeline.json' }
     ];
 
     state.data = {};
@@ -629,6 +630,45 @@ function getChartConfig(chartType, stepNumber) {
                         name: 'Afghanistan',
                         fieldPrefix: 'country2',
                         color: '#ff7f0e'
+                    }
+                }
+            }
+        },
+        'afghanistan-kivu-intensity': {
+            ChartClass: Charts.IntensityComparisonChart,
+            data: state.data.afghanistanKivuTimeline,
+            options: {
+                title: 'Conflict Intensity: Afghanistan vs Kivu',
+                countries: {
+                    country1: {
+                        name: 'Afghanistan',
+                        fieldPrefix: 'country1',
+                        color: '#ff7f0e'
+                    },
+                    country2: {
+                        name: 'Kivu',
+                        fieldPrefix: 'country2',
+                        color: '#2ca02c'
+                    }
+                }
+            }
+        },
+        'afghanistan-kivu-timeline': {
+            ChartClass: Charts.ConflictTimelineChart,
+            data: state.data.afghanistanKivuTimeline,
+            options: {
+                title: 'The Forgotten Crisis: Afghanistan vs Kivu (2001-2016)',
+                chartType: 'stacked-area',
+                countries: {
+                    country1: {
+                        name: 'Afghanistan',
+                        fieldPrefix: 'country1',
+                        color: '#ff7f0e'
+                    },
+                    country2: {
+                        name: 'Kivu',
+                        fieldPrefix: 'country2',
+                        color: '#2ca02c'
                     }
                 }
             }

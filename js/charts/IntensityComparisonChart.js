@@ -724,7 +724,7 @@ export class IntensityComparisonChart {
             .data(items)
             .join('g')
             .attr('class', 'legend-item')
-            .attr('transform', (d, i) => `translate(${i * 100}, 0)`);
+            .attr('transform', (d, i) => `translate(${i * 140}, 0)`);
 
         legendItem.append('line')
             .attr('x1', 0)
