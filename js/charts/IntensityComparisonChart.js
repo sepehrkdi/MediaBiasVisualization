@@ -139,6 +139,18 @@ export class IntensityComparisonChart {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
         
+        // Detect time format (monthly vs yearly)
+        const firstEntry = timeline[0];
+        this.isMonthly = !!firstEntry?.year_month;
+        
+        if (this.isMonthly) {
+            // Parse year_month strings to dates
+            this.timeParser = d3.timeParse('%Y-%m');
+            this.getTimeValue = (d) => this.timeParser(d.year_month);
+        } else {
+            this.getTimeValue = (d) => d.year;
+        }
+        
         // Field names
         const c1CasualtiesField = `${c1.fieldPrefix}CasualtiesPerEvent`;
         const c2CasualtiesField = `${c2.fieldPrefix}CasualtiesPerEvent`;
@@ -151,10 +163,16 @@ export class IntensityComparisonChart {
         const c1Avg = d3.mean(c1Data, d => d[c1CasualtiesField]) || 0;
         const c2Avg = d3.mean(c2Data, d => d[c2CasualtiesField]) || 0;
 
-        // X Scale (shared)
-        this.xScale = d3.scaleLinear()
-            .domain(d3.extent(timeline, d => d.year))
-            .range([0, this.width]);
+        // X Scale (shared) - time scale for monthly, linear for yearly
+        if (this.isMonthly) {
+            this.xScale = d3.scaleTime()
+                .domain(d3.extent(timeline, d => this.getTimeValue(d)))
+                .range([0, this.width]);
+        } else {
+            this.xScale = d3.scaleLinear()
+                .domain(d3.extent(timeline, d => d.year))
+                .range([0, this.width]);
+        }
 
         // Y Scale for casualties per event (top panel)
         const maxIntensity = d3.max(timeline, d => Math.max(d[c1CasualtiesField] || 0, d[c2CasualtiesField] || 0));
@@ -236,10 +254,19 @@ export class IntensityComparisonChart {
         this.renderGrid(panel, yScale);
 
         // X Axis
-        panel.append('g')
+        const xAxisCasualties = panel.append('g')
             .attr('class', 'axis axis-x')
-            .attr('transform', `translate(0, ${this.panelHeight})`)
-            .call(d3.axisBottom(this.xScale).tickFormat(d3.format('d')).ticks(9));
+            .attr('transform', `translate(0, ${this.panelHeight})`);
+        
+        if (this.isMonthly) {
+            xAxisCasualties.call(d3.axisBottom(this.xScale)
+                .ticks(d3.timeMonth.every(6))
+                .tickFormat(d3.timeFormat('%b %Y')));
+        } else {
+            xAxisCasualties.call(d3.axisBottom(this.xScale)
+                .tickFormat(d3.format('d'))
+                .ticks(9));
+        }
 
         // Y Axis
         const yAxisGroup = panel.append('g')
@@ -276,16 +303,25 @@ export class IntensityComparisonChart {
             .attr('class', 'panel-title')
             .attr('x', 0)
             .attr('y', -8)
-            .text('Number of Conflict Events per Year');
+            .text(this.isMonthly ? 'Number of Conflict Events per Month' : 'Number of Conflict Events per Year');
 
         // Grid
         this.renderGrid(panel, yScale);
 
         // X Axis
-        panel.append('g')
+        const xAxisEvents = panel.append('g')
             .attr('class', 'axis axis-x')
-            .attr('transform', `translate(0, ${this.panelHeight})`)
-            .call(d3.axisBottom(this.xScale).tickFormat(d3.format('d')).ticks(9));
+            .attr('transform', `translate(0, ${this.panelHeight})`);
+        
+        if (this.isMonthly) {
+            xAxisEvents.call(d3.axisBottom(this.xScale)
+                .ticks(d3.timeMonth.every(6))
+                .tickFormat(d3.timeFormat('%b %Y')));
+        } else {
+            xAxisEvents.call(d3.axisBottom(this.xScale)
+                .tickFormat(d3.format('d'))
+                .ticks(9));
+        }
 
         // Y Axis
         const yAxisGroup = panel.append('g')
@@ -362,12 +398,12 @@ export class IntensityComparisonChart {
     renderDataLines(panel, timeline, c1Field, c2Field, c1, c2, yScale, type) {
         // Line generators
         const c1Line = d3.line()
-            .x(d => this.xScale(d.year))
+            .x(d => this.xScale(this.getTimeValue(d)))
             .y(d => yScale(d[c1Field] || 0))
             .curve(d3.curveMonotoneX);
 
         const c2Line = d3.line()
-            .x(d => this.xScale(d.year))
+            .x(d => this.xScale(this.getTimeValue(d)))
             .y(d => yScale(d[c2Field] || 0))
             .curve(d3.curveMonotoneX);
 
@@ -416,11 +452,32 @@ export class IntensityComparisonChart {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
         
+        // Filter to only show local maxima and minima (peaks and valleys)
+        const dataWithValues = timeline.filter(d => d[field] > 0);
+        const extremePoints = dataWithValues.filter((d, i, arr) => {
+            if (arr.length <= 2) return true; // Show all if very few points
+            if (i === 0 || i === arr.length - 1) return false; // Skip first/last
+            
+            const prev = arr[i - 1][field];
+            const curr = d[field];
+            const next = arr[i + 1][field];
+            
+            // Local maximum or minimum
+            const isMax = curr > prev && curr > next;
+            const isMin = curr < prev && curr < next;
+            
+            // Also include significant changes (>50% change from neighbors)
+            const avgNeighbor = (prev + next) / 2;
+            const isSignificant = Math.abs(curr - avgNeighbor) / avgNeighbor > 0.5;
+            
+            return isMax || isMin || isSignificant;
+        });
+        
         panel.selectAll(`.dot-${country.fieldPrefix}-${type}`)
-            .data(timeline.filter(d => d[field] > 0))
+            .data(extremePoints)
             .join('circle')
             .attr('class', `dot dot-${country.fieldPrefix}-${type}`)
-            .attr('cx', d => this.xScale(d.year))
+            .attr('cx', d => this.xScale(this.getTimeValue(d)))
             .attr('cy', d => yScale(d[field]))
             .attr('r', 5)
             .attr('fill', country.color)
@@ -429,9 +486,10 @@ export class IntensityComparisonChart {
             .style('cursor', 'pointer')
             .on('mouseenter', (event, d) => {
                 let content;
+                const timeLabel = this.isMonthly ? d.year_month : d.year;
                 if (type === 'casualties') {
                     content = {
-                        title: `${country.name} - ${d.year}`,
+                        title: `${country.name} - ${timeLabel}`,
                         rows: [
                             { label: 'Casualties per Event', value: d[field].toFixed(1), format: 'text' },
                             { label: 'Total Deaths', value: (d[`${country.fieldPrefix}Deaths`] || 0).toLocaleString(), format: 'text' },
@@ -458,7 +516,7 @@ export class IntensityComparisonChart {
                     }
                 } else {
                     content = {
-                        title: `${country.name} - ${d.year}`,
+                        title: `${country.name} - ${timeLabel}`,
                         rows: [
                             { label: 'Conflict Events', value: d[field], format: 'number' },
                             { label: 'Total Deaths', value: (d[`${country.fieldPrefix}Deaths`] || 0).toLocaleString(), format: 'text' }
@@ -479,14 +537,24 @@ export class IntensityComparisonChart {
     renderConflictPeriods(annotations, timeline) {
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
-        const endYear = d3.max(timeline, d => d.year);
+        const endTime = this.isMonthly 
+            ? this.getTimeValue(timeline[timeline.length - 1])
+            : d3.max(timeline, d => d.year);
 
-        // Sort annotations by year
-        const sortedAnnotations = [...annotations].sort((a, b) => a.year - b.year);
+        // Sort annotations
+        const sortedAnnotations = [...annotations].sort((a, b) => {
+            if (this.isMonthly) {
+                return (a.year_month || '').localeCompare(b.year_month || '');
+            }
+            return a.year - b.year;
+        });
 
         sortedAnnotations.forEach((annotation, index) => {
-            const startX = this.xScale(annotation.year);
-            const endX = this.xScale(endYear);
+            const startTime = this.isMonthly 
+                ? this.timeParser(annotation.year_month)
+                : annotation.year;
+            const startX = this.xScale(startTime);
+            const endX = this.xScale(endTime);
             const zoneWidth = endX - startX;
 
             // Determine color based on country
@@ -512,8 +580,10 @@ export class IntensityComparisonChart {
     }
 
     renderDisparityZone(zone) {
-        const x1 = this.xScale(zone.start);
-        const x2 = this.xScale(zone.end);
+        const start = this.isMonthly ? this.timeParser(zone.start) : zone.start;
+        const end = this.isMonthly ? this.timeParser(zone.end) : zone.end;
+        const x1 = this.xScale(start);
+        const x2 = this.xScale(end);
         const zoneWidth = x2 - x1;
 
         // Top panel disparity zone
@@ -580,7 +650,10 @@ export class IntensityComparisonChart {
         const c2Color = this.options.countries.country2.color;
 
         annotations.forEach((annotation, index) => {
-            const x = this.xScale(annotation.year);
+            const annotTime = this.isMonthly 
+                ? this.timeParser(annotation.year_month)
+                : annotation.year;
+            const x = this.xScale(annotTime);
 
             // Determine color based on country
             const color = (annotation.country === 'country1' || annotation.country === 'liberia')

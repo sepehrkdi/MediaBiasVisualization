@@ -594,11 +594,43 @@ function getChartConfig(chartType, stepNumber) {
                 chartType: 'stacked-area'
             }
         },
+        'bosnia-afghanistan-intensity': {
+            ChartClass: Charts.IntensityComparisonChart,
+            data: state.data.bosniaAfghanistanTimeline,
+            options: {
+                title: 'Conflict Intensity: Bosnia vs Afghanistan',
+                countries: {
+                    country1: {
+                        name: 'Bosnia',
+                        fieldPrefix: 'country1',
+                        color: '#1f77b4'
+                    },
+                    country2: {
+                        name: 'Afghanistan',
+                        fieldPrefix: 'country2',
+                        color: '#ff7f0e'
+                    }
+                }
+            }
+        },
         'bosnia-afghanistan-timeline': {
             ChartClass: Charts.ConflictTimelineChart,
             data: state.data.bosniaAfghanistanTimeline,
             options: {
-                title: 'The 1990s Coverage Gap: Europe vs Central Asia'
+                title: 'The 1990s Coverage Gap: Europe vs Central Asia',
+                chartType: 'stacked-area',
+                countries: {
+                    country1: {
+                        name: 'Bosnia',
+                        fieldPrefix: 'country1',
+                        color: '#1f77b4'
+                    },
+                    country2: {
+                        name: 'Afghanistan',
+                        fieldPrefix: 'country2',
+                        color: '#ff7f0e'
+                    }
+                }
             }
         }
     };
