@@ -408,16 +408,30 @@ function setupScrollytelling() {
 function handleStepEnter(step, direction) {
     const stepNumber = parseInt(step.dataset.step);
     const chartType = step.dataset.chart;
+    const chapter = step.dataset.chapter;
 
-    console.log(`Entering step ${stepNumber}: ${chartType}`);
+    console.log(`Entering step ${stepNumber}: ${chartType} (chapter: ${chapter})`);
 
     // Mark step as active
     step.classList.add('is-active');
+
+    // Update chapter theme on sticky visual
+    updateChapterTheme(chapter);
 
     // Update chart
     updateMainChart(chartType, stepNumber);
 
     state.currentStep = stepNumber;
+}
+
+/**
+ * Update the visual theme based on the current chapter
+ */
+function updateChapterTheme(chapter) {
+    const stickyVisual = document.querySelector('.sticky-visual');
+    if (stickyVisual && chapter) {
+        stickyVisual.setAttribute('data-theme', chapter);
+    }
 }
 
 /**

@@ -13,6 +13,196 @@
 }
 
 /* ==========================================================================
+   Chapter Theme System - Visual Story Navigation
+   ========================================================================== */
+
+/* Chapter Theme Variables */
+:root {
+    /* Chapter 1: Global Overview - Deep Navy (World perspective) */
+    --chapter-global-primary: #1e3a5f;
+    --chapter-global-secondary: #3a6ea5;
+    --chapter-global-accent: #60a5fa;
+    --chapter-global-bg: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
+    --chapter-global-card-border: rgba(96, 165, 250, 0.3);
+
+    /* Chapter 2: Regional Baselines - Slate Gray (Neutral overview) */
+    --chapter-regional-primary: #475569;
+    --chapter-regional-secondary: #64748b;
+    --chapter-regional-accent: #94a3b8;
+    --chapter-regional-bg: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+    --chapter-regional-card-border: rgba(148, 163, 184, 0.3);
+
+    /* Chapter 3: Africa Deep Dive - Warm Earth (African soil) */
+    --chapter-africa-primary: #92400e;
+    --chapter-africa-secondary: #b45309;
+    --chapter-africa-accent: #f59e0b;
+    --chapter-africa-bg: linear-gradient(135deg, #451a03 0%, #78350f 50%, #92400e 100%);
+    --chapter-africa-card-border: rgba(245, 158, 11, 0.3);
+
+    /* Chapter 4: Modern Contrast - Violet (Contemporary crisis) */
+    --chapter-modern-primary: #6d28d9;
+    --chapter-modern-secondary: #7c3aed;
+    --chapter-modern-accent: #a78bfa;
+    --chapter-modern-bg: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #6d28d9 100%);
+    --chapter-modern-card-border: rgba(167, 139, 250, 0.3);
+
+    /* Chapter 5: Historical Parallel - Teal (Historical perspective) */
+    --chapter-historical-primary: #0f766e;
+    --chapter-historical-secondary: #0d9488;
+    --chapter-historical-accent: #2dd4bf;
+    --chapter-historical-bg: linear-gradient(135deg, #042f2e 0%, #115e59 50%, #0f766e 100%);
+    --chapter-historical-card-border: rgba(45, 212, 191, 0.3);
+}
+
+/* Chapter Indicator Icons */
+.chapter-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    padding: var(--space-xs) var(--space-md);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-xl);
+    width: fit-content;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all var(--transition-base);
+}
+
+.chapter-indicator-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chapter-indicator-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* Chapter-specific step content styling */
+.scroll-step[data-chapter="global"] .step-content {
+    border-left: 4px solid var(--chapter-global-accent);
+}
+
+.scroll-step[data-chapter="global"] .chapter-indicator {
+    color: var(--chapter-global-accent);
+    background: rgba(96, 165, 250, 0.15);
+}
+
+.scroll-step[data-chapter="global"] h3 {
+    color: var(--chapter-global-secondary);
+}
+
+.scroll-step[data-chapter="regional"] .step-content {
+    border-left: 4px solid var(--chapter-regional-accent);
+}
+
+.scroll-step[data-chapter="regional"] .chapter-indicator {
+    color: var(--chapter-regional-accent);
+    background: rgba(148, 163, 184, 0.15);
+}
+
+.scroll-step[data-chapter="regional"] h3 {
+    color: var(--chapter-regional-secondary);
+}
+
+.scroll-step[data-chapter="africa"] .step-content {
+    border-left: 4px solid var(--chapter-africa-accent);
+}
+
+.scroll-step[data-chapter="africa"] .chapter-indicator {
+    color: var(--chapter-africa-accent);
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.scroll-step[data-chapter="africa"] h3 {
+    color: var(--chapter-africa-secondary);
+}
+
+.scroll-step[data-chapter="modern"] .step-content {
+    border-left: 4px solid var(--chapter-modern-accent);
+}
+
+.scroll-step[data-chapter="modern"] .chapter-indicator {
+    color: var(--chapter-modern-accent);
+    background: rgba(167, 139, 250, 0.15);
+}
+
+.scroll-step[data-chapter="modern"] h3 {
+    color: var(--chapter-modern-secondary);
+}
+
+.scroll-step[data-chapter="historical"] .step-content {
+    border-left: 4px solid var(--chapter-historical-accent);
+}
+
+.scroll-step[data-chapter="historical"] .chapter-indicator {
+    color: var(--chapter-historical-accent);
+    background: rgba(45, 212, 191, 0.15);
+}
+
+.scroll-step[data-chapter="historical"] h3 {
+    color: var(--chapter-historical-secondary);
+}
+
+/* Sticky Visual Background Themes */
+.sticky-visual {
+    transition: background var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.sticky-visual[data-theme="global"] {
+    background: var(--chapter-global-bg);
+    box-shadow: inset 0 0 100px rgba(96, 165, 250, 0.1);
+}
+
+.sticky-visual[data-theme="regional"] {
+    background: var(--chapter-regional-bg);
+    box-shadow: inset 0 0 100px rgba(148, 163, 184, 0.1);
+}
+
+.sticky-visual[data-theme="africa"] {
+    background: var(--chapter-africa-bg);
+    box-shadow: inset 0 0 100px rgba(245, 158, 11, 0.1);
+}
+
+.sticky-visual[data-theme="modern"] {
+    background: var(--chapter-modern-bg);
+    box-shadow: inset 0 0 100px rgba(167, 139, 250, 0.1);
+}
+
+.sticky-visual[data-theme="historical"] {
+    background: var(--chapter-historical-bg);
+    box-shadow: inset 0 0 100px rgba(45, 212, 191, 0.1);
+}
+
+/* Active step glow effect matching chapter theme */
+.scroll-step[data-chapter="global"].is-active .step-content {
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(96, 165, 250, 0.15);
+}
+
+.scroll-step[data-chapter="regional"].is-active .step-content {
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(148, 163, 184, 0.15);
+}
+
+.scroll-step[data-chapter="africa"].is-active .step-content {
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(245, 158, 11, 0.15);
+}
+
+.scroll-step[data-chapter="modern"].is-active .step-content {
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(167, 139, 250, 0.15);
+}
+
+.scroll-step[data-chapter="historical"].is-active .step-content {
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(45, 212, 191, 0.15);
+}
+
+/* ==========================================================================
    Sticky Visual Container
    ========================================================================== */
 
@@ -199,28 +389,28 @@
     left: -4px;
     top: 50%;
     margin-top: -4px;
-    box-shadow: -2px 2px 3px rgba(0,0,0,0.05);
+    box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.05);
 }
 
 .annotation.arrow-right::before {
     right: -4px;
     top: 50%;
     margin-top: -4px;
-    box-shadow: 2px -2px 3px rgba(0,0,0,0.05);
+    box-shadow: 2px -2px 3px rgba(0, 0, 0, 0.05);
 }
 
 .annotation.arrow-top::before {
     top: -4px;
     left: 50%;
     margin-left: -4px;
-    box-shadow: -2px -2px 3px rgba(0,0,0,0.05);
+    box-shadow: -2px -2px 3px rgba(0, 0, 0, 0.05);
 }
 
 .annotation.arrow-bottom::before {
     bottom: -4px;
     left: 50%;
     margin-left: -4px;
-    box-shadow: 2px 2px 3px rgba(0,0,0,0.05);
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* ==========================================================================
@@ -329,9 +519,12 @@
 }
 
 @keyframes highlightPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         filter: none;
     }
+
     50% {
         filter: drop-shadow(0 0 8px var(--color-primary));
     }
@@ -417,30 +610,30 @@
     .scrollytelling {
         flex-direction: column;
     }
-    
+
     .sticky-container {
         flex: none;
     }
-    
+
     .scroll-sections {
         flex: none;
         max-width: 100%;
     }
-    
+
     .sticky-visual {
         height: 50vh;
         min-height: 400px;
     }
-    
+
     .scroll-step {
         min-height: auto;
         padding: var(--space-xl) var(--container-padding);
     }
-    
+
     .scroll-step:first-child {
         padding-top: calc(50vh + var(--space-xl));
     }
-    
+
     .step-content {
         max-width: 100%;
         margin: 0 auto;
@@ -451,42 +644,42 @@
     .scrollytelling {
         display: block;
     }
-    
+
     .sticky-visual {
         position: relative;
         top: 0;
         height: 60vh;
         min-height: 350px;
     }
-    
+
     .sticky-visual .chart-wrapper {
         padding: var(--space-md);
     }
-    
+
     .scroll-sections {
         position: relative;
     }
-    
+
     .scroll-step {
         min-height: auto;
         padding: var(--space-lg) var(--container-padding);
     }
-    
+
     .scroll-step:first-child {
         padding-top: var(--space-lg);
     }
-    
+
     .scroll-step:last-child {
         padding-bottom: var(--space-lg);
     }
-    
+
     .step-content {
         opacity: 1;
         transform: none;
         box-shadow: none;
         border: 1px solid var(--border-color);
     }
-    
+
     .step-indicators {
         display: none;
     }
@@ -515,6 +708,7 @@
 }
 
 @media (max-width: 1024px) {
+
     .scrollytelling.layout-sidebyside .sticky-visual,
     .scrollytelling.layout-sidebyside .scroll-sections {
         position: relative;
