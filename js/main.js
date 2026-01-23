@@ -296,16 +296,18 @@ function generateSampleData(key) {
  * Update statistics in the intro section
  */
 function updateStatistics() {
-    const coverage = state.data.coverage;
-    if (coverage && coverage.metadata) {
-        animateNumber(elements.statEvents, coverage.metadata.totalEvents || 1245678);
-        animateNumber(elements.statSources, state.data.sources?.sources?.length || 850);
-        animateNumber(elements.statCountries, coverage.countries?.length || 195);
+    // Use UCDP conflict data statistics for consistency with choropleth
+    // Total across 1989-2024: 385,918 events, 124 unique countries, 36 years
+    const choroplethData = state.data.choroplethYearly;
+    if (choroplethData && choroplethData.metadata) {
+        animateNumber(elements.statEvents, 385918);
+        animateNumber(elements.statSources, choroplethData.metadata.totalYears || 36);
+        animateNumber(elements.statCountries, 124);
     } else {
-        // Fallback values
-        animateNumber(elements.statEvents, 1245678);
-        animateNumber(elements.statSources, 850);
-        animateNumber(elements.statCountries, 195);
+        // Fallback values based on UCDP data
+        animateNumber(elements.statEvents, 385918);
+        animateNumber(elements.statSources, 36);
+        animateNumber(elements.statCountries, 124);
     }
 }
 
@@ -406,16 +408,30 @@ function setupScrollytelling() {
 function handleStepEnter(step, direction) {
     const stepNumber = parseInt(step.dataset.step);
     const chartType = step.dataset.chart;
+    const chapter = step.dataset.chapter;
 
-    console.log(`Entering step ${stepNumber}: ${chartType}`);
+    console.log(`Entering step ${stepNumber}: ${chartType} (chapter: ${chapter})`);
 
     // Mark step as active
     step.classList.add('is-active');
+
+    // Update chapter theme on sticky visual
+    updateChapterTheme(chapter);
 
     // Update chart
     updateMainChart(chartType, stepNumber);
 
     state.currentStep = stepNumber;
+}
+
+/**
+ * Update the visual theme based on the current chapter
+ */
+function updateChapterTheme(chapter) {
+    const stickyVisual = document.querySelector('.sticky-visual');
+    if (stickyVisual && chapter) {
+        stickyVisual.setAttribute('data-theme', chapter);
+    }
 }
 
 /**
@@ -486,7 +502,8 @@ function getChartConfig(chartType, stepNumber) {
                 animationSpeed: 1000,
                 autoPlay: false,
                 loop: true,
-                colorScheme: 'interpolateYlOrRd'
+                colorScheme: 'interpolateYlOrRd',
+                zoomable: false
             }
         },
         'coverage-disparity': {

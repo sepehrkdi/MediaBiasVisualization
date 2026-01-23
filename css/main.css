@@ -623,7 +623,22 @@ body {
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     padding: var(--space-lg);
-    min-height: 400px;
+    height: auto;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.intro-image {
+    max-height: 400px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 /* ==========================================================================

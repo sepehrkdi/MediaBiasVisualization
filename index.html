@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Exploring Global Media Bias Through Data - An interactive visualization project analyzing news coverage patterns across the world using GDELT data.">
+        content="Visualizing Global Conflict Patterns - An interactive visualization project analyzing 36 years of conflict data from the Uppsala Conflict Data Program (UCDP).">
     <meta name="author" content="EsfViz Team">
 
     <title>Decoding Media Bias | A Data-Driven Exploration</title>
@@ -80,35 +80,35 @@
             <div class="intro-grid">
                 <div class="intro-text">
                     <p class="lead">
-                        Every day, millions of news articles shape our perception of global events.
-                        But what stories get told—and how—varies dramatically depending on who's telling them.
+                        Every day, global conflicts shape our perception of the world.
+                        But which crises get attention—and which are forgotten—varies dramatically.
                     </p>
                     <p>
-                        This project analyzes <strong>GDELT (Global Database of Events, Language, and Tone)</strong>,
-                        one of the largest open datasets of global news coverage, to expose patterns in how
-                        different media outlets report on the same events.
+                        This project analyzes <strong>UCDP (Uppsala Conflict Data Program)</strong>,
+                        one of the most comprehensive datasets of organized violence worldwide, to explore
+                        patterns in global conflict from 1989 to 2024.
                     </p>
                     <p>
-                        We examine sentiment, coverage volume, geographic focus, and thematic emphasis
-                        to reveal the invisible editorial choices that influence public understanding.
+                        We examine conflict events, fatalities, and regional distributions
+                        to reveal how some crises dominate headlines while others remain invisible.
                     </p>
                     <div class="data-highlight">
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-events">--</span>
-                            <span class="highlight-label">Events Analyzed</span>
+                            <span class="highlight-label">Conflict Events</span>
                         </div>
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-sources">--</span>
-                            <span class="highlight-label">News Sources</span>
+                            <span class="highlight-label">Years of Data</span>
                         </div>
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-countries">--</span>
-                            <span class="highlight-label">Countries Covered</span>
+                            <span class="highlight-label">Countries Affected</span>
                         </div>
                     </div>
                 </div>
                 <div class="intro-visual">
-                    <div class="chart-container" id="intro-globe"></div>
+                    <img src="assets/images/intro-image.png" alt="Intro Visual" class="intro-image">
                 </div>
             </div>
         </div>
@@ -127,9 +127,12 @@
 
         <div class="scroll-sections">
             <!-- Story Step 1: Animated Global Conflict Timeline -->
-            <article class="scroll-step" data-step="1" data-chart="animated-choropleth">
+            <article class="scroll-step" data-step="1" data-chart="animated-choropleth" data-chapter="global">
                 <div class="step-content">
-                    <span class="step-number">01</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">🌍</span>
+                        <span>Global Overview</span>
+                    </div>
                     <h3>36 Years of Global Conflict</h3>
                     <p>
                         Watch how armed conflicts have evolved across the globe from <strong>1989 to 2024</strong>.
@@ -153,9 +156,12 @@
             </article>
 
             <!-- Story Step 2: Regional Pie - West Africa -->
-            <article class="scroll-step" data-step="2" data-chart="regional-pie-west-africa">
+            <article class="scroll-step" data-step="2" data-chart="regional-pie-west-africa" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">02</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>West Africa: The Forgotten Civil Wars</h3>
                     <p>
                         Between <strong>1989 and 2004</strong>, West Africa experienced devastating civil wars
@@ -178,9 +184,12 @@
             </article>
 
             <!-- Story Step 3: Regional Pie - Balkans -->
-            <article class="scroll-step" data-step="3" data-chart="regional-pie-balkans">
+            <article class="scroll-step" data-step="3" data-chart="regional-pie-balkans" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">03</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>The Balkans: Europe's Bloodiest Decade</h3>
                     <p>
                         The breakup of Yugoslavia (<strong>1989-2000</strong>) produced Europe's deadliest
@@ -199,9 +208,12 @@
             </article>
 
             <!-- Story Step 4: Regional Pie - Central Africa -->
-            <article class="scroll-step" data-step="4" data-chart="regional-pie-central-africa">
+            <article class="scroll-step" data-step="4" data-chart="regional-pie-central-africa" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">04</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>Central Africa: The "Forgotten" Continent</h3>
                     <p>
                         From <strong>2000 to 2024</strong>, Central Africa has been home to some of the
@@ -220,9 +232,12 @@
             </article>
 
             <!-- Story Step 5: Regional Pie - Middle East -->
-            <article class="scroll-step" data-step="5" data-chart="regional-pie-middle-east">
+            <article class="scroll-step" data-step="5" data-chart="regional-pie-middle-east" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">05</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>The Middle East: Disproportionate Focus</h3>
                     <p>
                         From <strong>2010 to 2024</strong>, the Middle East has dominated global headlines.
@@ -241,9 +256,12 @@
             </article>
 
             <!-- Story Step 6: Regional Pie - South Asia -->
-            <article class="scroll-step" data-step="6" data-chart="regional-pie-south-asia">
+            <article class="scroll-step" data-step="6" data-chart="regional-pie-south-asia" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">06</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>South Asia: Pre-9/11 Landscape</h3>
                     <p>
                         Before <strong>2001</strong> transformed global attention on the region,
@@ -261,9 +279,12 @@
             </article>
 
             <!-- Story Step 7: Regional Pie - Southeast Asia -->
-            <article class="scroll-step" data-step="7" data-chart="regional-pie-southeast-asia">
+            <article class="scroll-step" data-step="7" data-chart="regional-pie-southeast-asia" data-chapter="regional">
                 <div class="step-content">
-                    <span class="step-number">07</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📊</span>
+                        <span>Regional Baselines</span>
+                    </div>
                     <h3>Southeast Asia: Myanmar's Tragedy</h3>
                     <p>
                         In recent years (<strong>2010-2024</strong>), Southeast Asia's conflict landscape
@@ -282,9 +303,12 @@
             </article>
 
             <!-- Story Step 8: Intensity Comparison - The Real Severity -->
-            <article class="scroll-step" data-step="8" data-chart="conflict-intensity">
+            <article class="scroll-step" data-step="8" data-chart="conflict-intensity" data-chapter="africa">
                 <div class="step-content">
-                    <span class="step-number">08</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">🌍</span>
+                        <span>Africa Deep Dive</span>
+                    </div>
                     <h3>The Real Severity: Casualties per Event</h3>
                     <p>
                         Now let's look at the <strong>intensity</strong> of these conflicts—average casualties
@@ -308,9 +332,12 @@
             </article>
 
             <!-- Story Step 9: West African Civil Wars - Coverage Gap Case Study -->
-            <article class="scroll-step" data-step="9" data-chart="conflict-timeline">
+            <article class="scroll-step" data-step="9" data-chart="conflict-timeline" data-chapter="africa">
                 <div class="step-content">
-                    <span class="step-number">09</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">🌍</span>
+                        <span>Africa Deep Dive</span>
+                    </div>
                     <h3>Case Study: The Coverage Gap</h3>
                     <p>
                         The West African civil wars of the 1990s reveal a stark truth about media bias.
@@ -332,9 +359,12 @@
             </article>
 
             <!-- Story Step 10: Yemen vs Myanmar - Intensity Comparison -->
-            <article class="scroll-step" data-step="10" data-chart="yemen-myanmar-intensity">
+            <article class="scroll-step" data-step="10" data-chart="yemen-myanmar-intensity" data-chapter="modern">
                 <div class="step-content">
-                    <span class="step-number">10</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">⚡</span>
+                        <span>Modern Contrast</span>
+                    </div>
                     <h3>The Shifting Spotlight: Yemen vs Myanmar</h3>
                     <p>
                         This pattern of unequal attention isn't just historical—it continues today.
@@ -354,9 +384,12 @@
             </article>
 
             <!-- Story Step 11: Yemen vs Myanmar - Total Deaths -->
-            <article class="scroll-step" data-step="11" data-chart="yemen-myanmar-timeline">
+            <article class="scroll-step" data-step="11" data-chart="yemen-myanmar-timeline" data-chapter="modern">
                 <div class="step-content">
-                    <span class="step-number">11</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">⚡</span>
+                        <span>Modern Contrast</span>
+                    </div>
                     <h3>Total Human Cost: The Stacked View</h3>
                     <p>
                         This stacked area chart shows the <strong>total deaths per year</strong>,
@@ -376,9 +409,13 @@
             </article>
 
             <!-- Story Step 12: Bosnia vs Afghanistan - Intensity Comparison -->
-            <article class="scroll-step" data-step="12" data-chart="bosnia-afghanistan-intensity">
+            <article class="scroll-step" data-step="12" data-chart="bosnia-afghanistan-intensity"
+                data-chapter="historical">
                 <div class="step-content">
-                    <span class="step-number">12</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📜</span>
+                        <span>Historical Parallel</span>
+                    </div>
                     <h3>The 1990s: Europe vs. Central Asia</h3>
                     <p>
                         The same coverage disparity existed decades earlier. Compare the
@@ -398,9 +435,13 @@
             </article>
 
             <!-- Story Step 13: Bosnia vs Afghanistan - Total Deaths -->
-            <article class="scroll-step" data-step="13" data-chart="bosnia-afghanistan-timeline">
+            <article class="scroll-step" data-step="13" data-chart="bosnia-afghanistan-timeline"
+                data-chapter="historical">
                 <div class="step-content">
-                    <span class="step-number">13</span>
+                    <div class="chapter-indicator">
+                        <span class="chapter-indicator-icon">📜</span>
+                        <span>Historical Parallel</span>
+                    </div>
                     <h3>Total Human Cost: The Stacked View</h3>
                     <p>
                         This stacked area chart shows the <strong>total deaths per month</strong>,
@@ -443,19 +484,20 @@
                     </div>
                     <h3>Data Sources</h3>
                     <p>
-                        <strong>GDELT (Global Database of Events, Language, and Tone)</strong>
-                        monitors broadcast, print, and web news media from nearly every country.
-                        It processes over 100,000 articles daily, extracting events, actors,
-                        sentiment, and themes.
+                        <strong>UCDP (Uppsala Conflict Data Program)</strong>
+                        is one of the world's most comprehensive datasets on organized violence.
+                        It tracks state-based conflicts, non-state conflicts, and one-sided violence
+                        globally since 1989.
                     </p>
                     <ul class="method-details">
-                        <li><strong>Events Table:</strong> Who did what to whom, when, and where</li>
-                        <li><strong>GKG (Global Knowledge Graph):</strong> Themes, emotions, and locations</li>
-                        <li><strong>Mentions Table:</strong> Links events to specific articles</li>
+                        <li><strong>GED (Georeferenced Event Dataset):</strong> Individual conflict events with precise
+                            locations</li>
+                        <li><strong>Fatality Estimates:</strong> Best estimates of deaths per event</li>
+                        <li><strong>Actor Information:</strong> Details on parties involved in each conflict</li>
                     </ul>
                     <p class="method-caveat">
-                        <strong>Important:</strong> GDELT has English-language bias and relies on
-                        automated processing that can introduce errors.
+                        <strong>Important:</strong> UCDP data may undercount events in regions with limited
+                        documentation or ongoing active conflicts.
                     </p>
                 </article>
 
@@ -467,7 +509,7 @@
                         </svg>
                     </div>
                     <h3>Data Processing Pipeline</h3>
-                    <p>Raw GDELT data undergoes several transformations before visualization:</p>
+                    <p>Raw UCDP data undergoes several transformations before visualization:</p>
                     <ol class="method-steps">
                         <li>
                             <strong>Extraction:</strong> PostgreSQL queries retrieve relevant
@@ -537,8 +579,8 @@
                     <p>This analysis has significant limitations that must be acknowledged:</p>
                     <ul class="limitations-list">
                         <li>
-                            <strong>Source Bias:</strong> GDELT's source collection is not
-                            comprehensive; smaller outlets and non-English media are underrepresented
+                            <strong>Documentation Gaps:</strong> UCDP data coverage varies by region;
+                            some conflicts may be underreported due to access limitations
                         </li>
                         <li>
                             <strong>Automated Processing:</strong> Event extraction and sentiment
@@ -597,7 +639,7 @@
                     <h3>Technical Implementation</h3>
                     <p>This project uses the following technology stack:</p>
                     <ul class="tech-list">
-                        <li><strong>Data Storage:</strong> PostgreSQL database with GDELT schema</li>
+                        <li><strong>Data Storage:</strong> JSON files derived from UCDP GED dataset</li>
                         <li><strong>Preprocessing:</strong> Python (pandas, psycopg2, numpy)</li>
                         <li><strong>Visualization:</strong> D3.js v7</li>
                         <li><strong>Frontend:</strong> Vanilla HTML, CSS, JavaScript</li>
@@ -690,8 +732,8 @@
                     <h3>Acknowledgments</h3>
                     <ul>
                         <li>
-                            <strong>GDELT Project</strong> for providing open access to
-                            global news data
+                            <strong>UCDP (Uppsala Conflict Data Program)</strong> for providing
+                            comprehensive conflict event data
                         </li>
                         <li>
                             <strong>University of Genova</strong> for the academic framework
@@ -743,7 +785,7 @@
                         <ul>
                             <li><a href="https://github.com/sepehrkdi/MediaBiasVisualization" target="_blank">GitHub
                                     Repository</a></li>
-                            <li><a href="https://www.gdeltproject.org/" target="_blank">GDELT Project</a></li>
+                            <li><a href="https://ucdp.uu.se/" target="_blank">UCDP Database</a></li>
                             <li><a href="https://d3js.org/" target="_blank">D3.js</a></li>
                         </ul>
                     </div>
@@ -759,7 +801,7 @@
             <div class="footer-bottom">
                 <p class="copyright">
                     © 2026 MediaBias Visualization Project.
-                    Data provided by <a href="https://www.gdeltproject.org/" target="_blank">GDELT</a>.
+                    Data provided by <a href="https://ucdp.uu.se/" target="_blank">UCDP</a>.
                 </p>
                 <p class="disclaimer">
                     This is an academic project. Visualizations should not be taken as
