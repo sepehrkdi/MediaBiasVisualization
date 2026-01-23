@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Exploring Global Media Bias Through Data - An interactive visualization project analyzing news coverage patterns across the world using GDELT data.">
+        content="Visualizing Global Conflict Patterns - An interactive visualization project analyzing 36 years of conflict data from the Uppsala Conflict Data Program (UCDP).">
     <meta name="author" content="EsfViz Team">
 
     <title>Decoding Media Bias | A Data-Driven Exploration</title>
@@ -80,30 +80,30 @@
             <div class="intro-grid">
                 <div class="intro-text">
                     <p class="lead">
-                        Every day, millions of news articles shape our perception of global events.
-                        But what stories get told—and how—varies dramatically depending on who's telling them.
+                        Every day, global conflicts shape our perception of the world.
+                        But which crises get attention—and which are forgotten—varies dramatically.
                     </p>
                     <p>
-                        This project analyzes <strong>GDELT (Global Database of Events, Language, and Tone)</strong>,
-                        one of the largest open datasets of global news coverage, to expose patterns in how
-                        different media outlets report on the same events.
+                        This project analyzes <strong>UCDP (Uppsala Conflict Data Program)</strong>,
+                        one of the most comprehensive datasets of organized violence worldwide, to explore
+                        patterns in global conflict from 1989 to 2024.
                     </p>
                     <p>
-                        We examine sentiment, coverage volume, geographic focus, and thematic emphasis
-                        to reveal the invisible editorial choices that influence public understanding.
+                        We examine conflict events, fatalities, and regional distributions
+                        to reveal how some crises dominate headlines while others remain invisible.
                     </p>
                     <div class="data-highlight">
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-events">--</span>
-                            <span class="highlight-label">Events Analyzed</span>
+                            <span class="highlight-label">Conflict Events</span>
                         </div>
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-sources">--</span>
-                            <span class="highlight-label">News Sources</span>
+                            <span class="highlight-label">Years of Data</span>
                         </div>
                         <div class="highlight-item">
                             <span class="highlight-number" id="stat-countries">--</span>
-                            <span class="highlight-label">Countries Covered</span>
+                            <span class="highlight-label">Countries Affected</span>
                         </div>
                     </div>
                 </div>
@@ -443,19 +443,20 @@
                     </div>
                     <h3>Data Sources</h3>
                     <p>
-                        <strong>GDELT (Global Database of Events, Language, and Tone)</strong>
-                        monitors broadcast, print, and web news media from nearly every country.
-                        It processes over 100,000 articles daily, extracting events, actors,
-                        sentiment, and themes.
+                        <strong>UCDP (Uppsala Conflict Data Program)</strong>
+                        is one of the world's most comprehensive datasets on organized violence.
+                        It tracks state-based conflicts, non-state conflicts, and one-sided violence
+                        globally since 1989.
                     </p>
                     <ul class="method-details">
-                        <li><strong>Events Table:</strong> Who did what to whom, when, and where</li>
-                        <li><strong>GKG (Global Knowledge Graph):</strong> Themes, emotions, and locations</li>
-                        <li><strong>Mentions Table:</strong> Links events to specific articles</li>
+                        <li><strong>GED (Georeferenced Event Dataset):</strong> Individual conflict events with precise
+                            locations</li>
+                        <li><strong>Fatality Estimates:</strong> Best estimates of deaths per event</li>
+                        <li><strong>Actor Information:</strong> Details on parties involved in each conflict</li>
                     </ul>
                     <p class="method-caveat">
-                        <strong>Important:</strong> GDELT has English-language bias and relies on
-                        automated processing that can introduce errors.
+                        <strong>Important:</strong> UCDP data may undercount events in regions with limited
+                        documentation or ongoing active conflicts.
                     </p>
                 </article>
 
@@ -467,7 +468,7 @@
                         </svg>
                     </div>
                     <h3>Data Processing Pipeline</h3>
-                    <p>Raw GDELT data undergoes several transformations before visualization:</p>
+                    <p>Raw UCDP data undergoes several transformations before visualization:</p>
                     <ol class="method-steps">
                         <li>
                             <strong>Extraction:</strong> PostgreSQL queries retrieve relevant
@@ -537,8 +538,8 @@
                     <p>This analysis has significant limitations that must be acknowledged:</p>
                     <ul class="limitations-list">
                         <li>
-                            <strong>Source Bias:</strong> GDELT's source collection is not
-                            comprehensive; smaller outlets and non-English media are underrepresented
+                            <strong>Documentation Gaps:</strong> UCDP data coverage varies by region;
+                            some conflicts may be underreported due to access limitations
                         </li>
                         <li>
                             <strong>Automated Processing:</strong> Event extraction and sentiment
@@ -597,7 +598,7 @@
                     <h3>Technical Implementation</h3>
                     <p>This project uses the following technology stack:</p>
                     <ul class="tech-list">
-                        <li><strong>Data Storage:</strong> PostgreSQL database with GDELT schema</li>
+                        <li><strong>Data Storage:</strong> JSON files derived from UCDP GED dataset</li>
                         <li><strong>Preprocessing:</strong> Python (pandas, psycopg2, numpy)</li>
                         <li><strong>Visualization:</strong> D3.js v7</li>
                         <li><strong>Frontend:</strong> Vanilla HTML, CSS, JavaScript</li>
@@ -690,8 +691,8 @@
                     <h3>Acknowledgments</h3>
                     <ul>
                         <li>
-                            <strong>GDELT Project</strong> for providing open access to
-                            global news data
+                            <strong>UCDP (Uppsala Conflict Data Program)</strong> for providing
+                            comprehensive conflict event data
                         </li>
                         <li>
                             <strong>University of Genova</strong> for the academic framework
@@ -743,7 +744,7 @@
                         <ul>
                             <li><a href="https://github.com/sepehrkdi/MediaBiasVisualization" target="_blank">GitHub
                                     Repository</a></li>
-                            <li><a href="https://www.gdeltproject.org/" target="_blank">GDELT Project</a></li>
+                            <li><a href="https://ucdp.uu.se/" target="_blank">UCDP Database</a></li>
                             <li><a href="https://d3js.org/" target="_blank">D3.js</a></li>
                         </ul>
                     </div>
@@ -759,7 +760,7 @@
             <div class="footer-bottom">
                 <p class="copyright">
                     © 2026 MediaBias Visualization Project.
-                    Data provided by <a href="https://www.gdeltproject.org/" target="_blank">GDELT</a>.
+                    Data provided by <a href="https://ucdp.uu.se/" target="_blank">UCDP</a>.
                 </p>
                 <p class="disclaimer">
                     This is an academic project. Visualizations should not be taken as

@@ -15,23 +15,23 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             colorScheme: 'interpolateYlOrRd', // Red-yellow for conflict intensity
             ...options
         });
-        
+
         this.years = data?.years || [];
         this.coverageByYear = data?.coverageByYear || {};
         this.yearStats = data?.yearStats || {};
         this.metadata = data?.metadata || {};
-        
+
         this.currentYearIndex = 0;
         this.currentYear = this.years[0];
         this.isPlaying = false;
         this.animationTimer = null;
-        
+
         // Store references for updates
         this.colorScale = null;
         this.coverageMap = new Map();
         this.path = null;
     }
-    
+
     async render() {
         // Load world topology if not provided
         if (!this.worldData) {
@@ -44,24 +44,24 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
                 return;
             }
         }
-        
+
         // Create projection and path
         const projection = this.getProjection();
         this.path = d3.geoPath().projection(projection);
-        
+
         // Extract countries from topology
         const countries = topojson.feature(this.worldData, this.worldData.objects.countries);
-        
+
         // Create country name to ISO3 mapping for the world-atlas data
         // World-atlas uses numeric IDs, we need to map them
         this.countryFeatures = countries.features;
-        
+
         // Setup color scale based on global max
         this.setupColorScale();
-        
+
         // Initialize with first year's data
         this.updateCoverageMap(this.currentYear);
-        
+
         // Draw countries
         this.countryPaths = this.dataGroup.selectAll('.country')
             .data(this.countryFeatures)
@@ -71,14 +71,14 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .attr('fill', d => this.getCountryColor(d))
             .attr('stroke', '#fff')
             .attr('stroke-width', 0.5);
-        
+
         // Interactivity
         this.countryPaths
             .on('mouseenter', (event, d) => {
                 d3.select(event.currentTarget)
                     .classed('is-highlighted', true)
                     .attr('stroke-width', 2);
-                
+
                 this.showCountryTooltip(d, event);
             })
             .on('mousemove', (event) => this.moveTooltip(event))
@@ -88,69 +88,69 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
                     .attr('stroke-width', 0.5);
                 this.hideTooltip();
             });
-        
+
         // Zoom functionality
         if (this.options.zoomable) {
             this.setupZoom(projection, this.path);
         }
-        
+
         // Create animated legend
         this.createAnimatedLegend();
-        
+
         // Create playback controls
         this.createPlaybackControls();
-        
+
         // Auto-play if enabled
         if (this.options.autoPlay) {
             setTimeout(() => this.play(), 500);
         }
     }
-    
+
     setupColorScale() {
         const metric = this.options.metric;
         let maxValue;
-        
+
         if (metric === 'events') {
             maxValue = this.metadata.globalMaxEvents || 1000;
         } else {
             maxValue = this.metadata.globalMaxFatalities || 10000;
         }
-        
+
         // Use a sequential color scale - red tones for conflict intensity
         this.colorScale = d3.scaleSequentialLog(d3[this.options.colorScheme])
             .domain([1, maxValue])
             .clamp(true);
     }
-    
+
     updateCoverageMap(year) {
         const yearData = this.coverageByYear[year] || [];
         this.coverageMap = new Map(yearData.map(d => [d.id, d]));
     }
-    
+
     getCountryColor(feature) {
         // Try to match by ISO3 code from our data
         const countryData = this.findCountryData(feature);
-        
+
         if (!countryData) {
             return '#e0e0e0'; // No data - gray
         }
-        
-        const value = this.options.metric === 'events' 
-            ? countryData.events 
+
+        const value = this.options.metric === 'events'
+            ? countryData.events
             : countryData.fatalities;
-        
+
         return value > 0 ? this.colorScale(value) : '#e0e0e0';
     }
-    
+
     findCountryData(feature) {
         // World-atlas uses numeric IDs that correspond to ISO 3166-1 numeric codes
         // We need to map these to our ISO3 alpha codes
         const numericId = feature.id;
         const iso3 = this.numericToISO3(numericId);
-        
+
         return this.coverageMap.get(iso3);
     }
-    
+
     numericToISO3(numericId) {
         // ISO 3166-1 numeric to alpha-3 mapping
         const numericToAlpha3 = {
@@ -187,14 +187,14 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             '860': 'UZB', '862': 'VEN', '704': 'VNM', '887': 'YEM', '894': 'ZMB',
             '716': 'ZWE', '748': 'SWZ', '-99': 'XKX'
         };
-        
+
         return numericToAlpha3[String(numericId)] || null;
     }
-    
+
     showCountryTooltip(feature, event) {
         const countryData = this.findCountryData(feature);
         const countryName = feature.properties?.name || 'Unknown';
-        
+
         if (countryData) {
             this.showTooltip({
                 title: `${countryName} (${this.currentYear})`,
@@ -211,20 +211,20 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             }, event);
         }
     }
-    
+
     createAnimatedLegend() {
         const legendWidth = 200;
         const legendHeight = 12;
-        
+
         // Remove existing legend
         this.svg.selectAll('.legend-gradient').remove();
         this.svg.selectAll('.year-display').remove();
-        
+
         // Year display - prominent year indicator
         this.yearDisplay = this.svg.append('g')
             .attr('class', 'year-display')
             .attr('transform', `translate(${this.width / 2 + this.options.margin.left}, ${this.options.margin.top - 10})`);
-        
+
         this.yearText = this.yearDisplay.append('text')
             .attr('class', 'year-text')
             .attr('text-anchor', 'middle')
@@ -232,21 +232,21 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .attr('font-weight', 'bold')
             .attr('fill', '#333')
             .text(this.currentYear);
-        
+
         // Legend group
         const legendGroup = this.svg.append('g')
             .attr('class', 'legend-gradient')
             .attr('transform', `translate(${this.options.margin.left}, ${this.height + this.options.margin.top + 30})`);
-        
+
         // Create gradient
         const defs = this.svg.select('defs').empty() ? this.svg.append('defs') : this.svg.select('defs');
-        
+
         defs.selectAll('#animated-coverage-gradient').remove();
         const gradient = defs.append('linearGradient')
             .attr('id', 'animated-coverage-gradient')
             .attr('x1', '0%')
             .attr('x2', '100%');
-        
+
         // Add color stops
         const domain = this.colorScale.domain();
         const numStops = 10;
@@ -258,24 +258,24 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
                 .attr('offset', `${t * 100}%`)
                 .attr('stop-color', this.colorScale(value));
         }
-        
+
         // Draw gradient bar
         legendGroup.append('rect')
             .attr('width', legendWidth)
             .attr('height', legendHeight)
             .attr('rx', 2)
             .style('fill', 'url(#animated-coverage-gradient)');
-        
+
         // Add labels
         const metricLabel = this.options.metric === 'events' ? 'Conflict Events' : 'Fatalities';
-        
+
         legendGroup.append('text')
             .attr('class', 'legend-gradient-label')
             .attr('x', 0)
             .attr('y', legendHeight + 15)
             .attr('font-size', '11px')
             .text('1');
-        
+
         legendGroup.append('text')
             .attr('class', 'legend-gradient-label')
             .attr('x', legendWidth)
@@ -283,7 +283,7 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .attr('text-anchor', 'end')
             .attr('font-size', '11px')
             .text(this.formatNumber(this.colorScale.domain()[1]));
-        
+
         // Title
         legendGroup.append('text')
             .attr('class', 'legend-title')
@@ -291,42 +291,42 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .attr('font-size', '12px')
             .attr('font-weight', '600')
             .text(metricLabel);
-        
+
         // Stats display
         this.statsDisplay = legendGroup.append('g')
             .attr('class', 'stats-display')
             .attr('transform', `translate(${legendWidth + 40}, 0)`);
-        
+
         this.updateStatsDisplay();
     }
-    
+
     updateStatsDisplay() {
         const stats = this.yearStats[this.currentYear] || {};
-        
+
         this.statsDisplay.selectAll('*').remove();
-        
+
         this.statsDisplay.append('text')
             .attr('font-size', '11px')
             .attr('fill', '#666')
             .text(`${stats.countryCount || 0} countries affected`);
-        
+
         this.statsDisplay.append('text')
             .attr('y', 15)
             .attr('font-size', '11px')
             .attr('fill', '#666')
             .text(`${this.formatNumber(stats.totalEvents || 0)} events, ${this.formatNumber(stats.totalFatalities || 0)} fatalities`);
     }
-    
+
     createPlaybackControls() {
         // Remove existing controls
         d3.select(this.container).selectAll('.playback-controls').remove();
-        
+
         // Create controls container
         const controlsDiv = d3.select(this.container)
             .append('div')
             .attr('class', 'playback-controls')
             .style('position', 'absolute')
-            .style('bottom', '10px')
+            .style('bottom', '60px')
             .style('left', '50%')
             .style('transform', 'translateX(-50%)')
             .style('display', 'flex')
@@ -336,7 +336,7 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .style('padding', '10px 20px')
             .style('border-radius', '25px')
             .style('box-shadow', '0 2px 10px rgba(0,0,0,0.15)');
-        
+
         // Play/Pause button
         this.playButton = controlsDiv.append('button')
             .attr('class', 'play-btn')
@@ -353,13 +353,13 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .style('justify-content', 'center')
             .html('▶')
             .on('click', () => this.togglePlay());
-        
+
         // Year slider
         const sliderContainer = controlsDiv.append('div')
             .style('display', 'flex')
             .style('flex-direction', 'column')
             .style('align-items', 'center');
-        
+
         this.yearSlider = sliderContainer.append('input')
             .attr('type', 'range')
             .attr('min', 0)
@@ -371,7 +371,7 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
                 this.pause();
                 this.setYearByIndex(parseInt(event.target.value));
             });
-        
+
         // Year range labels
         const labelsDiv = sliderContainer.append('div')
             .style('display', 'flex')
@@ -379,10 +379,10 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .style('width', '200px')
             .style('font-size', '11px')
             .style('color', '#666');
-        
+
         labelsDiv.append('span').text(this.years[0] || '');
         labelsDiv.append('span').text(this.years[this.years.length - 1] || '');
-        
+
         // Speed control
         controlsDiv.append('select')
             .attr('class', 'speed-select')
@@ -405,7 +405,7 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             .attr('selected', d => d.value === this.options.animationSpeed ? '' : null)
             .text(d => d.label);
     }
-    
+
     togglePlay() {
         if (this.isPlaying) {
             this.pause();
@@ -413,19 +413,19 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
             this.play();
         }
     }
-    
+
     play() {
         if (this.isPlaying) return;
-        
+
         this.isPlaying = true;
         this.playButton.html('⏸');
-        
+
         const animate = () => {
             if (!this.isPlaying) return;
-            
+
             // Move to next year
             this.currentYearIndex++;
-            
+
             // Loop or stop at end
             if (this.currentYearIndex >= this.years.length) {
                 if (this.options.loop) {
@@ -435,60 +435,60 @@ export class AnimatedChoroplethMap extends ChoroplethMap {
                     return;
                 }
             }
-            
+
             this.animateToYear(this.years[this.currentYearIndex]);
-            
+
             // Schedule next frame
             this.animationTimer = setTimeout(animate, this.options.animationSpeed);
         };
-        
+
         animate();
     }
-    
+
     pause() {
         this.isPlaying = false;
         this.playButton?.html('▶');
-        
+
         if (this.animationTimer) {
             clearTimeout(this.animationTimer);
             this.animationTimer = null;
         }
     }
-    
+
     setYearByIndex(index) {
         if (index < 0 || index >= this.years.length) return;
-        
+
         this.currentYearIndex = index;
         this.animateToYear(this.years[index]);
     }
-    
+
     setYear(year) {
         const index = this.years.indexOf(String(year));
         if (index !== -1) {
             this.setYearByIndex(index);
         }
     }
-    
+
     animateToYear(year) {
         this.currentYear = year;
         this.updateCoverageMap(year);
-        
+
         // Update year display
         this.yearText?.text(year);
-        
+
         // Update slider
         this.yearSlider?.property('value', this.currentYearIndex);
-        
+
         // Animate country colors
         this.countryPaths
             .transition()
             .duration(this.options.animationSpeed * 0.6)
             .attr('fill', d => this.getCountryColor(d));
-        
+
         // Update stats
         this.updateStatsDisplay();
     }
-    
+
     // Override destroy to clean up animation
     destroy() {
         this.pause();
