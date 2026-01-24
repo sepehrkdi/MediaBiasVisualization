@@ -2,7 +2,7 @@
  * Intensity Comparison Chart
  * Dual-panel visualization showing:
  *   Top panel: Average casualties per event (with horizontal average reference lines)
- *   Bottom panel: Number of conflict events per year
+ *   Bottom panel: Number of reportedconflict events per year
  */
 
 export class IntensityComparisonChart {
@@ -303,7 +303,7 @@ export class IntensityComparisonChart {
             .attr('class', 'panel-title')
             .attr('x', 0)
             .attr('y', -8)
-            .text(this.isMonthly ? 'Number of Conflict Events per Month' : 'Number of Conflict Events per Year');
+            .text(this.isMonthly ? 'Number of Reported Conflict Events per Month' : 'Number of Reported Conflict Events per Year');
 
         // Grid
         this.renderGrid(panel, yScale);
