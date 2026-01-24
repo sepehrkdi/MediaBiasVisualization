@@ -152,6 +152,15 @@ export class ScrollytellingController {
                 indicator.setAttribute('aria-label', `Go to step ${index + 1}`);
                 indicator.dataset.step = index;
 
+                // Create tooltip with section title
+                const titleEl = step.querySelector('h3');
+                const titleText = titleEl ? titleEl.textContent : `Step ${index + 1}`;
+
+                const tooltip = document.createElement('span');
+                tooltip.className = 'step-tooltip';
+                tooltip.textContent = titleText;
+                indicator.appendChild(tooltip);
+
                 indicator.addEventListener('click', () => {
                     this.scrollToStep(index);
                 });

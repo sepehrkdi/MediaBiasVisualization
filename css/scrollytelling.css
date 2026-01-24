@@ -491,27 +491,72 @@
 }
 
 .step-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    width: 20px;
+    height: 4px;
+    border-radius: 2px;
     background: var(--color-gray-300);
-    border: 2px solid var(--bg-primary);
-    box-shadow: var(--shadow-sm);
+    border: none;
+    box-shadow: none;
     cursor: pointer;
-    transition: background var(--transition-fast), transform var(--transition-fast);
+    transition: all var(--transition-fast);
+    position: relative;
+    opacity: 0.6;
+}
+
+/* Tooltip styles */
+.step-tooltip {
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background: var(--bg-dark);
+    color: var(--color-white);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+}
+
+.step-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    margin-top: -4px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent transparent var(--bg-dark);
+}
+
+.step-indicator:hover .step-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
 }
 
 .step-indicator:hover {
-    background: var(--color-gray-400);
+    opacity: 1;
+    background: var(--color-gray-500);
+    width: 24px;
 }
 
 .step-indicator.is-active {
     background: var(--color-primary);
-    transform: scale(1.2);
+    width: 32px;
+    opacity: 1;
+    transform: none;
+    /* Reset the scale transform from previous dot style */
 }
 
 .step-indicator.is-passed {
     background: var(--color-primary-light);
+    opacity: 0.8;
 }
 
 /* ==========================================================================
