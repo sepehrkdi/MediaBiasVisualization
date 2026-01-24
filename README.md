@@ -57,7 +57,7 @@ Project/
 │   ├── source_network.json
 │   └── temporal_trends.json
 ├── preprocessing/
-│   ├── extract_gdelt.py      # PostgreSQL → JSON pipeline
+│   ├── GED_pythonsearch.ipynb # UCDP data processing notebook
 │   ├── generate_sample_data.py
 │   └── requirements.txt
 └── README.md
@@ -92,76 +92,17 @@ See [Database Setup](#-database-setup) section below.
 
 ---
 
-## 🗄️ Database Setup
 
-### Prerequisites
+## 🛠️ Data Processing
 
-- PostgreSQL 14+
-- Python 3.9+
-- GDELT data loaded into PostgreSQL
+The project uses UCDP data which is processed using Jupyter notebooks.
 
-### PostgreSQL Schema
+### Processing Steps
 
-```sql
--- Main events table
-CREATE TABLE gdelt_events (
-    globaleventid BIGINT PRIMARY KEY,
-    sqldate DATE NOT NULL,
-    actor1code VARCHAR(50),
-    actor1countrycode VARCHAR(3),
-    actor2code VARCHAR(50),
-    actor2countrycode VARCHAR(3),
-    eventcode VARCHAR(10),
-    eventrootcode VARCHAR(5),
-    eventbasecode VARCHAR(10),
-    goldsteinscale DECIMAL(5,2),
-    nummentions INTEGER,
-    numsources INTEGER,
-    avgtone DECIMAL(5,2),
-    sourceurl TEXT
-);
+1.  **Data Ingestion**: Raw UCDP GEM data is loaded into pandas dataframes.
+2.  **Filtering & Cleaning**: Events are filtered by date range and quality thresholds.
+3.  **Aggregation**: Data is aggregated by region, year, and conflict to produce the JSON files used for visualization.
 
--- Source metadata table
-CREATE TABLE gdelt_sources (
-    id SERIAL PRIMARY KEY,
-    domain VARCHAR(255) UNIQUE,
-    domain_country VARCHAR(3),
-    source_type VARCHAR(50)
-);
-
--- Indexes for performance
-CREATE INDEX idx_events_date ON gdelt_events(sqldate);
-CREATE INDEX idx_events_actor1country ON gdelt_events(actor1countrycode);
-CREATE INDEX idx_events_sourceurl ON gdelt_events(sourceurl);
-CREATE INDEX idx_events_avgtone ON gdelt_events(avgtone);
-```
-
-### Running the Preprocessing Pipeline
-
-1. Install Python dependencies:
-   ```bash
-   cd preprocessing
-   pip install -r requirements.txt
-   ```
-
-2. Configure database connection:
-   ```bash
-   export GDELT_DB_HOST=localhost
-   export GDELT_DB_PORT=5432
-   export GDELT_DB_NAME=gdelt
-   export GDELT_DB_USER=postgres
-   export GDELT_DB_PASSWORD=your_password
-   ```
-
-3. Run the extraction:
-   ```bash
-   python extract_gdelt.py
-   ```
-
-4. Or generate sample data for development:
-   ```bash
-   python generate_sample_data.py
-   ```
 
 ---
 

@@ -922,33 +922,27 @@ function setupDataFlowDiagram() {
     try {
         const flowData = {
             nodes: [
-                { id: 'gdelt', label: 'GDELT Database', type: 'source' },
-                { id: 'postgres', label: 'PostgreSQL', type: 'storage' },
-                { id: 'python', label: 'Python Processing', type: 'process' },
+                { id: 'ucdp', label: 'UCDP Database', type: 'source' },
+                { id: 'notebooks', label: 'Jupyter Notebooks', type: 'process' },
                 { id: 'csv', label: 'CSV/JSON Files', type: 'output' },
                 { id: 'd3', label: 'D3.js Visualizations', type: 'visualization' }
             ],
             links: [
-                { source: 'gdelt', target: 'postgres' },
-                { source: 'postgres', target: 'python' },
-                { source: 'python', target: 'csv' },
+                { source: 'ucdp', target: 'notebooks' },
+                { source: 'notebooks', target: 'csv' },
                 { source: 'csv', target: 'd3' }
             ]
         };
 
         // Pipeline stage descriptions for interactivity
         const pipelineDescriptions = {
-            gdelt: {
-                title: 'GDELT Database',
-                description: 'The Global Database of Events, Language, and Tone (GDELT) monitors news media from nearly every country in the world, identifying people, locations, organizations, themes, sources, emotions, and events. We query over 1 billion events from this comprehensive dataset.'
+            ucdp: {
+                title: 'UCDP Database',
+                description: 'The Uppsala Conflict Data Program (UCDP) is the world’s main provider of data on organized violence and the oldest project of its kind. We use the Georeferenced Event Dataset (GED) covering 1989-2024.'
             },
-            postgres: {
-                title: 'PostgreSQL Storage',
-                description: 'Raw GDELT data is stored in a PostgreSQL database for efficient querying and analysis. We use optimized indexes and partitioning to handle the massive scale of global news data spanning multiple years.'
-            },
-            python: {
-                title: 'Python Processing',
-                description: 'Python scripts using pandas, numpy, and scipy perform data cleaning, aggregation, sentiment analysis, and statistical computations. This includes calculating coverage ratios, tone distributions, and temporal patterns.'
+            notebooks: {
+                title: 'Jupyter Notebooks',
+                description: 'Data preprocessing is conducted through Python notebooks. These scripts handle data cleaning, filtering, and aggregation, transforming raw event data into structured formats suitable for visualization without using external databases.'
             },
             csv: {
                 title: 'JSON Data Files',
@@ -956,7 +950,7 @@ function setupDataFlowDiagram() {
             },
             d3: {
                 title: 'D3.js Visualizations',
-                description: 'Interactive visualizations built with D3.js bring the data to life. Each chart is designed to reveal specific patterns in media bias, from geographic distributions to temporal trends and sentiment analysis.'
+                description: 'Interactive visualizations built with D3.js bring the data to life. Each chart is designed to reveal specific patterns in conflict coverage and intensity.'
             }
         };
 
@@ -1025,9 +1019,8 @@ function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descE
 
             // Map label to id
             const labelToId = {
-                'GDELT Database': 'gdelt',
-                'PostgreSQL': 'postgres',
-                'Python Processing': 'python',
+                'UCDP Database': 'ucdp',
+                'Jupyter Notebooks': 'notebooks',
                 'CSV/JSON Files': 'csv',
                 'D3.js Visualizations': 'd3'
             };
