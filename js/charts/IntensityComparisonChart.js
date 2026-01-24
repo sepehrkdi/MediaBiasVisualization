@@ -7,17 +7,17 @@
 
 export class IntensityComparisonChart {
     constructor(container, data, options = {}) {
-        this.container = typeof container === 'string' 
-            ? document.querySelector(container) 
+        this.container = typeof container === 'string'
+            ? document.querySelector(container)
             : container;
-        
+
         if (!this.container) {
             console.error('IntensityComparisonChart: Container not found');
             return;
         }
-        
+
         this.data = data;
-        
+
         // Default configuration
         const defaultCountries = {
             country1: {
@@ -26,12 +26,12 @@ export class IntensityComparisonChart {
                 fieldPrefix: 'liberia'
             },
             country2: {
-                name: 'Sierra Leone', 
+                name: 'Sierra Leone',
                 color: '#2ca02c',
                 fieldPrefix: 'sierraLeone'
             }
         };
-        
+
         this.options = {
             margin: { top: 80, right: 100, bottom: 50, left: 70 },
             panelGap: 60,
@@ -43,7 +43,7 @@ export class IntensityComparisonChart {
             subtitle: '',
             ...options
         };
-        
+
         // Override from metadata
         if (data?.metadata) {
             if (data.metadata.country1) {
@@ -64,14 +64,14 @@ export class IntensityComparisonChart {
                 this.options.subtitle = data.metadata.period;
             }
         }
-        
+
         this.tooltip = options.tooltip;
-        
+
         this.setup();
         if (this.data) {
             this.render();
         }
-        
+
         if (this.options.responsive) {
             this.setupResizeObserver();
         }
@@ -80,10 +80,10 @@ export class IntensityComparisonChart {
     setup() {
         this.container.innerHTML = '';
         this.updateDimensions();
-        
+
         // Calculate panel heights (two stacked panels)
         this.panelHeight = (this.height - this.options.panelGap) / 2;
-        
+
         this.svg = d3.select(this.container)
             .append('svg')
             .attr('class', 'intensity-comparison-svg')
@@ -109,12 +109,12 @@ export class IntensityComparisonChart {
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
             .attr('transform', `translate(${this.options.margin.left + this.width - 200}, 25)`);
-        
+
         this.titleGroup = this.svg.append('g')
             .attr('class', 'chart-title-group')
             .attr('transform', `translate(${this.options.margin.left}, 25)`);
     }
-    
+
     setupResizeObserver() {
         this.resizeObserver = new ResizeObserver(() => {
             clearTimeout(this.resizeTimeout);
@@ -127,7 +127,7 @@ export class IntensityComparisonChart {
         const rect = this.container.getBoundingClientRect();
         this.width = Math.max((rect.width || 800) - this.options.margin.left - this.options.margin.right, 400);
         this.height = Math.max((rect.height || 600) - this.options.margin.top - this.options.margin.bottom, 400);
-        
+
         // Recalculate panel height
         this.panelHeight = (this.height - this.options.panelGap) / 2;
     }
@@ -138,11 +138,11 @@ export class IntensityComparisonChart {
         const timeline = this.data.timeline;
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
-        
+
         // Detect time format (monthly vs yearly)
         const firstEntry = timeline[0];
         this.isMonthly = !!firstEntry?.year_month;
-        
+
         if (this.isMonthly) {
             // Parse year_month strings to dates
             this.timeParser = d3.timeParse('%Y-%m');
@@ -150,13 +150,13 @@ export class IntensityComparisonChart {
         } else {
             this.getTimeValue = (d) => d.year;
         }
-        
+
         // Field names
         const c1CasualtiesField = `${c1.fieldPrefix}CasualtiesPerEvent`;
         const c2CasualtiesField = `${c2.fieldPrefix}CasualtiesPerEvent`;
         const c1EventsField = `${c1.fieldPrefix}Events`;
         const c2EventsField = `${c2.fieldPrefix}Events`;
-        
+
         // Calculate averages for casualties per event (only where there's data)
         const c1Data = timeline.filter(d => d[c1CasualtiesField] > 0);
         const c2Data = timeline.filter(d => d[c2CasualtiesField] > 0);
@@ -221,11 +221,11 @@ export class IntensityComparisonChart {
     addTitle() {
         const c1Name = this.options.countries.country1.name;
         const c2Name = this.options.countries.country2.name;
-        
+
         this.titleGroup.append('text')
             .attr('class', 'chart-title-text')
             .text(this.options.title);
-        
+
         this.titleGroup.append('text')
             .attr('class', 'chart-subtitle-text')
             .attr('y', 20)
@@ -257,7 +257,7 @@ export class IntensityComparisonChart {
         const xAxisCasualties = panel.append('g')
             .attr('class', 'axis axis-x')
             .attr('transform', `translate(0, ${this.panelHeight})`);
-        
+
         if (this.isMonthly) {
             xAxisCasualties.call(d3.axisBottom(this.xScale)
                 .ticks(d3.timeMonth.every(6))
@@ -312,7 +312,7 @@ export class IntensityComparisonChart {
         const xAxisEvents = panel.append('g')
             .attr('class', 'axis axis-x')
             .attr('transform', `translate(0, ${this.panelHeight})`);
-        
+
         if (this.isMonthly) {
             xAxisEvents.call(d3.axisBottom(this.xScale)
                 .ticks(d3.timeMonth.every(6))
@@ -451,28 +451,28 @@ export class IntensityComparisonChart {
     renderDataPoints(panel, timeline, field, country, yScale, type) {
         const c1 = this.options.countries.country1;
         const c2 = this.options.countries.country2;
-        
+
         // Filter to only show local maxima and minima (peaks and valleys)
         const dataWithValues = timeline.filter(d => d[field] > 0);
         const extremePoints = dataWithValues.filter((d, i, arr) => {
             if (arr.length <= 2) return true; // Show all if very few points
             if (i === 0 || i === arr.length - 1) return false; // Skip first/last
-            
+
             const prev = arr[i - 1][field];
             const curr = d[field];
             const next = arr[i + 1][field];
-            
+
             // Local maximum or minimum
             const isMax = curr > prev && curr > next;
             const isMin = curr < prev && curr < next;
-            
+
             // Also include significant changes (>50% change from neighbors)
             const avgNeighbor = (prev + next) / 2;
             const isSignificant = Math.abs(curr - avgNeighbor) / avgNeighbor > 0.5;
-            
+
             return isMax || isMin || isSignificant;
         });
-        
+
         panel.selectAll(`.dot-${country.fieldPrefix}-${type}`)
             .data(extremePoints)
             .join('circle')
@@ -496,9 +496,9 @@ export class IntensityComparisonChart {
                             { label: 'Events', value: d[`${country.fieldPrefix}Events`] || 0, format: 'number' }
                         ]
                     };
-                    
+
                     // Add comparison insight
-                    const otherField = country === c1 
+                    const otherField = country === c1
                         ? `${c2.fieldPrefix}CasualtiesPerEvent`
                         : `${c1.fieldPrefix}CasualtiesPerEvent`;
                     const otherValue = d[otherField] || 0;
@@ -523,7 +523,7 @@ export class IntensityComparisonChart {
                         ]
                     };
                 }
-                
+
                 if (this.tooltip) this.tooltip.show(content, event);
             })
             .on('mousemove', (event) => {
@@ -537,7 +537,7 @@ export class IntensityComparisonChart {
     renderConflictPeriods(annotations, timeline) {
         const c1Color = this.options.countries.country1.color;
         const c2Color = this.options.countries.country2.color;
-        const endTime = this.isMonthly 
+        const endTime = this.isMonthly
             ? this.getTimeValue(timeline[timeline.length - 1])
             : d3.max(timeline, d => d.year);
 
@@ -550,7 +550,7 @@ export class IntensityComparisonChart {
         });
 
         sortedAnnotations.forEach((annotation, index) => {
-            const startTime = this.isMonthly 
+            const startTime = this.isMonthly
                 ? this.timeParser(annotation.year_month)
                 : annotation.year;
             const startX = this.xScale(startTime);
@@ -614,8 +614,8 @@ export class IntensityComparisonChart {
             .duration(500)
             .attr('opacity', 0.12);
 
-        // Disparity label (positioned between panels)
-        const labelY = this.panelHeight + this.options.panelGap / 2;
+        // Disparity label (positioned inside top panel to avoid axis overlap)
+        const labelY = 40;
 
         const labelGroup = this.chartGroup.append('g')
             .attr('class', 'disparity-label-group')
@@ -650,7 +650,7 @@ export class IntensityComparisonChart {
         const c2Color = this.options.countries.country2.color;
 
         annotations.forEach((annotation, index) => {
-            const annotTime = this.isMonthly 
+            const annotTime = this.isMonthly
                 ? this.timeParser(annotation.year_month)
                 : annotation.year;
             const x = this.xScale(annotTime);

@@ -445,7 +445,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Ensure consistent margin for all regional charts
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         },
         'regional-pie-balkans': {
@@ -456,7 +458,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Ensure consistent margin for all regional charts
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         },
         'regional-pie-central-africa': {
@@ -467,7 +471,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Increase right margin for long country names (Central African Republic)
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         },
         'regional-pie-middle-east': {
@@ -478,7 +484,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Increase right margin for Yemen (North Yemen)
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         },
         'regional-pie-south-asia': {
@@ -489,7 +497,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Ensure consistent margin for all regional charts
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         },
         'regional-pie-southeast-asia': {
@@ -500,7 +510,9 @@ function getChartConfig(chartType, stepNumber) {
                 innerRadiusRatio: 0.45,
                 showLegend: true,
                 showSummary: true,
-                animatePulse: true
+                animatePulse: true,
+                // Increase right margin for Cambodia (Kampuchea)
+                margin: { top: 50, right: 240, bottom: 80, left: 20 }
             }
         }
     };

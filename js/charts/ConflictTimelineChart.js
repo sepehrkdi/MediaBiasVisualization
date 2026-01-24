@@ -207,7 +207,7 @@ export class ConflictTimelineChart {
         // Y scale for deaths - use stacked total or max based on chartType
         let maxDeaths;
         if (this.options.chartType === 'stacked-area') {
-            maxDeaths = d3.max(timeline, d => 
+            maxDeaths = d3.max(timeline, d =>
                 (d[this.getDeathsField(c1)] || 0) + (d[this.getDeathsField(c2)] || 0)
             );
         } else {
@@ -277,9 +277,9 @@ export class ConflictTimelineChart {
         const c2Color = this.options.countries.country2.color;
         const yScale = this.yScaleDeaths;
 
-        const valueKey = { 
-            country1: this.getDeathsField(c1), 
-            country2: this.getDeathsField(c2) 
+        const valueKey = {
+            country1: this.getDeathsField(c1),
+            country2: this.getDeathsField(c2)
         };
 
         // Panel title
@@ -511,7 +511,7 @@ export class ConflictTimelineChart {
 
         // stackedData[0] = country2 (bottom layer), stackedData[1] = country1 (top layer)
         // For each data point, we need to position dots at the TOP of their respective stack layer
-        
+
         // Country 2 dots (bottom layer) - positioned at y1 of layer 0 (top of country2 area)
         const country2Layer = stackedData[0];
         this.chartGroup.selectAll('.country2-dot')
@@ -616,8 +616,8 @@ export class ConflictTimelineChart {
             .duration(500)
             .attr('opacity', 1);
 
-        // Disparity label (positioned between panels)
-        const labelY = this.panelHeight + this.options.panelGap / 2;
+        // Disparity label (positioned at top of chart to avoid axis overlap)
+        const labelY = 40;
 
         const labelGroup = this.chartGroup.append('g')
             .attr('class', 'disparity-label-group')
