@@ -5,7 +5,8 @@ A data-driven scrollytelling visualization exploring global conflict patterns an
 **Team**: EsfViz  
 **Course**: Data Visualization 2025-2026, University of Genova  
 **Members**: [Sepehr Khodadadi](https://www.linkedin.com/in/sepehr-khodadadi/), [Hesam Mohebi](https://www.linkedin.com/in/hesam-mohebi-579699199), [Bahar Khalilian](https://ir.linkedin.com/in/bahaar-khalilian-a68716198)  
-**Repository**: https://github.com/sepehrkdi/MediaBiasVisualization.git
+**Repository**: https://github.com/sepehrkdi/MediaBiasVisualization.git  
+**Live Demo**: https://sepehrkdi.github.io/MediaBiasVisualization/
 
 ---
 
