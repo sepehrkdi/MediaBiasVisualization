@@ -122,19 +122,10 @@ export class ConflictTimelineChart {
         this.panelHeight = this.height;
         this.options.panelGap ??= 0;
 
-        // Responsive Legend Positioning
-        // If width is constricted, move legend below subtitle to avoid overlap
-        // Increased threshold to 800px to cover tablets and smaller desktop windows
-        const isCompact = this.width < 800;
-        const legendX = isCompact
-            ? this.options.margin.left
-            : this.options.margin.left + this.width - 220;
-        const legendY = isCompact ? 65 : 25;
-
-        // Legend group
+        // Legend group - position top right, same level as title
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${legendX}, ${legendY})`);
+            .attr('transform', `translate(${this.options.margin.left + this.width - 220}, 25)`);
 
         // Title group
         this.titleGroup = this.svg.append('g')
@@ -846,12 +837,12 @@ export class ConflictTimelineChart {
 
     updateDimensions() {
         const containerRect = this.container.getBoundingClientRect();
-        this.width = (containerRect.width || 600) - this.options.margin.left - this.options.margin.right;
-        this.height = (containerRect.height || 400) - this.options.margin.top - this.options.margin.bottom;
+        this.width = (containerRect.width || 800) - this.options.margin.left - this.options.margin.right;
+        this.height = (containerRect.height || 600) - this.options.margin.top - this.options.margin.bottom;
 
-        // Ensure minimum dimensions - Reduced to prevent overflow on mobile
-        this.width = Math.max(this.width, 200);
-        this.height = Math.max(this.height, 200);
+        // Ensure minimum dimensions
+        this.width = Math.max(this.width, 400);
+        this.height = Math.max(this.height, 400);
 
         // Single-panel: panelHeight equals full chart height
         const panelGap = this.options.panelGap ?? 0;

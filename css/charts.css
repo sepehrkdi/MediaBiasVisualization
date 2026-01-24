@@ -18,7 +18,10 @@
     display: block;
     width: 100%;
     height: auto;
+    max-width: 100%;
+    /* Prevent growing beyond container on zoom */
     overflow: visible;
+    /* Allow labels/legends to extend beyond viewBox */
 }
 
 .chart-wrapper {
@@ -150,14 +153,54 @@
    ========================================================================== */
 
 /* Primary categorical palette */
-.color-1 { fill: #CF0063; stroke: #CF0063; }  /* Primary magenta */
-.color-2 { fill: #003366; stroke: #003366; }  /* Dark blue */
-.color-3 { fill: #FF6B35; stroke: #FF6B35; }  /* Orange */
-.color-4 { fill: #2E7D32; stroke: #2E7D32; }  /* Green */
-.color-5 { fill: #7B1FA2; stroke: #7B1FA2; }  /* Purple */
-.color-6 { fill: #00838F; stroke: #00838F; }  /* Teal */
-.color-7 { fill: #F9A825; stroke: #F9A825; }  /* Yellow */
-.color-8 { fill: #5D4037; stroke: #5D4037; }  /* Brown */
+.color-1 {
+    fill: #CF0063;
+    stroke: #CF0063;
+}
+
+/* Primary magenta */
+.color-2 {
+    fill: #003366;
+    stroke: #003366;
+}
+
+/* Dark blue */
+.color-3 {
+    fill: #FF6B35;
+    stroke: #FF6B35;
+}
+
+/* Orange */
+.color-4 {
+    fill: #2E7D32;
+    stroke: #2E7D32;
+}
+
+/* Green */
+.color-5 {
+    fill: #7B1FA2;
+    stroke: #7B1FA2;
+}
+
+/* Purple */
+.color-6 {
+    fill: #00838F;
+    stroke: #00838F;
+}
+
+/* Teal */
+.color-7 {
+    fill: #F9A825;
+    stroke: #F9A825;
+}
+
+/* Yellow */
+.color-8 {
+    fill: #5D4037;
+    stroke: #5D4037;
+}
+
+/* Brown */
 
 /* Sentiment colors */
 .sentiment-negative {
@@ -176,26 +219,78 @@
 }
 
 /* Sequential scale (for heatmaps, choropleth) */
-.sequential-1 { fill: #FCE4EC; }
-.sequential-2 { fill: #F8BBD9; }
-.sequential-3 { fill: #F48FB1; }
-.sequential-4 { fill: #EC407A; }
-.sequential-5 { fill: #E91E63; }
-.sequential-6 { fill: #D81B60; }
-.sequential-7 { fill: #C2185B; }
-.sequential-8 { fill: #AD1457; }
-.sequential-9 { fill: #880E4F; }
+.sequential-1 {
+    fill: #FCE4EC;
+}
+
+.sequential-2 {
+    fill: #F8BBD9;
+}
+
+.sequential-3 {
+    fill: #F48FB1;
+}
+
+.sequential-4 {
+    fill: #EC407A;
+}
+
+.sequential-5 {
+    fill: #E91E63;
+}
+
+.sequential-6 {
+    fill: #D81B60;
+}
+
+.sequential-7 {
+    fill: #C2185B;
+}
+
+.sequential-8 {
+    fill: #AD1457;
+}
+
+.sequential-9 {
+    fill: #880E4F;
+}
 
 /* Diverging scale (for comparisons) */
-.diverging-negative-4 { fill: #B71C1C; }
-.diverging-negative-3 { fill: #D32F2F; }
-.diverging-negative-2 { fill: #EF5350; }
-.diverging-negative-1 { fill: #FFCDD2; }
-.diverging-neutral { fill: #EEEEEE; }
-.diverging-positive-1 { fill: #C8E6C9; }
-.diverging-positive-2 { fill: #66BB6A; }
-.diverging-positive-3 { fill: #388E3C; }
-.diverging-positive-4 { fill: #1B5E20; }
+.diverging-negative-4 {
+    fill: #B71C1C;
+}
+
+.diverging-negative-3 {
+    fill: #D32F2F;
+}
+
+.diverging-negative-2 {
+    fill: #EF5350;
+}
+
+.diverging-negative-1 {
+    fill: #FFCDD2;
+}
+
+.diverging-neutral {
+    fill: #EEEEEE;
+}
+
+.diverging-positive-1 {
+    fill: #C8E6C9;
+}
+
+.diverging-positive-2 {
+    fill: #66BB6A;
+}
+
+.diverging-positive-3 {
+    fill: #388E3C;
+}
+
+.diverging-positive-4 {
+    fill: #1B5E20;
+}
 
 /* ==========================================================================
    Bar Charts
@@ -376,6 +471,7 @@
         transform: scale(1);
         opacity: 0.5;
     }
+
     100% {
         transform: scale(2.5);
         opacity: 0;
@@ -557,9 +653,12 @@
 }
 
 @keyframes pulse-glow {
-    0%, 100% {
+
+    0%,
+    100% {
         filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.4));
     }
+
     50% {
         filter: drop-shadow(0 0 14px rgba(255, 68, 68, 0.7));
     }
@@ -851,9 +950,17 @@
     stroke: none;
 }
 
-.quality-high { fill: var(--color-positive); }
-.quality-medium { fill: var(--color-warning); }
-.quality-low { fill: var(--color-negative); }
+.quality-high {
+    fill: var(--color-positive);
+}
+
+.quality-medium {
+    fill: var(--color-warning);
+}
+
+.quality-low {
+    fill: var(--color-negative);
+}
 
 /* ==========================================================================
    Animation Classes
@@ -874,31 +981,53 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
 @keyframes drawLine {
-    to { stroke-dashoffset: 0; }
+    to {
+        stroke-dashoffset: 0;
+    }
 }
 
 /* Staggered animation delays */
-.animate-delay-1 { animation-delay: 0.1s; }
-.animate-delay-2 { animation-delay: 0.2s; }
-.animate-delay-3 { animation-delay: 0.3s; }
-.animate-delay-4 { animation-delay: 0.4s; }
-.animate-delay-5 { animation-delay: 0.5s; }
+.animate-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.animate-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.animate-delay-3 {
+    animation-delay: 0.3s;
+}
+
+.animate-delay-4 {
+    animation-delay: 0.4s;
+}
+
+.animate-delay-5 {
+    animation-delay: 0.5s;
+}
 
 /* ==========================================================================
    Conflict Timeline Chart
@@ -1007,19 +1136,19 @@
     .axis text {
         font-size: 10px;
     }
-    
+
     .axis-label {
         font-size: 11px;
     }
-    
+
     .chart-title-text {
         font-size: 14px;
     }
-    
+
     .legend-label {
         font-size: 10px;
     }
-    
+
     .data-label-text {
         font-size: 9px;
     }

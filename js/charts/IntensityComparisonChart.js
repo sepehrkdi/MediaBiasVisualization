@@ -105,18 +105,10 @@ export class IntensityComparisonChart {
             .attr('class', 'panel panel-bottom')
             .attr('transform', `translate(0, ${this.panelHeight + this.options.panelGap})`);
 
-        // Responsive Legend Positioning
-        // Increased threshold to 800px to avoid text overlap
-        const isCompact = this.width < 800;
-        const legendX = isCompact
-            ? this.options.margin.left
-            : this.options.margin.left + this.width - 200;
-        const legendY = isCompact ? 65 : 25;
-
         // Legend group
         this.legendGroup = this.svg.append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${legendX}, ${legendY})`);
+            .attr('transform', `translate(${this.options.margin.left + this.width - 200}, 25)`);
 
         this.titleGroup = this.svg.append('g')
             .attr('class', 'chart-title-group')
@@ -133,13 +125,17 @@ export class IntensityComparisonChart {
 
     updateDimensions() {
         const rect = this.container.getBoundingClientRect();
-        // Use container dimensions but ensure a safe minimum to prevent negative values
-        // Reduced minimums allow the chart to scale down to fit the new mobile layout (250px height)
-        this.width = Math.max((rect.width || 600) - this.options.margin.left - this.options.margin.right, 200);
-        this.height = Math.max((rect.height || 400) - this.options.margin.top - this.options.margin.bottom, 200);
+
+        // Handle cases where rect dimensions are unreliable (e.g., during zoom or initial render)
+        // Use offsetWidth/offsetHeight as fallback
+        const containerWidth = rect.width || this.container.offsetWidth || 800;
+        const containerHeight = rect.height || this.container.offsetHeight || 600;
+
+        this.width = Math.max(containerWidth - this.options.margin.left - this.options.margin.right, 400);
+        this.height = Math.max(containerHeight - this.options.margin.top - this.options.margin.bottom, 400);
 
         // Recalculate panel height
-        this.panelHeight = Math.max((this.height - this.options.panelGap) / 2, 80);
+        this.panelHeight = (this.height - this.options.panelGap) / 2;
     }
 
     render() {
