@@ -304,14 +304,30 @@ function updateMainChart(chartType, stepNumber) {
     const container = elements.mainChart;
     if (!container) return;
 
-    // Clear existing chart
+    // Destroy existing chart to prevent memory leaks and animation conflicts
+    if (state.charts.main) {
+        if (typeof state.charts.main.destroy === 'function') {
+            state.charts.main.destroy();
+        }
+        state.charts.main = null;
+    }
+
+    // Clear container content explicitly
     container.innerHTML = '';
 
     // Get appropriate chart class and data
     try {
         const chartConfig = getChartConfig(chartType, stepNumber);
 
-        if (chartConfig && chartConfig.ChartClass && chartConfig.data) {
+        if (chartConfig && chartConfig.ChartClass) {
+            // Check for valid data
+            if (!chartConfig.data || (typeof chartConfig.data === 'object' && Object.keys(chartConfig.data).length === 0)) {
+                console.warn(`No data available for chart type: ${chartType} (Step ${stepNumber})`);
+                // Optional: Show placeholder
+                // container.innerHTML = '<div class="chart-placeholder">Data missing</div>';
+                // return; 
+            }
+
             const { ChartClass, data, options } = chartConfig;
             const chart = new ChartClass(container, data, {
                 ...options,
@@ -319,9 +335,12 @@ function updateMainChart(chartType, stepNumber) {
                 animate: true
             });
             state.charts.main = chart;
+        } else {
+            console.warn(`Unknown chart type: ${chartType} for step ${stepNumber}`);
         }
     } catch (e) {
-        console.warn(`Failed to create chart for step ${stepNumber}:`, e);
+        console.error(`Failed to create chart for step ${stepNumber}:`, e);
+        container.innerHTML = `<div class="error-message">Error loading visualization: ${e.message}</div>`;
     }
 }
 

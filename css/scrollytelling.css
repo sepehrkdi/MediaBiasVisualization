@@ -657,25 +657,50 @@
 
     .sticky-container {
         flex: none;
+        position: sticky;
+        top: var(--header-height);
+        z-index: 1;
+        /* Ensure click events pass through the container's empty areas if any */
+        pointer-events: none;
     }
 
     .scroll-sections {
         flex: none;
         max-width: 100%;
+        position: relative;
+        z-index: 10;
+        pointer-events: none;
+        /* Allow clicks to pass through to chart */
+        background: transparent !important;
+        /* Ensure gaps are transparent */
+    }
+
+    .step-content {
+        pointer-events: auto;
+        /* Re-enable events on text cards */
     }
 
     .sticky-visual {
-        height: 50vh;
-        min-height: 400px;
+        pointer-events: auto;
+        /* Re-enable events on the visual itself */
+        height: 40vh;
+        min-height: 250px;
+        padding: var(--space-sm);
+        /* Reduce padding to maximize chart space */
     }
 
     .scroll-step {
-        min-height: auto;
-        padding: var(--space-xl) var(--container-padding);
+        min-height: 80vh;
+        /* Ensure steps are tall enough to space out text */
+        padding: 45vh var(--container-padding) var(--space-xl);
+        /* Top padding clears the chart area */
+        display: flex;
+        align-items: flex-start;
+        /* Align text to top of content area (just below chart space) */
     }
 
     .scroll-step:first-child {
-        padding-top: calc(50vh + var(--space-xl));
+        padding-top: 45vh;
     }
 
     .step-content {
@@ -705,12 +730,12 @@
     }
 
     .scroll-step {
-        min-height: auto;
-        padding: var(--space-lg) var(--container-padding);
+        min-height: 80vh;
+        padding: 50vh var(--container-padding) var(--space-lg);
     }
 
     .scroll-step:first-child {
-        padding-top: var(--space-lg);
+        padding-top: 50vh;
     }
 
     .scroll-step:last-child {
