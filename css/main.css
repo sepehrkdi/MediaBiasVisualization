@@ -418,6 +418,10 @@ body {
     transform: translateY(-2px);
 }
 
+.team-member-badge:visited {
+    color: var(--color-white);
+}
+
 .hero-title {
     font-family: 'Roboto Slab', Georgia, serif;
     font-size: clamp(2.5rem, 8vw, 5rem);
@@ -459,6 +463,19 @@ body {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.875rem;
     animation: pulse 2s infinite;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.scroll-indicator:hover {
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+.scroll-indicator:visited,
+.scroll-indicator:active,
+.scroll-indicator:focus {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .scroll-arrow {
