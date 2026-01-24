@@ -6,7 +6,7 @@
 :root {
     /* University of Genova Colors */
     --color-primary: #a32a26;
-    /* Accent Magenta */
+    /* Accent Red */
     --color-primary-dark: #cc6c27;
     --color-primary-light: #cc6c27;
     --color-secondary: #003366;
@@ -204,17 +204,6 @@ body {
     max-width: var(--container-max-width);
     margin: 0 auto;
     padding: 0 var(--container-padding);
-}
-
-.logo a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-}
-
-.unige-logo {
-    height: 40px;
-    width: auto;
 }
 
 .main-nav {
@@ -660,90 +649,6 @@ body {
 }
 
 /* ==========================================================================
-   Explore Section
-   ========================================================================== */
-
-.explore-section {
-    background: var(--bg-primary);
-}
-
-.explore-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-lg);
-    align-items: flex-end;
-    padding: var(--space-lg);
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius-lg);
-    margin-bottom: var(--space-xl);
-}
-
-.control-group {
-    flex: 1;
-    min-width: 180px;
-}
-
-.control-group label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-xs);
-}
-
-.filter-select {
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    font-family: inherit;
-    font-size: 1rem;
-    color: var(--text-primary);
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    cursor: pointer;
-    transition: border-color var(--transition-fast);
-}
-
-.filter-select:hover {
-    border-color: var(--color-gray-400);
-}
-
-.filter-select:focus {
-    border-color: var(--color-primary);
-    outline: none;
-}
-
-.explore-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);
-}
-
-.explore-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    padding: var(--space-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.explore-card.wide {
-    grid-column: span 2;
-}
-
-.explore-card h3 {
-    font-family: 'Roboto Slab', Georgia, serif;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-md);
-}
-
-.explore-card .chart-container {
-    min-height: 300px;
-}
-
-/* ==========================================================================
    Methodology Section
    ========================================================================== */
 
@@ -825,86 +730,6 @@ body {
     border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
     font-size: 0.875rem;
     color: var(--text-primary);
-}
-
-.data-flow {
-    margin-top: var(--space-xxl);
-    padding: var(--space-xl);
-    background: var(--bg-primary);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.data-flow h3 {
-    font-family: 'Roboto Slab', Georgia, serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: var(--space-lg);
-}
-
-.pipeline-description {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    font-size: 0.95rem;
-}
-
-.data-flow-description {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    font-size: 0.95rem;
-}
-
-.flow-diagram {
-    min-height: 200px;
-}
-
-/* Interactive Pipeline Styles */
-.pipeline-details {
-    margin-top: var(--space-xl);
-    padding: var(--space-lg);
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius-md);
-    border-left: 4px solid var(--color-primary);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.pipeline-details.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.pipeline-detail-content h4 {
-    font-family: 'Roboto Slab', Georgia, serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-sm);
-}
-
-.pipeline-detail-content p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* Pipeline node hover states */
-.pipeline-node {
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.pipeline-node:hover {
-    transform: scale(1.05);
-    filter: brightness(1.1);
-}
-
-.pipeline-node.active {
-    filter: drop-shadow(0 0 8px var(--color-primary));
 }
 
 /* ==========================================================================

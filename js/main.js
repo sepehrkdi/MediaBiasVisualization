@@ -89,20 +89,6 @@ async function init() {
             console.warn('Scrollytelling setup failed:', e);
         }
 
-        // Setup explore section
-        try {
-            setupExploreSection();
-        } catch (e) {
-            console.warn('Explore section setup failed:', e);
-        }
-
-        // Setup data flow diagram
-        try {
-            setupDataFlowDiagram();
-        } catch (e) {
-            console.warn('Data flow diagram setup failed:', e);
-        }
-
         // Hide loading overlay
         hideLoading();
 
@@ -124,7 +110,6 @@ async function loadAllData() {
         { key: 'conflictTimeline', path: 'data/conflict_timeline.json' },
         { key: 'yemenMyanmarTimeline', path: 'data/yemen_myanmar_timeline.json' },
         { key: 'bosniaAfghanistanTimeline', path: 'data/bosnia_afghanistan_timeline.json' },
-        { key: 'afghanistanKivuTimeline', path: 'data/afghanistan_kivu_timeline.json' },
         // Regional pie chart data
         { key: 'westAfricaPie', path: 'data/west_africa_piechart_data.json' },
         { key: 'balkansPie', path: 'data/balkans_piechart_data.json' },
@@ -228,8 +213,6 @@ async function initializeCharts() {
         'yemen-myanmar-timeline': () => Charts.ConflictTimelineChart,
         'bosnia-afghanistan-intensity': () => Charts.IntensityComparisonChart,
         'bosnia-afghanistan-timeline': () => Charts.ConflictTimelineChart,
-        'afghanistan-kivu-intensity': () => Charts.IntensityComparisonChart,
-        'afghanistan-kivu-timeline': () => Charts.ConflictTimelineChart,
         'regional-pie-west-africa': () => Charts.PieChart,
         'regional-pie-balkans': () => Charts.PieChart,
         'regional-pie-central-africa': () => Charts.PieChart,
@@ -453,45 +436,6 @@ function getChartConfig(chartType, stepNumber) {
                 }
             }
         },
-        'afghanistan-kivu-intensity': {
-            ChartClass: Charts.IntensityComparisonChart,
-            data: state.data.afghanistanKivuTimeline,
-            options: {
-                title: 'Conflict Intensity: Afghanistan vs Kivu',
-                countries: {
-                    country1: {
-                        name: 'Afghanistan',
-                        fieldPrefix: 'country1',
-                        color: '#ff7f0e'
-                    },
-                    country2: {
-                        name: 'Kivu',
-                        fieldPrefix: 'country2',
-                        color: '#2ca02c'
-                    }
-                }
-            }
-        },
-        'afghanistan-kivu-timeline': {
-            ChartClass: Charts.ConflictTimelineChart,
-            data: state.data.afghanistanKivuTimeline,
-            options: {
-                title: 'The Forgotten Crisis: Afghanistan vs Kivu (2001-2016)',
-                chartType: 'stacked-area',
-                countries: {
-                    country1: {
-                        name: 'Afghanistan',
-                        fieldPrefix: 'country1',
-                        color: '#ff7f0e'
-                    },
-                    country2: {
-                        name: 'Kivu',
-                        fieldPrefix: 'country2',
-                        color: '#2ca02c'
-                    }
-                }
-            }
-        },
         // Regional Pie Charts
         'regional-pie-west-africa': {
             ChartClass: Charts.PieChart,
@@ -562,118 +506,6 @@ function getChartConfig(chartType, stepNumber) {
     };
 
     return configs[chartType];
-}
-
-/**
- * Setup explore section interactivity (placeholder - no longer used)
- */
-function setupExploreSection() {
-    // Explore section has been removed from the application
-}
-
-/**
- * Setup data flow diagram in methodology section (placeholder - FlowDiagram removed)
- */
-function setupDataFlowDiagram() {
-    // FlowDiagram chart type has been removed from the application
-}
-
-/**
- * Setup interactive pipeline stage details
- */
-function setupPipelineInteractivity(descriptions) {
-    const detailsPanel = document.getElementById('pipeline-details');
-    const titleEl = document.getElementById('pipeline-detail-title');
-    const descEl = document.getElementById('pipeline-detail-description');
-
-    if (!detailsPanel || !titleEl || !descEl) return;
-
-    // Add click handlers to pipeline nodes
-    const diagram = document.getElementById('data-flow-diagram');
-    if (!diagram) return;
-
-    // Use MutationObserver to wait for SVG to be created
-    const observer = new MutationObserver((mutations, obs) => {
-        const svg = diagram.querySelector('svg');
-        if (svg) {
-            obs.disconnect();
-            addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl);
-        }
-    });
-
-    observer.observe(diagram, { childList: true, subtree: true });
-
-    // Also check if SVG already exists
-    const existingSvg = diagram.querySelector('svg');
-    if (existingSvg) {
-        observer.disconnect();
-        addPipelineNodeHandlers(existingSvg, descriptions, detailsPanel, titleEl, descEl);
-    }
-}
-
-/**
- * Add click handlers to pipeline SVG nodes
- */
-function addPipelineNodeHandlers(svg, descriptions, detailsPanel, titleEl, descEl) {
-    const nodeGroups = svg.querySelectorAll('.node');
-    let activeNode = null;
-
-    nodeGroups.forEach(nodeGroup => {
-        nodeGroup.classList.add('pipeline-node');
-
-        nodeGroup.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            // Get node id from the group or text
-            const textEl = nodeGroup.querySelector('text');
-            const label = textEl ? textEl.textContent : '';
-
-            // Map label to id
-            const labelToId = {
-                'UCDP Database': 'ucdp',
-                'Jupyter Notebooks': 'notebooks',
-                'CSV/JSON Files': 'csv',
-                'D3.js Visualizations': 'd3'
-            };
-
-            const nodeId = labelToId[label];
-            if (!nodeId || !descriptions[nodeId]) return;
-
-            // Update active state
-            if (activeNode) {
-                activeNode.classList.remove('active');
-            }
-            nodeGroup.classList.add('active');
-            activeNode = nodeGroup;
-
-            // Update details panel
-            const info = descriptions[nodeId];
-            titleEl.textContent = info.title;
-            descEl.textContent = info.description;
-            detailsPanel.classList.add('visible');
-        });
-
-        // Keyboard accessibility
-        nodeGroup.setAttribute('tabindex', '0');
-        nodeGroup.setAttribute('role', 'button');
-        nodeGroup.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                nodeGroup.click();
-            }
-        });
-    });
-
-    // Click outside to hide details
-    document.addEventListener('click', (e) => {
-        if (!detailsPanel.contains(e.target) && !svg.contains(e.target)) {
-            detailsPanel.classList.remove('visible');
-            if (activeNode) {
-                activeNode.classList.remove('active');
-                activeNode = null;
-            }
-        }
-    });
 }
 
 /**

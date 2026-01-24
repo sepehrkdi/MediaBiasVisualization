@@ -67,7 +67,9 @@ Project/
 ├── assets/
 │   └── images/               # Visual assets and favicon
 ├── preprocessing/
-│   └── GED_pythonsearch.ipynb # UCDP data processing notebook
+│   ├── GED_pythonsearch.ipynb # General UCDP data processing
+│   ├── BA.ipynb               # Bosnia vs Afghanistan processing
+│   └── SYM.ipynb              # Syria/Yemen/Myanmar processing
 └── README.md
 ```
 
@@ -102,15 +104,15 @@ The storytelling experience includes 13 interactive steps:
 |------|--------------|-------------|
 | 1 | Animated Choropleth Map | Global conflict fatalities timeline (1989-2024) |
 | 2-7 | Regional Pie Charts | Distribution of conflicts in 6 regions |
-| 8-9 | Dual-Axis Line Charts | Sierra Leone vs Liberia intensity & events |
-| 10-11 | Stacked Area Charts | Yemen vs Myanmar comparison |
-| 12-13 | Multi-Panel Charts | Bosnia vs Afghanistan historical parallel |
+| 8-9 | Intensity & Stacked Area | Africa Deep Dive (Sierra Leone vs Liberia) |
+| 10-11 | Intensity & Stacked Area | Modern Contrast (Yemen vs Myanmar) |
+| 12-13 | Intensity & Stacked Area | Historical Parallel (Bosnia vs Afghanistan) |
 
 ### Chart Types
 
 - **Animated Choropleth**: Shows fatalities by country with year-by-year animation
 - **Interactive Pie Charts**: Click to isolate countries, hover for statistics
-- **Line Charts with Dual Axes**: Compare event frequency vs. casualties per event
+- **Intensity Comparison Charts**: Compare event frequency vs. casualties per event (Dual Axes)
 - **Stacked Area Charts**: Cumulative death tolls over time
 
 ---
@@ -121,7 +123,7 @@ The storytelling experience includes 13 interactive steps:
 
 | Variable | Usage |
 |----------|-------|
-| `--color-primary` | Primary accent (UniGE magenta) |
+| `--color-primary` | Primary accent (UniGE Red) |
 | `--color-secondary` | Secondary accent (dark blue) |
 | `--color-positive` | Positive/low severity |
 | `--color-negative` | Negative/high severity |
@@ -154,8 +156,8 @@ The **GED (Georeferenced Event Dataset)** provides individual conflict events wi
 
 ### Limitations
 
-1. **Documentation Gaps**: UCDP coverage varies by region; some conflicts may be underreported
-2. **Access Limitations**: Remote or dangerous areas have less complete data
+1. **Documentation Gaps**: UCDP coverage varies by region; some conflicts may be underreported due to access limitations
+2. **Automated Processing**: Event extraction and sentiment analysis use algorithms that can misclassify content
 3. **Temporal Inconsistency**: Coverage may vary for certain periods
 4. **Definitional Ambiguity**: "Bias" is contested; our analysis offers one interpretation
 5. **Correlation ≠ Causation**: Patterns don't reveal editorial decision-making processes
@@ -198,7 +200,7 @@ This project is for educational purposes as part of the University of Genova Dat
 - [UCDP (Uppsala Conflict Data Program)](https://ucdp.uu.se/) for the conflict event data
 - [D3.js](https://d3js.org/) for visualization library
 - [University of Genova](https://www.unige.it/) for the course framework
-- [Natural Earth](https://www.naturalearthdata.com/) for geographic data
+- [World Atlas](https://github.com/topojson/world-atlas) (based on Natural Earth) for geographic data
 
 ---
 
