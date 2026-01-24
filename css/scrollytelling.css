@@ -248,7 +248,7 @@
 .sticky-visual .chart-wrapper {
     width: 100%;
     max-width: 900px;
-    height: 80%;
+    height: 90%;
     max-height: 600px;
     background: var(--bg-primary);
     border-radius: var(--border-radius-lg);

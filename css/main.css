@@ -5,10 +5,10 @@
 /* CSS Custom Properties (Variables) */
 :root {
     /* University of Genova Colors */
-    --color-primary: #CF0063;
+    --color-primary: #a32a26;
     /* Accent Magenta */
-    --color-primary-dark: #A30050;
-    --color-primary-light: #E6337F;
+    --color-primary-dark: #cc6c27;
+    --color-primary-light: #cc6c27;
     --color-secondary: #003366;
     /* Dark Blue */
     --color-secondary-light: #004C99;
@@ -200,7 +200,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 100%;
+    height: 80%;
     max-width: var(--container-max-width);
     margin: 0 auto;
     padding: 0 var(--container-padding);
