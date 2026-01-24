@@ -429,8 +429,19 @@ function handleStepEnter(step, direction) {
  */
 function updateChapterTheme(chapter) {
     const stickyVisual = document.querySelector('.sticky-visual');
-    if (stickyVisual && chapter) {
-        stickyVisual.setAttribute('data-theme', chapter);
+    const scrollSections = document.querySelector('.scroll-sections');
+    const stickyContainer = document.querySelector('.sticky-container');
+
+    if (chapter) {
+        if (stickyVisual) {
+            stickyVisual.setAttribute('data-theme', chapter);
+        }
+        if (scrollSections) {
+            scrollSections.setAttribute('data-theme', chapter);
+        }
+        if (stickyContainer) {
+            stickyContainer.setAttribute('data-theme', chapter);
+        }
     }
 }
 

@@ -209,6 +209,28 @@
 .sticky-container {
     flex: 1;
     position: relative;
+    transition: background var(--transition-slow);
+}
+
+/* Dynamic background themes for sticky-container - fills entire left side */
+.sticky-container[data-theme="global"] {
+    background: var(--chapter-global-bg);
+}
+
+.sticky-container[data-theme="regional"] {
+    background: var(--chapter-regional-bg);
+}
+
+.sticky-container[data-theme="africa"] {
+    background: var(--chapter-africa-bg);
+}
+
+.sticky-container[data-theme="modern"] {
+    background: var(--chapter-modern-bg);
+}
+
+.sticky-container[data-theme="historical"] {
+    background: var(--chapter-historical-bg);
 }
 
 .sticky-visual {
@@ -250,6 +272,28 @@
     pointer-events: none;
     flex: 0 0 450px;
     max-width: 450px;
+    transition: background var(--transition-slow);
+}
+
+/* Dynamic background themes for scroll-sections - matches sticky-visual */
+.scroll-sections[data-theme="global"] {
+    background: var(--chapter-global-bg);
+}
+
+.scroll-sections[data-theme="regional"] {
+    background: var(--chapter-regional-bg);
+}
+
+.scroll-sections[data-theme="africa"] {
+    background: var(--chapter-africa-bg);
+}
+
+.scroll-sections[data-theme="modern"] {
+    background: var(--chapter-modern-bg);
+}
+
+.scroll-sections[data-theme="historical"] {
+    background: var(--chapter-historical-bg);
 }
 
 .scroll-step {
