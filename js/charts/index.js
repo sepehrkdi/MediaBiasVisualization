@@ -6,44 +6,19 @@
 // Base chart
 export { BaseChart } from './BaseChart.js';
 
-// Core chart types
-export { BarChart, DivergingBarChart, StackedBarChart } from './BarChart.js';
+// Core chart types (only those actually used in the application)
 export { PieChart } from './PieChart.js';
-export { LineChart, AreaChart, MultiLineChart } from './LineChart.js';
 export { ChoroplethMap } from './ChoroplethMap.js';
 export { AnimatedChoroplethMap } from './AnimatedChoroplethMap.js';
-export { NetworkGraph } from './NetworkGraph.js';
 export { ConflictTimelineChart } from './ConflictTimelineChart.js';
-
-// Additional chart types
-export { 
-    ScatterPlot,
-    TreeMap,
-    RadarChart,
-    Histogram,
-    ParallelCoordinates,
-    UncertaintyChart,
-    FlowDiagram
-} from './OtherCharts.js';
+export { IntensityComparisonChart } from './IntensityComparisonChart.js';
 
 // Chart registry for dynamic instantiation
 export const ChartRegistry = {
-    bar: 'BarChart',
-    diverging: 'DivergingBarChart',
-    stacked: 'StackedBarChart',
-    line: 'LineChart',
-    area: 'AreaChart',
-    multiline: 'MultiLineChart',
     map: 'ChoroplethMap',
-    network: 'NetworkGraph',
-    scatter: 'ScatterPlot',
-    treemap: 'TreeMap',
-    radar: 'RadarChart',
-    histogram: 'Histogram',
-    parallel: 'ParallelCoordinates',
-    uncertainty: 'UncertaintyChart',
-    flow: 'FlowDiagram',
+    animatedMap: 'AnimatedChoroplethMap',
     conflictTimeline: 'ConflictTimelineChart',
+    intensityComparison: 'IntensityComparisonChart',
     pie: 'PieChart',
     'regional-pie': 'PieChart'
 };
@@ -51,53 +26,29 @@ export const ChartRegistry = {
 // Charts namespace for convenient access
 export const Charts = {
     BaseChart,
-    BarChart,
-    DivergingBarChart,
-    StackedBarChart,
-    LineChart,
-    AreaChart,
-    MultiLineChart,
     ChoroplethMap,
-    NetworkGraph,
-    ScatterPlot,
-    TreeMap,
-    RadarChart,
-    Histogram,
-    ParallelCoordinates,
-    UncertaintyChart,
-    FlowDiagram,
+    AnimatedChoroplethMap,
     ConflictTimelineChart,
+    IntensityComparisonChart,
     PieChart
 };
 
 // Factory function to create charts
 export function createChart(type, container, data, options = {}) {
     const chartMap = {
-        bar: BarChart,
-        diverging: DivergingBarChart,
-        stacked: StackedBarChart,
-        line: LineChart,
-        area: AreaChart,
-        multiline: MultiLineChart,
         map: ChoroplethMap,
-        network: NetworkGraph,
-        scatter: ScatterPlot,
-        treemap: TreeMap,
-        radar: RadarChart,
-        histogram: Histogram,
-        parallel: ParallelCoordinates,
-        uncertainty: UncertaintyChart,
-        flow: FlowDiagram,
+        animatedMap: AnimatedChoroplethMap,
         conflictTimeline: ConflictTimelineChart,
+        intensityComparison: IntensityComparisonChart,
         pie: PieChart,
         'regional-pie': PieChart
     };
-    
+
     const ChartClass = chartMap[type];
     if (!ChartClass) {
         console.error(`Unknown chart type: ${type}`);
         return null;
     }
-    
+
     return new ChartClass(container, data, options);
 }
