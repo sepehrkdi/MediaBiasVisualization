@@ -1,25 +1,31 @@
-# Global Media Bias Visualization
+# Shifting Spotlights: How Global Media Attention Changes During Crises
 
-A data-driven storytelling website that explores global media bias using GDELT data, D3.js visualizations, and a scroll-driven narrative.
+A data-driven scrollytelling visualization exploring global conflict patterns and media attention disparities using UCDP data, D3.js, and interactive storytelling.
 
 **Team**: EsfViz  
 **Course**: Data Visualization 2025-2026, University of Genova  
-**Members**: Sepehr Khodadadi, Hesam Mohebi, Bahar Khalilian  
+**Members**: [Sepehr Khodadadi](https://www.linkedin.com/in/sepehr-khodadadi/), [Hesam Mohebi](https://www.linkedin.com/in/hesam-mohebi-579699199), [Bahar Khalilian](https://ir.linkedin.com/in/bahaar-khalilian-a68716198)  
 **Repository**: https://github.com/sepehrkdi/MediaBiasVisualization.git
 
 ---
 
 ## 🎯 Project Overview
 
-This project presents an interactive exploration of how global media outlets cover world events, revealing patterns of bias, sentiment, and geographic focus in news coverage. The visualization uses data from the GDELT (Global Database of Events, Language, and Tone) project.
+This project presents an interactive exploration of how global conflicts receive varying levels of media attention, revealing patterns where some crises dominate headlines while others—often deadlier—remain invisible. We analyze data from the **UCDP (Uppsala Conflict Data Program)**, one of the world's most comprehensive datasets on organized violence, spanning **1989 to 2024**.
+
+### Key Questions We Explore
+
+- Which conflicts get attention and which are forgotten?
+- Does media coverage correlate with conflict severity?
+- How do geographic proximity and geopolitical interests affect reporting?
 
 ### Key Features
 
-- **Scroll-driven Storytelling**: Narrative unfolds as users scroll through the page
-- **Interactive D3.js Visualizations**: 10+ chart types including choropleth maps, network graphs, and temporal trends
-- **Uncertainty Visualization**: Confidence intervals and sample size indicators throughout
+- **Scroll-driven Storytelling**: 13 narrative steps guiding users through the data
+- **Interactive D3.js Visualizations**: Choropleth maps, pie charts, line charts, and stacked area charts
+- **Regional Case Studies**: West Africa, Balkans, Central Africa, Middle East, South Asia, Southeast Asia
+- **Comparative Analysis**: Side-by-side conflict comparisons (Sierra Leone vs Liberia, Bosnia vs Afghanistan, Yemen vs Myanmar)
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Methodology Section**: Full transparency about data sources, limitations, and analysis methods
 
 ---
 
@@ -35,7 +41,7 @@ Project/
 │   ├── scrollytelling.css    # Scroll-driven narrative styles
 │   └── responsive.css        # Mobile-first responsive design
 ├── js/
-│   ├── main.js               # Application entry point
+│   ├── main.js               # Application entry point & chart logic
 │   ├── modules/
 │   │   ├── dataManager.js    # Data loading and transformation
 │   │   ├── scrollytelling.js # Scroll-based navigation
@@ -44,22 +50,23 @@ Project/
 │   └── charts/
 │       ├── index.js          # Chart exports
 │       ├── BaseChart.js      # Foundation chart class
-│       ├── BarChart.js       # Bar chart variants
-│       ├── LineChart.js      # Line and area charts
-│       ├── ChoroplethMap.js  # Geographic visualization
-│       ├── NetworkGraph.js   # Force-directed network
-│       └── OtherCharts.js    # Additional chart types
+│       └── ...               # Additional chart modules
 ├── data/
-│   ├── sentiment_by_source.json
-│   ├── country_coverage.json
-│   ├── bias_comparison.json
-│   ├── event_types.json
-│   ├── source_network.json
-│   └── temporal_trends.json
+│   ├── choropleth_yearly.json           # Global fatalities by country/year
+│   ├── west_africa_piechart_data.json   # West Africa regional distribution
+│   ├── balkans_piechart_data.json       # Balkans regional distribution
+│   ├── central_africa_piechart_data.json# Central Africa regional distribution
+│   ├── middle_east_piechart_data.json   # Middle East regional distribution
+│   ├── south_asia_piechart_data.json    # South Asia regional distribution
+│   ├── southeast_asia_piechart_data.json# Southeast Asia regional distribution
+│   ├── conflict_timeline.json           # Sierra Leone vs Liberia comparison
+│   ├── bosnia_afghanistan_timeline.json # Bosnia vs Afghanistan comparison
+│   ├── yemen_myanmar_timeline.json      # Yemen vs Myanmar comparison
+│   └── ...                              # Additional data files
+├── assets/
+│   └── images/               # Visual assets and favicon
 ├── preprocessing/
-│   ├── GED_pythonsearch.ipynb # UCDP data processing notebook
-│   ├── generate_sample_data.py
-│   └── requirements.txt
+│   └── GED_pythonsearch.ipynb # UCDP data processing notebook
 └── README.md
 ```
 
@@ -67,56 +74,43 @@ Project/
 
 ## 🚀 Quick Start
 
-### Option 1: View Demo (No Database Required)
-
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/sepehrkdi/MediaBiasVisualization.git
    cd MediaBiasVisualization
    ```
 
-2. Serve the files locally:
+2. **Start a local server**:
    ```bash
    # Using Python
-   python -m http.server 8000
+   python -m http.server 8080
    
    # Or using Node.js
    npx serve .
    ```
 
-3. Open http://localhost:8000 in your browser
-
-### Option 2: Full Setup with Database
-
-See [Database Setup](#-database-setup) section below.
-
----
-
-
-## 🛠️ Data Processing
-
-The project uses UCDP data which is processed using Jupyter notebooks.
-
-### Processing Steps
-
-1.  **Data Ingestion**: Raw UCDP GEM data is loaded into pandas dataframes.
-2.  **Filtering & Cleaning**: Events are filtered by date range and quality thresholds.
-3.  **Aggregation**: Data is aggregated by region, year, and conflict to produce the JSON files used for visualization.
-
+3. **Open in browser**: Navigate to http://localhost:8080
 
 ---
 
 ## 📊 Visualizations
 
-| Chart Type | Purpose | Data Source |
-|------------|---------|-------------|
-| Choropleth Map | Geographic coverage patterns | `country_coverage.json` |
-| Diverging Bar Chart | Source sentiment comparison | `bias_comparison.json` |
-| Line Chart with CI | Temporal trends | `temporal_trends.json` |
-| Network Graph | Source citation network | `source_network.json` |
-| TreeMap | Event type distribution | `event_types.json` |
-| Scatter Plot | Sentiment vs. coverage | `sentiment_by_source.json` |
-| Uncertainty Chart | Confidence intervals | Various |
+The storytelling experience includes 13 interactive steps:
+
+| Step | Visualization | Description |
+|------|--------------|-------------|
+| 1 | Animated Choropleth Map | Global conflict fatalities timeline (1989-2024) |
+| 2-7 | Regional Pie Charts | Distribution of conflicts in 6 regions |
+| 8-9 | Dual-Axis Line Charts | Sierra Leone vs Liberia intensity & events |
+| 10-11 | Stacked Area Charts | Yemen vs Myanmar comparison |
+| 12-13 | Multi-Panel Charts | Bosnia vs Afghanistan historical parallel |
+
+### Chart Types
+
+- **Animated Choropleth**: Shows fatalities by country with year-by-year animation
+- **Interactive Pie Charts**: Click to isolate countries, hover for statistics
+- **Line Charts with Dual Axes**: Compare event frequency vs. casualties per event
+- **Stacked Area Charts**: Cumulative death tolls over time
 
 ---
 
@@ -124,13 +118,13 @@ The project uses UCDP data which is processed using Jupyter notebooks.
 
 ### Colors
 
-| Variable | Hex | Usage |
-|----------|-----|-------|
-| `--color-primary` | `#CF0063` | Primary accent (UniGE magenta) |
-| `--color-secondary` | `#003366` | Secondary accent (dark blue) |
-| `--color-positive` | `#2E7D32` | Positive sentiment |
-| `--color-negative` | `#C62828` | Negative sentiment |
-| `--color-neutral` | `#757575` | Neutral sentiment |
+| Variable | Usage |
+|----------|-------|
+| `--color-primary` | Primary accent (UniGE magenta) |
+| `--color-secondary` | Secondary accent (dark blue) |
+| `--color-positive` | Positive/low severity |
+| `--color-negative` | Negative/high severity |
+| Chapter-specific gradients | Background themes for each story chapter |
 
 ### Typography
 
@@ -144,25 +138,26 @@ The project uses UCDP data which is processed using Jupyter notebooks.
 
 ### Data Source
 
-This project uses [GDELT](https://www.gdeltproject.org/), which monitors print, broadcast, and online news from nearly every country in every language.
+**UCDP (Uppsala Conflict Data Program)** is one of the world's most comprehensive datasets on organized violence, tracking:
+- State-based conflicts
+- Non-state conflicts
+- One-sided violence
 
-### Sentiment Analysis
+The **GED (Georeferenced Event Dataset)** provides individual conflict events with precise locations and fatality estimates.
 
-- **AVG Tone**: GDELT's composite tone score (-100 to +100)
-- **Goldstein Scale**: Conflict-cooperation scale (-10 to +10)
+### Key Metrics
+
+- **Events**: Number of documented violent incidents
+- **Fatalities**: Best estimates of deaths per event
+- **Casualties per Event**: Intensity proxy (deaths ÷ events)
 
 ### Limitations
 
-1. **Selection Bias**: GDELT monitors English-language and translated content primarily
-2. **Temporal Coverage**: Analysis limited to available data period
-3. **Aggregation**: Individual article nuance lost in aggregation
-4. **Classification**: Automated coding may introduce errors
-
-### Statistical Methods
-
-- 95% confidence intervals using t-distribution
-- Rolling averages for temporal smoothing (4-week window)
-- Minimum sample sizes enforced (n ≥ 100 for source analysis)
+1. **Documentation Gaps**: UCDP coverage varies by region; some conflicts may be underreported
+2. **Access Limitations**: Remote or dangerous areas have less complete data
+3. **Temporal Inconsistency**: Coverage may vary for certain periods
+4. **Definitional Ambiguity**: "Bias" is contested; our analysis offers one interpretation
+5. **Correlation ≠ Causation**: Patterns don't reveal editorial decision-making processes
 
 ---
 
@@ -180,7 +175,7 @@ npx browser-sync start --server --files "**/*.html, **/*.css, **/*.js"
 - ES6 modules for JavaScript
 - CSS custom properties for theming
 - Semantic HTML5 elements
-- No inline SVG styles (all via CSS selectors)
+- D3.js v7 for visualizations
 
 ### Browser Support
 
@@ -199,7 +194,7 @@ This project is for educational purposes as part of the University of Genova Dat
 
 ## 🙏 Acknowledgments
 
-- [GDELT Project](https://www.gdeltproject.org/) for the data
+- [UCDP (Uppsala Conflict Data Program)](https://ucdp.uu.se/) for the conflict event data
 - [D3.js](https://d3js.org/) for visualization library
 - [University of Genova](https://www.unige.it/) for the course framework
 - [Natural Earth](https://www.naturalearthdata.com/) for geographic data
@@ -209,9 +204,9 @@ This project is for educational purposes as part of the University of Genova Dat
 ## 📞 Contact
 
 **EsfViz Team**  
-- Sepehr Khodadadi
-- Hesam Mohebi
-- Bahar Khalilian
+- [Sepehr Khodadadi](https://www.linkedin.com/in/sepehr-khodadadi/)
+- [Hesam Mohebi](https://www.linkedin.com/in/hesam-mohebi-579699199)
+- [Bahar Khalilian](https://ir.linkedin.com/in/bahaar-khalilian-a68716198)
 
 Data Visualization 2025-2026  
 University of Genova
