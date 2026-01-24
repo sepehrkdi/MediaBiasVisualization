@@ -511,7 +511,7 @@ function getChartConfig(chartType, stepNumber) {
                 title: 'Global Conflict Events Over Time',
                 metric: 'fatalities',
                 animationSpeed: 1000,
-                autoPlay: false,
+                autoPlay: true,
                 loop: true,
                 colorScheme: 'interpolateYlOrRd',
                 zoomable: false
