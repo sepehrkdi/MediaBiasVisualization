@@ -367,7 +367,6 @@ export class IntensityComparisonChart {
             .attr('y2', yScale(c1Avg))
             .attr('stroke', c1.color)
             .attr('stroke-width', 1.5)
-            .attr('stroke-dasharray', '8,4')
             .attr('opacity', 0.7);
 
         c1AvgGroup.append('text')
@@ -389,7 +388,6 @@ export class IntensityComparisonChart {
             .attr('y2', yScale(c2Avg))
             .attr('stroke', c2.color)
             .attr('stroke-width', 1.5)
-            .attr('stroke-dasharray', '8,4')
             .attr('opacity', 0.7);
 
         c2AvgGroup.append('text')
@@ -432,9 +430,13 @@ export class IntensityComparisonChart {
             .attr('stroke-width', 2.5);
 
         // Animate
+        // Animate
         if (this.options.animate) {
             this.animateLine(c1Path);
             this.animateLine(c2Path);
+        } else {
+            c1Path.attr('stroke-dasharray', '4,4');
+            c2Path.attr('stroke-dasharray', '4,4');
         }
 
         // Data points
@@ -451,7 +453,7 @@ export class IntensityComparisonChart {
             .duration(this.options.animationDuration)
             .ease(d3.easeLinear)
             .attr('stroke-dashoffset', 0)
-            .on('end', () => path.attr('stroke-dasharray', null));
+            .on('end', () => path.attr('stroke-dasharray', '4,4'));
     }
 
     renderDataPoints(panel, timeline, field, country, yScale, type) {

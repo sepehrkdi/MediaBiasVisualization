@@ -376,9 +376,13 @@ export class ConflictTimelineChart {
             .attr('stroke-width', 2.5);
 
         // Animate lines
+        // Animate lines
         if (this.options.animate) {
             this.animateLine(country1Path);
             this.animateLine(country2Path);
+        } else {
+            country1Path.attr('stroke-dasharray', '4,4');
+            country2Path.attr('stroke-dasharray', '4,4');
         }
 
         // Add data points with hover
@@ -460,8 +464,8 @@ export class ConflictTimelineChart {
             .ease(d3.easeLinear)
             .attr('stroke-dashoffset', 0)
             .on('end', () => {
-                // Clean up after animation
-                path.attr('stroke-dasharray', null);
+                // Set to dashed line after animation to indicate interpolation
+                path.attr('stroke-dasharray', '4,4');
             });
     }
 
