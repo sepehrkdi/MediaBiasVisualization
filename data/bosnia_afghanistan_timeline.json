@@ -377,168 +377,6 @@
       "country2Deaths": 321,
       "country2Events": 33,
       "country2CasualtiesPerEvent": 9.73
-    },
-    {
-      "year_month": "1995-07",
-      "country1Deaths": 13659,
-      "country1Events": 114,
-      "country1CasualtiesPerEvent": 119.82,
-      "country2Deaths": 239,
-      "country2Events": 13,
-      "country2CasualtiesPerEvent": 18.38
-    },
-    {
-      "year_month": "1995-08",
-      "country1Deaths": 260,
-      "country1Events": 47,
-      "country1CasualtiesPerEvent": 5.53,
-      "country2Deaths": 280,
-      "country2Events": 21,
-      "country2CasualtiesPerEvent": 13.33
-    },
-    {
-      "year_month": "1995-09",
-      "country1Deaths": 792,
-      "country1Events": 36,
-      "country1CasualtiesPerEvent": 22.0,
-      "country2Deaths": 129,
-      "country2Events": 10,
-      "country2CasualtiesPerEvent": 12.9
-    },
-    {
-      "year_month": "1995-10",
-      "country1Deaths": 309,
-      "country1Events": 15,
-      "country1CasualtiesPerEvent": 20.6,
-      "country2Deaths": 645,
-      "country2Events": 18,
-      "country2CasualtiesPerEvent": 35.83
-    },
-    {
-      "year_month": "1995-11",
-      "country1Deaths": 3,
-      "country1Events": 2,
-      "country1CasualtiesPerEvent": 1.5,
-      "country2Deaths": 406,
-      "country2Events": 22,
-      "country2CasualtiesPerEvent": 18.45
-    },
-    {
-      "year_month": "1995-12",
-      "country1Deaths": 6,
-      "country1Events": 2,
-      "country1CasualtiesPerEvent": 3.0,
-      "country2Deaths": 148,
-      "country2Events": 19,
-      "country2CasualtiesPerEvent": 7.79
-    },
-    {
-      "year_month": "1996-01",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 109,
-      "country2Events": 20,
-      "country2CasualtiesPerEvent": 5.45
-    },
-    {
-      "year_month": "1996-02",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 431,
-      "country2Events": 23,
-      "country2CasualtiesPerEvent": 18.74
-    },
-    {
-      "year_month": "1996-03",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 185,
-      "country2Events": 18,
-      "country2CasualtiesPerEvent": 10.28
-    },
-    {
-      "year_month": "1996-04",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 390,
-      "country2Events": 24,
-      "country2CasualtiesPerEvent": 16.25
-    },
-    {
-      "year_month": "1996-05",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 233,
-      "country2Events": 16,
-      "country2CasualtiesPerEvent": 14.56
-    },
-    {
-      "year_month": "1996-06",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 197,
-      "country2Events": 17,
-      "country2CasualtiesPerEvent": 11.59
-    },
-    {
-      "year_month": "1996-07",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 151,
-      "country2Events": 21,
-      "country2CasualtiesPerEvent": 7.19
-    },
-    {
-      "year_month": "1996-08",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 88,
-      "country2Events": 12,
-      "country2CasualtiesPerEvent": 7.33
-    },
-    {
-      "year_month": "1996-09",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 554,
-      "country2Events": 25,
-      "country2CasualtiesPerEvent": 22.16
-    },
-    {
-      "year_month": "1996-10",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 514,
-      "country2Events": 27,
-      "country2CasualtiesPerEvent": 19.04
-    },
-    {
-      "year_month": "1996-11",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 649,
-      "country2Events": 22,
-      "country2CasualtiesPerEvent": 29.5
-    },
-    {
-      "year_month": "1996-12",
-      "country1Deaths": 0,
-      "country1Events": 0,
-      "country1CasualtiesPerEvent": 0,
-      "country2Deaths": 94,
-      "country2Events": 9,
-      "country2CasualtiesPerEvent": 10.44
     }
   ],
   "metadata": {
@@ -556,15 +394,15 @@
       "avgCasualtiesPerEvent": 30.13,
       "color": "#ff7f0e"
     },
-    "period": "1992-1996",
+    "period": "1992-1995",
     "timeFormat": "monthly",
     "source": "Uppsala Conflict Data Program (UCDP) GED"
   },
   "annotations": [
     {
-      "year_month": "1995-07",
-      "label": "Srebrenica",
-      "description": "Over 8,000 killed in genocide",
+      "year_month": "1992-04",
+      "label": "Bosnian War Begins",
+      "description": "Start of the conflict",
       "country": "country1"
     },
     {
