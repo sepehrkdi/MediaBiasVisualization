@@ -12,7 +12,7 @@ A data-driven scrollytelling visualization exploring global conflict patterns an
 
 ## 🎯 Project Overview
 
-This project presents an interactive exploration of how global conflicts receive varying levels of media attention, revealing patterns where some crises dominate headlines while others—often deadlier—remain invisible. We analyze data from the **UCDP (Uppsala Conflict Data Program)**, one of the world's most comprehensive datasets on organized violence, spanning **1989 to 2024**.
+This project presents an interactive exploration of how global conflicts receive varying levels of media attention, revealing patterns where some crises dominate headlines while others-often deadlier-remain invisible. We analyze data from the **UCDP (Uppsala Conflict Data Program)**, one of the world's most comprehensive datasets on organized violence, spanning **1989 to 2024**.
 
 ### Key Questions We Explore
 
